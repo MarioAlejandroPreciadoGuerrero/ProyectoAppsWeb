@@ -11,4 +11,9 @@ public class HomeController {
     public String inicio() {
         return "bemole_home_page";
     }
+
+    @GetMapping("/templates")
+    public String login() {
+        return "bemole_auth";
+    }
 }
