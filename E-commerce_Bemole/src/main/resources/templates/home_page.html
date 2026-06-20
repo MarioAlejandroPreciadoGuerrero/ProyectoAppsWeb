@@ -1,47 +1,47 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bemolé — Instrumentos para cada nota</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/styles/style.css"/>
+  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
 </head>
 <body>
 
 <!-- ── NAVBAR ── -->
-<header class="navbar">
+<header  class="navbar">
   <div class="container navbar__inner">
 
-    <!-- Logo -->
     <div class="logo">
       <span class="logo__name">Bemolé</span>
       <span class="logo__tagline">Instrumentos para cada nota</span>
     </div>
 
-    <!-- Links -->
     <ul class="nav-links">
-      <li><a href="#" class="active">Inicio</a></li>
+      <li><a th:href="@{/}" class="active">Inicio</a></li>
       <li><a href="#categorias">Categorías</a></li>
-      <li><a href="#productos">Productos</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
       <li><a href="#nosotros">Nosotros</a></li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
 
-    <!-- Acciones -->
     <div class="nav-actions">
       <button aria-label="Buscar">🔍</button>
-      <button class="cart-btn" aria-label="Carrito">
-        🛒
-        <span class="cart-badge">2</span>
-      </button>
+      <a th:href="@{/carrito}" class="cart-btn">
+        🛒<span class="cart-badge">2</span>
+      </a>
+    </div>
+
+    <div class="login-link">
+      <a th:href="@{/login}">Iniciar sesión</a>
     </div>
 
   </div>
 </header>
 
 <!-- ── HERO ── -->
-<section class="hero">
+<section id="inicio" class="hero">
   <div class="container hero__inner">
 
     <div class="hero__content">
@@ -54,12 +54,11 @@
         Más de 2,000 instrumentos seleccionados por músicos, para músicos. Desde el primer acorde hasta el escenario principal.
       </p>
       <div class="hero__ctas">
-        <a href="#productos" class="btn-primary">Ver catálogo</a>
+        <a th:href="@{/catalogo}" class="btn-primary">Ver catálogo</a>
         <a href="#categorias" class="btn-outline">Explorar categorías</a>
       </div>
     </div>
 
-    <!-- Stats -->
     <div class="hero__stats">
       <div class="stat">
         <div class="stat__number">2,400+</div>
@@ -88,8 +87,7 @@
     </div>
 
     <div class="grid-categorias">
-
-      <a href="#" class="cat-card">
+      <a th:href="@{/catalogo(categoria=guitarras)}" class="cat-card">
         <span class="cat-card__icon">🎸</span>
         <div class="cat-card__row">
           <span class="cat-card__name">Guitarras</span>
@@ -97,8 +95,7 @@
         </div>
         <span class="cat-card__count">348 productos</span>
       </a>
-
-      <a href="#" class="cat-card">
+      <a th:href="@{/catalogo(categoria=pianos)}" class="cat-card">
         <span class="cat-card__icon">🎹</span>
         <div class="cat-card__row">
           <span class="cat-card__name">Pianos</span>
@@ -106,8 +103,7 @@
         </div>
         <span class="cat-card__count">192 productos</span>
       </a>
-
-      <a href="#" class="cat-card">
+      <a th:href="@{/catalogo(categoria=percusion)}" class="cat-card">
         <span class="cat-card__icon">🥁</span>
         <div class="cat-card__row">
           <span class="cat-card__name">Percusión</span>
@@ -115,8 +111,7 @@
         </div>
         <span class="cat-card__count">276 productos</span>
       </a>
-
-      <a href="#" class="cat-card">
+      <a th:href="@{/catalogo(categoria=vientos)}" class="cat-card">
         <span class="cat-card__icon">🎷</span>
         <div class="cat-card__row">
           <span class="cat-card__name">Vientos</span>
@@ -124,12 +119,12 @@
         </div>
         <span class="cat-card__count">154 productos</span>
       </a>
-
     </div>
+
   </div>
 </section>
 
-<!-- ── PRODUCTOS ── -->
+<!-- ── PRODUCTOS DESTACADOS ── -->
 <section id="productos" class="section section--white">
   <div class="container">
 
@@ -138,12 +133,11 @@
         <p class="section__eyebrow">Los más vendidos</p>
         <h2 class="section__heading">Productos destacados</h2>
       </div>
-      <a href="#" class="section__link">Ver todos →</a>
+      <a th:href="@{/catalogo}" class="section__link">Ver todos →</a>
     </div>
 
     <div class="grid-productos">
 
-      <!-- Producto 1 -->
       <div class="product-card">
         <div class="product-card__image">🎸</div>
         <div class="product-card__body">
@@ -158,7 +152,6 @@
         </div>
       </div>
 
-      <!-- Producto 2 -->
       <div class="product-card">
         <div class="product-card__image">🎹</div>
         <div class="product-card__body">
@@ -176,7 +169,6 @@
         </div>
       </div>
 
-      <!-- Producto 3 -->
       <div class="product-card">
         <div class="product-card__image">🎻</div>
         <div class="product-card__body">
@@ -191,7 +183,6 @@
         </div>
       </div>
 
-      <!-- Producto 4 -->
       <div class="product-card">
         <div class="product-card__image">🥁</div>
         <div class="product-card__body">
@@ -212,7 +203,6 @@
 
 <!-- ── NOSOTROS ── -->
 <section id="nosotros" class="section">
-
   <div class="container">
 
     <div class="section__header">
@@ -221,76 +211,61 @@
     </div>
 
     <div class="grid-nosotros">
-
       <div class="feature-card">
         <span class="feature-card__icon">🎓</span>
         <h3 class="feature-card__title">Asesoría experta</h3>
         <p class="feature-card__desc">Nuestros asesores son músicos activos que te orientan para elegir el instrumento correcto.</p>
       </div>
-
       <div class="feature-card">
         <span class="feature-card__icon">🚚</span>
         <h3 class="feature-card__title">Envío a todo México</h3>
         <p class="feature-card__desc">Gratis en compras mayores a $2,000 MXN con rastreo en tiempo real.</p>
       </div>
-
       <div class="feature-card">
         <span class="feature-card__icon">🛡️</span>
         <h3 class="feature-card__title">Garantía extendida</h3>
         <p class="feature-card__desc">Mínimo 12 meses en todos los instrumentos. Algunos modelos hasta 3 años.</p>
       </div>
-
       <div class="feature-card">
         <span class="feature-card__icon">🔄</span>
         <h3 class="feature-card__title">Devoluciones fáciles</h3>
         <p class="feature-card__desc">30 días para devolver o cambiar tu instrumento sin complicaciones.</p>
       </div>
-
     </div>
 
   </div>
-
 </section>
 
 <!-- ── CONTACTO ── -->
 <section id="contacto" class="contact-section">
-
   <div class="contact-inner">
-
     <p class="contact-eyebrow">¿Tienes dudas?</p>
     <h2 class="contact-heading">Contáctanos</h2>
     <p class="contact-body">Escríbenos y un asesor musical te responderá en menos de 24 horas.</p>
-
     <div class="contact-form">
-      <input type="text"  placeholder="Tu nombre"/>
+      <input type="text" placeholder="Tu nombre"/>
       <input type="email" placeholder="tu@correo.com"/>
-      <textarea rows="4"  placeholder="¿En qué te ayudamos?"></textarea>
+      <textarea rows="4" placeholder="¿En qué te ayudamos?"></textarea>
       <button type="button" class="btn-submit">Enviar mensaje</button>
     </div>
-
   </div>
-
 </section>
 
 <!-- ── FOOTER ── -->
 <footer class="footer">
-
   <div class="container footer__inner">
-
     <div>
       <span class="footer__brand">Bemolé</span>
       <span class="footer__copy">© 2025 · Todos los derechos reservados</span>
     </div>
-
     <ul class="footer__links">
-      <li><a href="#">Inicio</a></li>
+      <li><a th:href="@{/}">Inicio</a></li>
       <li><a href="#categorias">Categorías</a></li>
-      <li><a href="#productos">Productos</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
       <li><a href="#contacto">Contacto</a></li>
+      <li><a href="#inicio">Volver Arriba</a></li>
     </ul>
-
   </div>
-
 </footer>
 
 </body>

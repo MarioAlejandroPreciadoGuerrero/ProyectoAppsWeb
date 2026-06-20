@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bemolé — Checkout</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+</head>
+<body>
+
+<!-- ── NAVBAR MINIMAL ── -->
+<header class="navbar navbar--minimal">
+  <div class="container navbar__inner">
+    <a th:href="@{/}" class="logo" style="text-decoration:none;">
+      <span class="logo__name">Bemolé</span>
+      <span class="logo__tagline">Instrumentos para cada nota</span>
+    </a>
+    <div class="secure-label">
+      <span>🔒</span>
+      <span>Pago seguro</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── STEPS ── -->
+<div class="steps-bar">
+  <div class="steps-bar__inner">
+    <div class="step step__done">
+      <span class="step__num">✓</span> Carrito
+    </div>
+    <span class="steps-divider">——</span>
+    <div class="step step--active">
+      <span class="step__num">2</span> Envío
+    </div>
+    <span class="steps-divider">——</span>
+    <div class="step">
+      <span class="step__num">3</span> Pago
+    </div>
+    <span class="steps-divider">——</span>
+    <div class="step">
+      <span class="step__num">4</span> Confirmación
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="checkout-layout">
+
+    <!-- FORMULARIOS -->
+    <div class="checkout-forms">
+
+      <!-- Contacto -->
+      <div class="form-section">
+        <h2><span class="form-num">1</span> Información de contacto</h2>
+        <div class="form-grid">
+          <div>
+            <label class="label">Nombre</label>
+            <input type="text" class="input" placeholder="Juan" value="Juan"/>
+          </div>
+          <div>
+            <label class="label">Apellido</label>
+            <input type="text" class="input" placeholder="García" value="García"/>
+          </div>
+          <div class="form-grid--full">
+            <label class="label">Correo electrónico</label>
+            <input type="email" class="input" placeholder="juan@correo.com" value="juan@correo.com"/>
+          </div>
+          <div class="form-grid--full">
+            <label class="label">Teléfono</label>
+            <input type="tel" class="input" placeholder="+52 644 000 0000" value="+52 644 123 4567"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dirección -->
+      <div class="form-section">
+        <h2><span class="form-num">2</span> Dirección de envío</h2>
+        <div class="form-grid">
+          <div class="form-grid--full">
+            <label class="label">Calle y número</label>
+            <input type="text" class="input" placeholder="Av. Principal #123" value="Av. Sonora #456 Int. 2"/>
+          </div>
+          <div>
+            <label class="label">Colonia</label>
+            <input type="text" class="input" placeholder="Col. Centro" value="Col. Modelo"/>
+          </div>
+          <div>
+            <label class="label">C.P.</label>
+            <input type="text" class="input" placeholder="85000" value="85000"/>
+          </div>
+          <div>
+            <label class="label">Ciudad</label>
+            <input type="text" class="input" placeholder="Ciudad Obregón" value="Ciudad Obregón"/>
+          </div>
+          <div>
+            <label class="label">Estado</label>
+            <select class="select">
+              <option selected>Sonora</option>
+              <option>CDMX</option>
+              <option>Jalisco</option>
+              <option>Nuevo León</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Método de envío -->
+      <div class="form-section">
+        <h2><span class="form-num">3</span> Método de envío</h2>
+        <div class="shipping-options">
+          <label class="shipping-option shipping-option--selected">
+            <input type="radio" name="envio" checked style="accent-color:var(--gold-cta);margin-top:.15rem;"/>
+            <div class="shipping-option__info">
+              <p class="shipping-option__name">Envío estándar</p>
+              <p class="shipping-option__days">5–7 días hábiles</p>
+            </div>
+            <span class="shipping-option__price shipping-option__price--free">Gratis</span>
+          </label>
+          <label class="shipping-option">
+            <input type="radio" name="envio" style="accent-color:var(--gold-cta);margin-top:.15rem;"/>
+            <div class="shipping-option__info">
+              <p class="shipping-option__name">Envío express</p>
+              <p class="shipping-option__days">2–3 días hábiles</p>
+            </div>
+            <span class="shipping-option__price">$199 MXN</span>
+          </label>
+          <label class="shipping-option">
+            <input type="radio" name="envio" style="accent-color:var(--gold-cta);margin-top:.15rem;"/>
+            <div class="shipping-option__info">
+              <p class="shipping-option__name">Recoger en tienda</p>
+              <p class="shipping-option__days">Disponible mañana · Sucursal Obregón</p>
+            </div>
+            <span class="shipping-option__price shipping-option__price--free">Gratis</span>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-gold">Continuar al pago →</button>
+    </div>
+
+    <!-- RESUMEN -->
+    <div>
+      <div class="checkout-summary">
+        <p class="summary-title">Tu pedido</p>
+
+        <div class="checkout-items">
+          <div class="checkout-item">
+            <div class="checkout-item__img">
+              🎸
+              <span class="checkout-item__qty">1</span>
+            </div>
+            <div>
+              <p class="checkout-item__name">Fender Stratocaster Player</p>
+              <p class="checkout-item__variant">Sonic Blue</p>
+            </div>
+            <span class="checkout-item__price">$18,999</span>
+          </div>
+          <div class="checkout-item">
+            <div class="checkout-item__img">
+              🎹
+              <span class="checkout-item__qty">1</span>
+            </div>
+            <div>
+              <p class="checkout-item__name">Yamaha P-145</p>
+              <p class="checkout-item__variant">Negro</p>
+            </div>
+            <span class="checkout-item__price">$12,499</span>
+          </div>
+        </div>
+
+        <div class="summary-rows">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span class="val">$31,498</span>
+          </div>
+          <div class="summary-row">
+            <span>Descuento</span>
+            <span class="val--red">−$3,125</span>
+          </div>
+          <div class="summary-row">
+            <span>Envío</span>
+            <span class="val--green">Gratis</span>
+          </div>
+        </div>
+
+        <div class="summary-total">
+          <span class="summary-total__label">Total</span>
+          <div class="summary-total__amount">
+            <p class="big">$28,373</p>
+            <p class="sub">MXN</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer" style="margin-top:5rem;">
+  <div class="container footer__inner">
+    <div>
+      <span class="footer__brand">Bemolé</span>
+      <span class="footer__copy">© 2025 · Todos los derechos reservados</span>
+    </div>
+    <div class="footer__legal">
+      <span>🔒 Sitio seguro SSL</span>
+      <a th:href="@{/privacidad}">Aviso de privacidad</a>
+      <a th:href="@{/terminos}">Términos y condiciones</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

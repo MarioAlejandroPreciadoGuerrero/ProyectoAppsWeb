@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bemolé — Catálogo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header class="navbar">
+  <div class="container navbar__inner">
+    <div class="logo">
+      <span class="logo__name">Bemolé</span>
+      <span class="logo__tagline">Instrumentos para cada nota</span>
+    </div>
+    <ul class="nav-links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a th:href="@{/catalogo}" class="active">Catálogo</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button aria-label="Buscar">🔍</button>
+      <a th:href="@{/carrito}">
+        <button class="cart-btn" aria-label="Carrito">🛒<span class="cart-badge">2</span></button>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ── HEADER SECCIÓN ── -->
+<div class="catalog-hero">
+  <div class="catalog-hero__inner">
+    <p class="eyebrow">Explora</p>
+    <h1>Catálogo completo</h1>
+    <p>2,400+ instrumentos · Filtros para encontrar el tuyo</p>
+  </div>
+</div>
+
+<div class="container py-10">
+  <div class="catalog-layout">
+
+    <!-- SIDEBAR FILTROS -->
+    <aside class="sidebar">
+      <div class="sidebar__section">
+        <input type="text" class="input" placeholder="Buscar instrumento…"/>
+      </div>
+
+      <div class="sidebar__section">
+        <span class="sidebar__label">Categoría</span>
+        <div class="sidebar__options">
+          <label class="sidebar__option"><input type="radio" name="cat" checked/> Todas</label>
+          <label class="sidebar__option"><input type="radio" name="cat"/> 🎸 Guitarras <span class="count">348</span></label>
+          <label class="sidebar__option"><input type="radio" name="cat"/> 🎹 Pianos <span class="count">192</span></label>
+          <label class="sidebar__option"><input type="radio" name="cat"/> 🥁 Percusión <span class="count">276</span></label>
+          <label class="sidebar__option"><input type="radio" name="cat"/> 🎷 Vientos <span class="count">204</span></label>
+          <label class="sidebar__option"><input type="radio" name="cat"/> 🎻 Cuerdas <span class="count">158</span></label>
+          <label class="sidebar__option"><input type="radio" name="cat"/> 🎤 Audio <span class="count">312</span></label>
+        </div>
+      </div>
+
+      <div class="sidebar__section">
+        <span class="sidebar__label">Precio (MXN)</span>
+        <div class="sidebar__price-row">
+          <input type="text" class="input" placeholder="Mín"/>
+          <input type="text" class="input" placeholder="Máx"/>
+        </div>
+      </div>
+
+      <div class="sidebar__section">
+        <span class="sidebar__label">Marca</span>
+        <div class="sidebar__options">
+          <label class="sidebar__option"><input type="checkbox" checked/> Fender</label>
+          <label class="sidebar__option"><input type="checkbox"/> Gibson</label>
+          <label class="sidebar__option"><input type="checkbox"/> Yamaha</label>
+          <label class="sidebar__option"><input type="checkbox"/> Roland</label>
+          <label class="sidebar__option"><input type="checkbox"/> Casio</label>
+          <a href="#" class="sidebar__more-link">+ Ver más marcas</a>
+        </div>
+      </div>
+
+      <div class="sidebar__section">
+        <span class="sidebar__label">Disponibilidad</span>
+        <label class="sidebar__option"><input type="checkbox" checked/> Solo con stock</label>
+      </div>
+
+      <button class="btn-gold">Aplicar filtros</button>
+      <button style="width:100%;margin-top:.5rem;font-size:.75rem;color:#9ca3af;padding:.35rem;background:none;border:none;cursor:pointer;">Limpiar filtros</button>
+    </aside>
+
+    <!-- GRID PRODUCTOS -->
+    <div class="catalog-main">
+
+      <div class="catalog-topbar">
+        <p class="catalog-count"><strong>2,400</strong> productos encontrados</p>
+        <select class="select" style="width:auto;">
+          <option>Ordenar: Relevancia</option>
+          <option>Precio: menor a mayor</option>
+          <option>Precio: mayor a menor</option>
+          <option>Más nuevos</option>
+          <option>Mejor valorados</option>
+        </select>
+      </div>
+
+      <div class="chips">
+        <span class="chip">Fender <button>×</button></span>
+        <span class="chip">Guitarras <button>×</button></span>
+      </div>
+
+      <div class="grid-catalog">
+
+        <div class="catalog-card">
+          <div class="catalog-card__img">🎸</div>
+          <div class="catalog-card__body">
+            <span class="badge badge--new">Nuevo</span>
+            <p class="catalog-card__cat">Guitarras</p>
+            <h3 class="catalog-card__name"><a th:href="@{/producto}">Fender Stratocaster Player</a></h3>
+            <p class="catalog-card__desc">Cuerpo de aliso, mástil de arce, 3 single-coil.</p>
+            <div class="catalog-card__stars">★★★★★ <span>(124)</span></div>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">$18,999 <span class="currency">MXN</span></span>
+              <button class="btn-add">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="catalog-card">
+          <div class="catalog-card__img">🎸</div>
+          <div class="catalog-card__body">
+            <span class="badge badge--sale">−15%</span>
+            <p class="catalog-card__cat">Guitarras</p>
+            <h3 class="catalog-card__name"><a th:href="@{/producto}">Gibson Les Paul Standard</a></h3>
+            <p class="catalog-card__desc">Caoba y arce, pastillas BurstBucker Pro.</p>
+            <div class="catalog-card__stars">★★★★★ <span>(89)</span></div>
+            <div class="catalog-card__footer">
+              <div>
+                <span class="price-old">$52,000</span>
+                <span class="catalog-card__price">$44,200 <span class="currency">MXN</span></span>
+              </div>
+              <button class="btn-add">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="catalog-card">
+          <div class="catalog-card__img">🎸</div>
+          <div class="catalog-card__body">
+            <p class="catalog-card__cat" style="margin-top:1.25rem;">Guitarras</p>
+            <h3 class="catalog-card__name"><a th:href="@{/producto}">Fender Telecaster Deluxe</a></h3>
+            <p class="catalog-card__desc">Aliso, 2 humbuckers, clavijero Stratocaster.</p>
+            <div class="catalog-card__stars">★★★★ <span>(57)</span></div>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">$21,500 <span class="currency">MXN</span></span>
+              <button class="btn-add">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="catalog-card">
+          <div class="catalog-card__img">🎸</div>
+          <div class="catalog-card__body">
+            <span class="badge badge--limited">Últimas unidades</span>
+            <p class="catalog-card__cat">Guitarras</p>
+            <h3 class="catalog-card__name"><a th:href="@{/producto}">Fender Jazzmaster</a></h3>
+            <p class="catalog-card__desc">Offset body, pastillas Jazzmaster, vibrato flotante.</p>
+            <div class="catalog-card__stars">★★★★★ <span>(41)</span></div>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">$23,999 <span class="currency">MXN</span></span>
+              <button class="btn-add">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="catalog-card">
+          <div class="catalog-card__img">🎸</div>
+          <div class="catalog-card__body">
+            <span class="badge badge--new">Nuevo</span>
+            <p class="catalog-card__cat">Guitarras</p>
+            <h3 class="catalog-card__name"><a th:href="@{/producto}">Gibson SG Standard</a></h3>
+            <p class="catalog-card__desc">Doble cutaway, humbuckers 490R/490T.</p>
+            <div class="catalog-card__stars">★★★★★ <span>(76)</span></div>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">$35,800 <span class="currency">MXN</span></span>
+              <button class="btn-add">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="catalog-card">
+          <div class="catalog-card__img">🎸</div>
+          <div class="catalog-card__body">
+            <p class="catalog-card__cat" style="margin-top:1.25rem;">Guitarras</p>
+            <h3 class="catalog-card__name"><a th:href="@{/producto}">Fender Mustang Player</a></h3>
+            <p class="catalog-card__desc">Escala corta, aliso, 2 single-coil, ideal principiantes.</p>
+            <div class="catalog-card__stars">★★★★ <span>(33)</span></div>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">$11,200 <span class="currency">MXN</span></span>
+              <button class="btn-add">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Paginación -->
+      <div class="pagination">
+        <button class="pag-btn">‹</button>
+        <button class="pag-btn pag-btn--active">1</button>
+        <button class="pag-btn">2</button>
+        <button class="pag-btn">3</button>
+        <span class="pag-dots">…</span>
+        <button class="pag-btn">24</button>
+        <button class="pag-btn">›</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div>
+      <span class="footer__brand">Bemolé</span>
+      <span class="footer__copy">© 2025 · Todos los derechos reservados</span>
+    </div>
+    <ul class="footer__links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>
