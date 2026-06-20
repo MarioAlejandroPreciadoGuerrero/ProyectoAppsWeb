@@ -9,7 +9,12 @@ public class NavController {
 
     @GetMapping("/" )
     public String inicio() {
-        return "home_page";
+        return "home_page_loggeado";
+    }
+
+    @GetMapping("/home_page_no_loggeado" )
+    public String inicio_logOut() {
+        return "home_page_no_loggeado";
     }
 
     @GetMapping("/login")
@@ -35,5 +40,10 @@ public class NavController {
     @GetMapping("/producto")
     public String productos() {
         return "producto";
+    }
+
+    @GetMapping("/ordenes")
+    public String ordenes(){
+        return "ordenes";
     }
 }

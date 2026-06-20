@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bemolé — Instrumentos para cada nota</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header  class="navbar">
+  <div class="container navbar__inner">
+
+    <div class="logo">
+      <span class="logo__name">Bemolé</span>
+      <span class="logo__tagline">Instrumentos para cada nota</span>
+    </div>
+
+    <ul class="nav-links">
+      <li><a th:href="@{/}" class="active">Inicio</a></li>
+      <li><a href="#categorias">Categorías</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+
+    <div class="nav-actions">
+
+      <!-- Buscador expandible -->
+      <div class="search-box" id="searchBox">
+        <button class="search-box__toggle" id="searchToggle" aria-label="Buscar">🔍</button>
+        <div class="search-box__field" id="searchField">
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Buscar instrumentos…"
+            autocomplete="off"
+            aria-label="Buscar productos"
+          />
+          <button class="search-box__close" id="searchClose" aria-label="Cerrar buscador">✕</button>
+        </div>
+      </div>
+
+      <!-- Carrito -->
+      <a th:href="@{/carrito}" class="cart-btn">
+        🛒<span class="cart-badge">2</span>
+      </a>
+
+      <!-- Perfil -->
+      <a th:href="@{/ordenes}" class="profile-btn" aria-label="Mi perfil">👤</a>
+
+    </div>
+
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section id="inicio" class="hero">
+  <div class="container hero__inner">
+
+    <div class="hero__content">
+      <span class="hero__eyebrow">Colección 2025</span>
+      <h1 class="hero__heading">
+        Encuentra tu<br>
+        <em>instrumento</em> ideal
+      </h1>
+      <p class="hero__body">
+        Más de 2,000 instrumentos seleccionados por músicos, para músicos. Desde el primer acorde hasta el escenario principal.
+      </p>
+      <div class="hero__ctas">
+        <a th:href="@{/catalogo}" class="btn-primary">Ver catálogo</a>
+        <a href="#categorias" class="btn-outline">Explorar categorías</a>
+      </div>
+    </div>
+
+    <div class="hero__stats">
+      <div class="stat">
+        <div class="stat__number">2,400+</div>
+        <div class="stat__label">Instrumentos</div>
+      </div>
+      <div class="stat">
+        <div class="stat__number">140+</div>
+        <div class="stat__label">Marcas</div>
+      </div>
+      <div class="stat">
+        <div class="stat__number">15 años</div>
+        <div class="stat__label">De experiencia</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CATEGORÍAS ── -->
+<section id="categorias" class="section">
+  <div class="container">
+
+    <div class="section__header">
+      <p class="section__eyebrow">Explora por tipo</p>
+      <h2 class="section__heading">Categorías</h2>
+    </div>
+
+    <div class="grid-categorias">
+      <a th:href="@{/catalogo(categoria=guitarras)}" class="cat-card">
+        <span class="cat-card__icon">🎸</span>
+        <div class="cat-card__row">
+          <span class="cat-card__name">Guitarras</span>
+          <span class="cat-card__arrow">→</span>
+        </div>
+        <span class="cat-card__count">348 productos</span>
+      </a>
+      <a th:href="@{/catalogo(categoria=pianos)}" class="cat-card">
+        <span class="cat-card__icon">🎹</span>
+        <div class="cat-card__row">
+          <span class="cat-card__name">Pianos</span>
+          <span class="cat-card__arrow">→</span>
+        </div>
+        <span class="cat-card__count">192 productos</span>
+      </a>
+      <a th:href="@{/catalogo(categoria=percusion)}" class="cat-card">
+        <span class="cat-card__icon">🥁</span>
+        <div class="cat-card__row">
+          <span class="cat-card__name">Percusión</span>
+          <span class="cat-card__arrow">→</span>
+        </div>
+        <span class="cat-card__count">276 productos</span>
+      </a>
+      <a th:href="@{/catalogo(categoria=vientos)}" class="cat-card">
+        <span class="cat-card__icon">🎷</span>
+        <div class="cat-card__row">
+          <span class="cat-card__name">Vientos</span>
+          <span class="cat-card__arrow">→</span>
+        </div>
+        <span class="cat-card__count">154 productos</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── PRODUCTOS DESTACADOS ── -->
+<section id="productos" class="section section--white">
+  <div class="container">
+
+    <div class="section__header--row">
+      <div>
+        <p class="section__eyebrow">Los más vendidos</p>
+        <h2 class="section__heading">Productos destacados</h2>
+      </div>
+      <a th:href="@{/catalogo}" class="section__link">Ver todos →</a>
+    </div>
+
+    <div class="grid-productos">
+
+      <div class="product-card">
+        <div class="product-card__image">🎸</div>
+        <div class="product-card__body">
+          <span class="badge badge--new">Nuevo</span>
+          <p class="product-card__cat">Guitarras</p>
+          <h3 class="product-card__name">Fender Stratocaster Player</h3>
+          <p class="product-card__desc">Cuerpo de aliso, mástil de arce, 3 single-coil.</p>
+          <div class="product-card__footer">
+            <span class="product-card__price">$18,999 <span class="currency">MXN</span></span>
+            <button class="btn-add">+ Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-card__image">🎹</div>
+        <div class="product-card__body">
+          <span class="badge badge--sale">−20%</span>
+          <p class="product-card__cat">Pianos</p>
+          <h3 class="product-card__name">Yamaha P-145</h3>
+          <p class="product-card__desc">88 teclas contrapesadas, 10 voces, altavoces estéreo.</p>
+          <div class="product-card__footer">
+            <div>
+              <span class="product-card__price-old">$15,624</span>
+              <span class="product-card__price">$12,499 <span class="currency">MXN</span></span>
+            </div>
+            <button class="btn-add">+ Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-card__image">🎻</div>
+        <div class="product-card__body">
+          <span class="badge badge--limited">Últimas unidades</span>
+          <p class="product-card__cat">Cuerdas</p>
+          <h3 class="product-card__name">Violín 4/4 Stentor II</h3>
+          <p class="product-card__desc">Madera sólida, arco brasileño, estuche incluido.</p>
+          <div class="product-card__footer">
+            <span class="product-card__price">$4,299 <span class="currency">MXN</span></span>
+            <button class="btn-add">+ Agregar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-card__image">🥁</div>
+        <div class="product-card__body">
+          <span class="badge badge--new">Nuevo</span>
+          <p class="product-card__cat">Percusión</p>
+          <h3 class="product-card__name">Roland TD-07KV</h3>
+          <p class="product-card__desc">Kit electrónico 5 piezas, 143 kits, mallas tensadas.</p>
+          <div class="product-card__footer">
+            <span class="product-card__price">$32,000 <span class="currency">MXN</span></span>
+            <button class="btn-add">+ Agregar</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── NOSOTROS ── -->
+<section id="nosotros" class="section">
+  <div class="container">
+
+    <div class="section__header">
+      <p class="section__eyebrow">Nuestro compromiso</p>
+      <h2 class="section__heading">¿Por qué Bemolé?</h2>
+    </div>
+
+    <div class="grid-nosotros">
+      <div class="feature-card">
+        <span class="feature-card__icon">🎓</span>
+        <h3 class="feature-card__title">Asesoría experta</h3>
+        <p class="feature-card__desc">Nuestros asesores son músicos activos que te orientan para elegir el instrumento correcto.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-card__icon">🚚</span>
+        <h3 class="feature-card__title">Envío a todo México</h3>
+        <p class="feature-card__desc">Gratis en compras mayores a $2,000 MXN con rastreo en tiempo real.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-card__icon">🛡️</span>
+        <h3 class="feature-card__title">Garantía extendida</h3>
+        <p class="feature-card__desc">Mínimo 12 meses en todos los instrumentos. Algunos modelos hasta 3 años.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-card__icon">🔄</span>
+        <h3 class="feature-card__title">Devoluciones fáciles</h3>
+        <p class="feature-card__desc">30 días para devolver o cambiar tu instrumento sin complicaciones.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CONTACTO ── -->
+<section id="contacto" class="contact-section">
+  <div class="contact-inner">
+    <p class="contact-eyebrow">¿Tienes dudas?</p>
+    <h2 class="contact-heading">Contáctanos</h2>
+    <p class="contact-body">Escríbenos y un asesor musical te responderá en menos de 24 horas.</p>
+    <div class="contact-form">
+      <input type="text" placeholder="Tu nombre"/>
+      <input type="email" placeholder="tu@correo.com"/>
+      <textarea rows="4" placeholder="¿En qué te ayudamos?"></textarea>
+      <button type="button" class="btn-submit">Enviar mensaje</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div>
+      <span class="footer__brand">Bemolé</span>
+      <span class="footer__copy">© 2025 · Todos los derechos reservados</span>
+    </div>
+    <ul class="footer__links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a href="#categorias">Categorías</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+      <li><a href="#inicio">Volver Arriba</a></li>
+    </ul>
+  </div>
+</footer>
+
+
+</body>
+</html>

@@ -27,10 +27,30 @@
     </ul>
 
     <div class="nav-actions">
-      <button aria-label="Buscar">🔍</button>
+
+      <!-- Buscador expandible -->
+      <div class="search-box" id="searchBox">
+        <button class="search-box__toggle" id="searchToggle" aria-label="Buscar">🔍</button>
+        <div class="search-box__field" id="searchField">
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Buscar instrumentos…"
+            autocomplete="off"
+            aria-label="Buscar productos"
+          />
+          <button class="search-box__close" id="searchClose" aria-label="Cerrar buscador">✕</button>
+        </div>
+      </div>
+
+      <!-- Carrito -->
       <a th:href="@{/carrito}" class="cart-btn">
         🛒<span class="cart-badge">2</span>
       </a>
+
+      <!-- Perfil -->
+      <a th:href="@{/perfil}" class="profile-btn" aria-label="Mi perfil">👤</a>
+
     </div>
 
     <div class="login-link">
@@ -268,5 +288,46 @@
   </div>
 </footer>
 
+<script>
+  (function () {
+    const toggle = document.getElementById('searchToggle');
+    const field  = document.getElementById('searchField');
+    const input  = document.getElementById('searchInput');
+    const close  = document.getElementById('searchClose');
+
+    function openSearch() {
+      field.classList.add('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      input.focus();
+    }
+
+    function closeSearch() {
+      field.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      input.value = '';
+    }
+
+    toggle.addEventListener('click', function () {
+      field.classList.contains('is-open') ? closeSearch() : openSearch();
+    });
+
+    close.addEventListener('click', closeSearch);
+
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeSearch();
+      if (e.key === 'Enter' && input.value.trim()) {
+        // Redirige al catálogo con el término de búsqueda
+        window.location.href = '/catalogo?q=' + encodeURIComponent(input.value.trim());
+      }
+    });
+
+    // Cierra si el usuario hace clic fuera del buscador
+    document.addEventListener('click', function (e) {
+      if (!document.getElementById('searchBox').contains(e.target)) {
+        closeSearch();
+      }
+    });
+  })();
+</script>
 </body>
 </html>
