@@ -1,4 +1,4 @@
-package com.example.E_commerce_Bemole.dto;
+package com.example.Bemole_API.dto.usuarios;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

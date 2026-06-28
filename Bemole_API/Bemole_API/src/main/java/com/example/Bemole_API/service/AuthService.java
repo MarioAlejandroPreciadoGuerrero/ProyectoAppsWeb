@@ -1,7 +1,7 @@
 package com.example.Bemole_API.service;
 
-import com.example.Bemole_API.dto.AuthResponseDTO;
-import com.example.Bemole_API.dto.LoginDTO;
+import com.example.Bemole_API.dto.usuarios.AuthResponseDTO;
+import com.example.Bemole_API.dto.usuarios.LoginDTO;
 import com.example.Bemole_API.models.Usuario;
 import com.example.Bemole_API.repositorys.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;

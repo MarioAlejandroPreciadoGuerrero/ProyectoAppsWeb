@@ -79,53 +79,57 @@
         <!-- Panel Registro -->
         <div id="panel-registro" class="auth-panel">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
-            <div>
-              <label class="label">Nombre</label>
-              <input type="text" class="input" placeholder="Juan"/>
-            </div>
-            <div>
-              <label class="label">Apellido</label>
-              <input type="text" class="input" placeholder="García"/>
-            </div>
-          </div>
-          <div>
-            <label class="label">Correo electrónico</label>
-            <input type="email" class="input" placeholder="tu@correo.com"/>
-          </div>
-          <div>
-            <label class="label">Teléfono (opcional)</label>
-            <input type="tel" class="input" placeholder="+52 644 000 0000"/>
-          </div>
-          <div>
-            <label class="label">Contraseña</label>
-            <input type="password" class="input" placeholder="Mínimo 8 caracteres"/>
-            <div class="strength-bar">
-              <div class="strength-bar__seg strength-bar__seg--red"></div>
-              <div class="strength-bar__seg strength-bar__seg--yellow"></div>
-              <div class="strength-bar__seg"></div>
-              <div class="strength-bar__seg"></div>
-            </div>
-            <p class="strength-hint">Contraseña moderada</p>
-          </div>
-          <div>
-            <label class="label">Confirmar contraseña</label>
-            <input type="password" class="input" placeholder="Repite tu contraseña"/>
-          </div>
+            <form th:action="@{/registro}" method="post" th:object="${usuarioDTO}">
 
-          <div class="auth-checkbox-row">
-            <input type="checkbox" id="terminos" style="accent-color:var(--gold-cta);"/>
-            <label for="terminos">
-              Acepto los <a th:href="@{/terminos}">Términos y condiciones</a> y el <a th:href="@{/privacidad}">Aviso de privacidad</a> de Bemolé.
-            </label>
-          </div>
+              <div>
+                <label class="label">Nombre</label>
+                <input type="text" class="input" th:field="*{nombre}" placeholder="Ej. Juan"/>
+              </div>
+              <div>
+                <label class="label">Apellido</label>
+                <input type="text" class="input" th:field="*{apellido}" placeholder="Ej. Garcia"/>
+              </div>
 
-          <div class="auth-checkbox-row">
-            <input type="checkbox" id="promo" checked style="accent-color:var(--gold-cta);"/>
-            <label for="promo">Deseo recibir ofertas, novedades y noticias de Bemolé por correo.</label>
-          </div>
+              <div>
+                <label class="label">Correo electrónico</label>
+                <input type="email" class="input" th:field="*{email}" placeholder="tu@correo.com"/>
+              </div>
+              <div>
+                <label class="label">Teléfono (opcional)</label>
+                <input type="text" class="input" th:field="*{telefono}" placeholder="6444512390"/>
+              </div>
+              <div>
+                <label class="label">Contraseña</label>
+                <input type="password" class="input" th:field="*{password}" placeholder="Mínimo 8 caracteres"/>
+                <div class="strength-bar">
+                  <div class="strength-bar__seg strength-bar__seg--red"></div>
+                  <div class="strength-bar__seg strength-bar__seg--yellow"></div>
+                  <div class="strength-bar__seg"></div>
+                  <div class="strength-bar__seg"></div>
+                </div>
+                <p class="strength-hint">Contraseña moderada</p>
+              </div>
+              <div>
+                <label class="label">Confirmar contraseña</label>
+                <input type="password" class="input" placeholder="Repite tu contraseña"/>
+              </div>
 
-          <button class="btn-gold">Crear mi cuenta</button>
+              <div class="auth-checkbox-row">
+                <input type="checkbox" id="terminos" style="accent-color:var(--gold-cta);"/>
+                <label for="terminos">
+                  Acepto los <a th:href="@{/terminos}">Términos y condiciones</a> y el <a th:href="@{/privacidad}">Aviso de privacidad</a> de Bemolé.
+                </label>
+              </div>
 
+              <div class="auth-checkbox-row">
+                <input type="checkbox" id="promo" checked style="accent-color:var(--gold-cta);"/>
+                <label for="promo">Deseo recibir ofertas, novedades y noticias de Bemolé por correo.</label>
+              </div>
+
+              <button type="submit" class="btn-gold">
+                Crear mi cuenta
+              </button>
+          </form>
           <p class="auth-footer-text">
             ¿Ya tienes cuenta?
             <button onclick="showTab('login')">Inicia sesión</button>
@@ -136,6 +140,7 @@
 
       <p class="auth-ssl">🔒 Tus datos están protegidos con encriptación SSL</p>
     </div>
+  </div>
   </div>
 
   <script>

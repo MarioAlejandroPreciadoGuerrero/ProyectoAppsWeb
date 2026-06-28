@@ -1,4 +1,4 @@
-package com.example.Bemole_API.dto;
+package com.example.E_commerce_Bemole.dto.usuarios;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponseDTO {
-    private String mensaje;
-    private String token;
+public class LoginDTO {
+    private String email;
+    private String password;
 }

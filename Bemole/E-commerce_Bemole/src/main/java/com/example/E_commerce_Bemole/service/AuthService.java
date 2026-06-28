@@ -1,7 +1,7 @@
 package com.example.E_commerce_Bemole.service;
 
-import com.example.E_commerce_Bemole.dto.AuthResponseDTO;
-import com.example.E_commerce_Bemole.dto.LoginDTO;
+import com.example.E_commerce_Bemole.dto.usuarios.AuthResponseDTO;
+import com.example.E_commerce_Bemole.dto.usuarios.LoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

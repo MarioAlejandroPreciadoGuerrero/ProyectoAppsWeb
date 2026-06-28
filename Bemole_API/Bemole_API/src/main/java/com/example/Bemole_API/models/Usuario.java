@@ -1,11 +1,17 @@
 package com.example.Bemole_API.models;
 import com.example.Bemole_API.enums.RolUsuario;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "usuarios")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,11 +20,17 @@ public class Usuario {
     @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false)
+    private String apellido;
+
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = true)
+    private String telefono;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -27,71 +39,13 @@ public class Usuario {
     @Column(nullable = false)
     private LocalDateTime fechaRegistro;
 
-    public Usuario() {
-    }
-
-    public Usuario(String nombre, String email, String password, RolUsuario rol, LocalDateTime fechaRegistro) {
+    public Usuario(String nombre,String apellido, String email, String password, String telefono,RolUsuario rol, LocalDateTime fechaRegistro) {
         this.nombre = nombre;
+        this.apellido = apellido;
         this.email = email;
         this.password = password;
+        this.telefono = telefono;
         this.rol = rol;
-        this.fechaRegistro = fechaRegistro;
-    }
-
-    public Usuario(Long id, String nombre, String email, String password, RolUsuario rol, LocalDateTime fechaRegistro) {
-        this.id = id;
-        this.nombre = nombre;
-        this.email = email;
-        this.password = password;
-        this.rol = rol;
-        this.fechaRegistro = fechaRegistro;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public RolUsuario getRol() {
-        return rol;
-    }
-
-    public void setRol(RolUsuario rol) {
-        this.rol = rol;
-    }
-
-    public LocalDateTime getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 

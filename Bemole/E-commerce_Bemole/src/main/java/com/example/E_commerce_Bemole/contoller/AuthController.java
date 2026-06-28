@@ -1,8 +1,10 @@
 package com.example.E_commerce_Bemole.contoller;
 
-import com.example.E_commerce_Bemole.dto.AuthResponseDTO;
-import com.example.E_commerce_Bemole.dto.LoginDTO;
+import com.example.E_commerce_Bemole.dto.usuarios.AuthResponseDTO;
+import com.example.E_commerce_Bemole.dto.usuarios.LoginDTO;
+import com.example.E_commerce_Bemole.dto.usuarios.UsuarioRegistroDTO;
 import com.example.E_commerce_Bemole.service.AuthService;
+import com.example.E_commerce_Bemole.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,9 +18,13 @@ public class AuthController {
     @Autowired
     private AuthService service;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @GetMapping("/login")
     public String mostrarLogin(Model model){
         model.addAttribute("credenciales",new LoginDTO());
+        model.addAttribute("usuarioDTO", new UsuarioRegistroDTO());
         return "login";
     }
 
@@ -29,4 +35,15 @@ public class AuthController {
 
         return "redirect:/";
     }
+
+    @PostMapping("/registro")
+    public String registro(@ModelAttribute UsuarioRegistroDTO usuarioNuevo) {
+
+        usuarioNuevo.setRol("CLIENTE");
+
+        usuarioService.registrar(usuarioNuevo);
+
+        return "redirect:/login";
+    }
+
 }

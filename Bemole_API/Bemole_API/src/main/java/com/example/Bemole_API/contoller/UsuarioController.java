@@ -1,8 +1,10 @@
 package com.example.Bemole_API.contoller;
 
+import com.example.Bemole_API.dto.usuarios.UsuarioRegistroDTO;
 import com.example.Bemole_API.models.Usuario;
 import com.example.Bemole_API.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +26,8 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public Usuario crear(@RequestBody Usuario usuario){
-        return service.registrarUsuario(usuario);
+    public ResponseEntity<Usuario> registrar(@RequestBody Usuario usuario){
+        return ResponseEntity.ok(service.registrarUsuario(usuario));
     }
 
     @PatchMapping("/{id}")

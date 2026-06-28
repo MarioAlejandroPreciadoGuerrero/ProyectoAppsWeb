@@ -1,5 +1,6 @@
 package com.example.Bemole_API.service;
 
+import com.example.Bemole_API.dto.usuarios.UsuarioRegistroDTO;
 import com.example.Bemole_API.models.Usuario;
 import com.example.Bemole_API.repositorys.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,17 @@ public class UsuarioService {
                 usuario.setNombre(nuevoNombre);
             }
 
+            if (usuarioParcial.getApellido() != null) {
+                String nuevoApellido = usuarioParcial.getApellido().trim();
+                if (nuevoApellido.isEmpty()) {
+                    throw new IllegalArgumentException("El nombre del usuario no puede estar vacío.");
+                }
+                if (nuevoApellido.length() > 100) {
+                    throw new IllegalArgumentException("El nombre no puede superar los 100 caracteres.");
+                }
+                usuario.setApellido(nuevoApellido);
+            }
+
             if (usuarioParcial.getEmail() != null) {
                 String nuevoEmail = usuarioParcial.getEmail().trim().toLowerCase();
                 if (!EMAIL_PATTERN.matcher(nuevoEmail).matches()) {
@@ -89,6 +101,10 @@ public class UsuarioService {
 
             if (usuarioParcial.getRol() != null) {
                 usuario.setRol(usuarioParcial.getRol());
+            }
+
+            if (usuarioParcial.getTelefono() !=null){
+                usuario.setTelefono(usuarioParcial.getTelefono());
             }
 
             return repository.save(usuario);

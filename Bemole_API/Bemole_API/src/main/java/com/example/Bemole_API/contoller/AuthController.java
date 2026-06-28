@@ -1,7 +1,7 @@
 package com.example.Bemole_API.contoller;
 
-import com.example.Bemole_API.dto.AuthResponseDTO;
-import com.example.Bemole_API.dto.LoginDTO;
+import com.example.Bemole_API.dto.usuarios.AuthResponseDTO;
+import com.example.Bemole_API.dto.usuarios.LoginDTO;
 import com.example.Bemole_API.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
