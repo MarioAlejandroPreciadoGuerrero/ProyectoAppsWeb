@@ -36,24 +36,32 @@
 
         <!-- Panel Login -->
         <div id="panel-login" class="auth-panel auth-panel--visible">
-          <div>
-            <label class="label">Correo electrónico</label>
-            <input type="email" class="input" placeholder="tu@correo.com"/>
-          </div>
-          <div>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
-              <label class="label" style="margin:0;">Contraseña</label>
-              <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+          <form th:action="@{/login}" method="post" th:object="${credenciales}">
+
+            <div>
+              <label class="label">Correo electrónico</label>
+              <input type="email" class="input" th:field="*{email}" placeholder="tu@correo.com"/>
             </div>
-            <input type="password" class="input" placeholder="••••••••"/>
-          </div>
 
-          <div style="display:flex;align-items:center;gap:.5rem;">
-            <input type="checkbox" id="remember" style="accent-color:var(--gold-cta);"/>
-            <label for="remember" style="font-size:.875rem;color:#6b7280;font-weight:300;cursor:pointer;">Recordar mi sesión</label>
-          </div>
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
+                <label class="label" style="margin:0;">Contraseña</label>
+                <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+              </div>
 
-          <button class="btn-gold">Iniciar sesión</button>
+              <input type="password" class="input" th:field="*{password}" placeholder="••••••••"/>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:.5rem;">
+              <input type="checkbox" id="remember"/>
+              <label for="remember">Recordar mi sesión</label>
+            </div>
+
+            <button type="submit" class="btn-gold">
+              Iniciar sesión
+            </button>
+
+          </form>
 
           <div class="social-divider"><span>o continúa con</span></div>
 

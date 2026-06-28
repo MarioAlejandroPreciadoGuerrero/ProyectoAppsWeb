@@ -17,11 +17,6 @@ public class NavController {
         return "home_page_no_loggeado";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
     @GetMapping("/catalogo")
     public String catalogo() {
         return "catalogo";
