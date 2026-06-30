@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "items_carrito")
 public class ItemCarrito {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,39 +30,32 @@ public class ItemCarrito {
         this.cantidad = cantidad;
     }
 
-    public ItemCarrito(Long id, Carrito carrito, Producto producto, Integer cantidad) {
-        this.id = id;
-        this.carrito = carrito;
-        this.producto = producto;
-        this.cantidad = cantidad;
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Carrito getCarrito() {
         return carrito;
     }
 
-    public void setCarrito(Carrito carrito) {
-        this.carrito = carrito;
-    }
-
     public Producto getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-
     public Integer getCantidad() {
         return cantidad;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCarrito(Carrito carrito) {
+        this.carrito = carrito;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public void setCantidad(Integer cantidad) {
@@ -70,6 +64,7 @@ public class ItemCarrito {
 
     @Override
     public String toString() {
-        return "ItemCarrito{" + "id=" + id + ", carrito=" + carrito + ", producto=" + producto + ", cantidad=" + cantidad + '}';
+        return "ItemCarrito{id=" + id + ", producto=" + producto.getNombre() +
+                ", cantidad=" + cantidad + "}";
     }
 }

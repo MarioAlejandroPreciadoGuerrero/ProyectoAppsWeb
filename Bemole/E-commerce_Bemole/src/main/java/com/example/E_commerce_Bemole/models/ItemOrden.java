@@ -30,16 +30,8 @@ public class ItemOrden {
     public ItemOrden() {
     }
 
-    public ItemOrden(Orden orden, Producto producto, Integer cantidad, Double precioUnitario, Double descuento) {
-        this.orden = orden;
-        this.producto = producto;
-        this.cantidad = cantidad;
-        this.precioUnitario = precioUnitario;
-        this.descuento = descuento;
-    }
-
-    public ItemOrden(Long id, Orden orden, Producto producto, Integer cantidad, Double precioUnitario, Double descuento) {
-        this.id = id;
+    public ItemOrden(Orden orden, Producto producto, Integer cantidad,
+                     Double precioUnitario, Double descuento) {
         this.orden = orden;
         this.producto = producto;
         this.cantidad = cantidad;
@@ -51,44 +43,44 @@ public class ItemOrden {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Orden getOrden() {
         return orden;
-    }
-
-    public void setOrden(Orden orden) {
-        this.orden = orden;
     }
 
     public Producto getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-
     public Integer getCantidad() {
         return cantidad;
-    }
-
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
     }
 
     public Double getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(Double precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
     public Double getDescuento() {
         return descuento;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setOrden(Orden orden) {
+        this.orden = orden;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public void setPrecioUnitario(Double precioUnitario) {
+        this.precioUnitario = precioUnitario;
     }
 
     public void setDescuento(Double descuento) {
@@ -97,6 +89,7 @@ public class ItemOrden {
 
     @Override
     public String toString() {
-        return "ItemOrden{id=" + id + ", producto=" + producto.getNombre() + ", cantidad=" + cantidad + ", precioUnitario=" + precioUnitario + "}";
+        return "ItemOrden{id=" + id + ", producto=" + producto.getNombre() +
+                ", cantidad=" + cantidad + ", precioUnitario=" + precioUnitario + "}";
     }
 }
