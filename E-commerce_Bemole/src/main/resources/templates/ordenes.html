@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bemolé — Mis órdenes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header class="navbar">
+  <div class="container navbar__inner">
+    <div class="logo">
+      <span class="logo__name">Bemolé</span>
+      <span class="logo__tagline">Instrumentos para cada nota</span>
+    </div>
+    <ul class="nav-links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button aria-label="Buscar">🔍</button>
+      <a th:href="@{/carrito}">
+        <button class="cart-btn" aria-label="Carrito">🛒<span class="cart-badge">2</span></button>
+      </a>
+      <div class="nav-avatar">J</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="account-layout">
+
+    <!-- SIDEBAR CUENTA -->
+    <aside class="account-sidebar">
+      <div class="account-profile">
+        <div class="account-avatar">J</div>
+        <p class="account-profile__name">Jesus Adrian</p>
+        <p class="account-profile__email">adrian@correo.com</p>
+      </div>
+      <nav class="account-nav">
+        <a th:href="@{/perfil}">👤 Mi perfil</a>
+        <a th:href="@{/ordenes}" class="active">📦 Mis órdenes</a>
+        <a th:href="@{/favoritos}">❤️ Favoritos</a>
+        <a th:href="@{/direcciones}">📍 Mis direcciones</a>
+        <a th:href="@{/notificaciones}">🔔 Notificaciones</a>
+        <hr/>
+        <a th:href="@{/logout}" class="logout">← Cerrar sesión</a>
+      </nav>
+    </aside>
+
+    <!-- CONTENIDO -->
+    <div style="flex:1;">
+      <div style="margin-bottom:1.75rem;">
+        <p class="eyebrow">Mi cuenta</p>
+        <h1 class="display" style="font-size:2rem;">Historial de órdenes</h1>
+      </div>
+
+      <!-- Filtros -->
+      <div class="order-filters">
+        <button class="filter-btn filter-btn--active">Todas</button>
+        <button class="filter-btn">En proceso</button>
+        <button class="filter-btn">Enviadas</button>
+        <button class="filter-btn">Entregadas</button>
+        <button class="filter-btn">Canceladas</button>
+      </div>
+
+      <div class="orders-list">
+
+        <!-- Orden 1 — En tránsito -->
+        <div class="order-card">
+          <div class="order-card__header">
+            <div>
+              <p class="order-card__id">Orden <strong>#BMO-2025-0348</strong></p>
+              <p class="order-card__date">Realizada el 8 de junio de 2025</p>
+            </div>
+            <div class="order-card__right">
+              <span class="status-badge status-badge--transit">🚚 En tránsito</span>
+              <p class="order-card__total">$28,373 MXN</p>
+            </div>
+          </div>
+          <div class="order-card__body">
+            <div class="order-card__products">
+              <div class="order-card__imgs">
+                <div class="order-product-img">🎸</div>
+                <div class="order-product-img">🎹</div>
+              </div>
+              <div>
+                <p class="order-card__product-name">Fender Stratocaster Player + 1 más</p>
+                <p class="order-card__product-date">Llegada estimada: 13 jun 2025</p>
+              </div>
+            </div>
+            <div class="order-card__actions">
+              <button class="action-btn action-btn--gold">Rastrear envío</button>
+              <button class="action-btn action-btn--ghost">Ver detalle</button>
+            </div>
+          </div>
+          <div class="order-progress">
+            <div class="progress-steps">
+              <span class="progress-step--done">✓ Confirmada</span>
+              <div class="progress-line progress-line--done"></div>
+              <span class="progress-step--done">✓ Preparando</span>
+              <div class="progress-line progress-line--done"></div>
+              <span class="progress-step--done">✓ Enviada</span>
+              <div class="progress-line"></div>
+              <span>Entregada</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orden 2 — Entregada -->
+        <div class="order-card">
+          <div class="order-card__header">
+            <div>
+              <p class="order-card__id">Orden <strong>#BMO-2025-0201</strong></p>
+              <p class="order-card__date">Realizada el 14 de abril de 2025</p>
+            </div>
+            <div class="order-card__right">
+              <span class="status-badge status-badge--delivered">✓ Entregada</span>
+              <p class="order-card__total">$4,299 MXN</p>
+            </div>
+          </div>
+          <div class="order-card__body">
+            <div class="order-card__products">
+              <div class="order-product-img">🎻</div>
+              <div>
+                <p class="order-card__product-name">Violín 4/4 Stentor II</p>
+                <p class="order-card__product-date">Entregada el 19 abr 2025</p>
+              </div>
+            </div>
+            <div class="order-card__actions">
+              <button class="action-btn action-btn--gold">Reseñar</button>
+              <button class="action-btn action-btn--ghost">Ver detalle</button>
+              <button class="action-btn action-btn--ghost">Volver a comprar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orden 3 — Entregada -->
+        <div class="order-card">
+          <div class="order-card__header">
+            <div>
+              <p class="order-card__id">Orden <strong>#BMO-2024-1876</strong></p>
+              <p class="order-card__date">Realizada el 2 de diciembre de 2024</p>
+            </div>
+            <div class="order-card__right">
+              <span class="status-badge status-badge--delivered">✓ Entregada</span>
+              <p class="order-card__total">$32,000 MXN</p>
+            </div>
+          </div>
+          <div class="order-card__body">
+            <div class="order-card__products">
+              <div class="order-product-img">🥁</div>
+              <div>
+                <p class="order-card__product-name">Roland TD-07KV</p>
+                <p class="order-card__product-date">Entregada el 7 dic 2024</p>
+              </div>
+            </div>
+            <div class="order-card__actions">
+              <button class="action-btn action-btn--ghost">Ver detalle</button>
+              <button class="action-btn action-btn--ghost">Volver a comprar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orden 4 — Cancelada -->
+        <div class="order-card order-card--cancelled">
+          <div class="order-card__header">
+            <div>
+              <p class="order-card__id">Orden <strong>#BMO-2024-1453</strong></p>
+              <p class="order-card__date">Realizada el 10 de octubre de 2024</p>
+            </div>
+            <div class="order-card__right">
+              <span class="status-badge status-badge--cancelled">✕ Cancelada</span>
+              <p class="order-card__total">$12,499 MXN</p>
+            </div>
+          </div>
+          <div class="order-card__body">
+            <div class="order-card__products">
+              <div class="order-product-img">🎹</div>
+              <div>
+                <p class="order-card__product-name">Yamaha P-145</p>
+                <p class="order-card__product-date">Cancelada por el cliente</p>
+              </div>
+            </div>
+            <div class="order-card__actions">
+              <button class="action-btn action-btn--gold">Volver a comprar</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer" style="margin-top:3rem;">
+  <div class="container footer__inner">
+    <div>
+      <span class="footer__brand">Bemolé</span>
+      <span class="footer__copy">© 2025 · Todos los derechos reservados</span>
+    </div>
+    <ul class="footer__links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>

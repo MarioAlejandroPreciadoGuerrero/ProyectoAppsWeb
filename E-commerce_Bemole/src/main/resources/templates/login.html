@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bemolé — Iniciar sesión</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+</head>
+<body class="auth-page">
+
+  <!-- NAVBAR MINIMAL -->
+  <header class="navbar navbar--minimal">
+    <div class="container navbar__inner">
+      <a th:href="@{/home_page_no_loggeado}" class="logo" style="text-decoration:none;">
+        <span class="logo__name">Bemolé</span>
+        <span class="logo__tagline">Instrumentos para cada nota</span>
+      </a>
+      <a th:href="@{/home_page_no_loggeado}" class="back-link" style="font-weight: bold;">← Volver a la tienda</a>
+    </div>
+  </header>
+
+  <div class="auth-center">
+    <div class="auth-box">
+
+      <div class="auth-icon">🎵</div>
+      <p class="auth-subtitle">Accede a tu cuenta Bemolé</p>
+
+      <div class="auth-card">
+
+        <!-- Tabs -->
+        <div class="auth-tabs">
+          <button id="tab-login" class="auth-tab auth-tab--active" onclick="showTab('login')">Iniciar sesión</button>
+          <button id="tab-registro" class="auth-tab" onclick="showTab('registro')">Crear cuenta</button>
+        </div>
+
+        <!-- Panel Login -->
+        <div id="panel-login" class="auth-panel auth-panel--visible">
+          <div>
+            <label class="label">Correo electrónico</label>
+            <input type="email" class="input" placeholder="tu@correo.com"/>
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
+              <label class="label" style="margin:0;">Contraseña</label>
+              <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+            </div>
+            <input type="password" class="input" placeholder="••••••••"/>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:.5rem;">
+            <input type="checkbox" id="remember" style="accent-color:var(--gold-cta);"/>
+            <label for="remember" style="font-size:.875rem;color:#6b7280;font-weight:300;cursor:pointer;">Recordar mi sesión</label>
+          </div>
+
+          <button class="btn-gold">Iniciar sesión</button>
+
+          <div class="social-divider"><span>o continúa con</span></div>
+
+          <div class="social-btns">
+            <button class="social-btn"><span>🇬</span> Google</button>
+            <button class="social-btn"><span>📘</span> Facebook</button>
+          </div>
+
+          <p class="auth-footer-text">
+            ¿No tienes cuenta?
+            <button onclick="showTab('registro')">Regístrate gratis</button>
+          </p>
+        </div>
+
+        <!-- Panel Registro -->
+        <div id="panel-registro" class="auth-panel">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+            <div>
+              <label class="label">Nombre</label>
+              <input type="text" class="input" placeholder="Juan"/>
+            </div>
+            <div>
+              <label class="label">Apellido</label>
+              <input type="text" class="input" placeholder="García"/>
+            </div>
+          </div>
+          <div>
+            <label class="label">Correo electrónico</label>
+            <input type="email" class="input" placeholder="tu@correo.com"/>
+          </div>
+          <div>
+            <label class="label">Teléfono (opcional)</label>
+            <input type="tel" class="input" placeholder="+52 644 000 0000"/>
+          </div>
+          <div>
+            <label class="label">Contraseña</label>
+            <input type="password" class="input" placeholder="Mínimo 8 caracteres"/>
+            <div class="strength-bar">
+              <div class="strength-bar__seg strength-bar__seg--red"></div>
+              <div class="strength-bar__seg strength-bar__seg--yellow"></div>
+              <div class="strength-bar__seg"></div>
+              <div class="strength-bar__seg"></div>
+            </div>
+            <p class="strength-hint">Contraseña moderada</p>
+          </div>
+          <div>
+            <label class="label">Confirmar contraseña</label>
+            <input type="password" class="input" placeholder="Repite tu contraseña"/>
+          </div>
+
+          <div class="auth-checkbox-row">
+            <input type="checkbox" id="terminos" style="accent-color:var(--gold-cta);"/>
+            <label for="terminos">
+              Acepto los <a th:href="@{/terminos}">Términos y condiciones</a> y el <a th:href="@{/privacidad}">Aviso de privacidad</a> de Bemolé.
+            </label>
+          </div>
+
+          <div class="auth-checkbox-row">
+            <input type="checkbox" id="promo" checked style="accent-color:var(--gold-cta);"/>
+            <label for="promo">Deseo recibir ofertas, novedades y noticias de Bemolé por correo.</label>
+          </div>
+
+          <button class="btn-gold">Crear mi cuenta</button>
+
+          <p class="auth-footer-text">
+            ¿Ya tienes cuenta?
+            <button onclick="showTab('login')">Inicia sesión</button>
+          </p>
+        </div>
+
+      </div>
+
+      <p class="auth-ssl">🔒 Tus datos están protegidos con encriptación SSL</p>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tab) {
+      const panelLogin    = document.getElementById('panel-login');
+      const panelRegistro = document.getElementById('panel-registro');
+      const tabLogin      = document.getElementById('tab-login');
+      const tabRegistro   = document.getElementById('tab-registro');
+
+      if (tab === 'login') {
+        panelLogin.style.display    = 'flex';
+        panelRegistro.style.display = 'none';
+        tabLogin.classList.add('auth-tab--active');
+        tabRegistro.classList.remove('auth-tab--active');
+      } else {
+        panelLogin.style.display    = 'none';
+        panelRegistro.style.display = 'flex';
+        tabRegistro.classList.add('auth-tab--active');
+        tabLogin.classList.remove('auth-tab--active');
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 package com.example.E_commerce_Bemole.modules;
 
-import jakarta.persistence.*;
 
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "categorias")

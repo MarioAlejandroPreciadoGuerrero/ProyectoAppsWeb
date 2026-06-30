@@ -1,4 +1,4 @@
-package com.example.E_commerce_Bemole;
+package com.example.E_commerce_Bemole.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

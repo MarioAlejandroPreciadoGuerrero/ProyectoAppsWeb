@@ -255,9 +255,8 @@ button { cursor: pointer; border: none; background: none; }
 }
 .navbar--minimal .back-link {
   font-size: .875rem;
-  color: rgb(0 0 0 / 0.5);
+  color: rgba(255,255,255,.5);
   transition: color var(--trans);
-
 }
 .navbar--minimal .back-link:hover { color: var(--gold-acento); }
 
