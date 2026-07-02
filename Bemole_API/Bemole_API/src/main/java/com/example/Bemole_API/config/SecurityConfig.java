@@ -6,6 +6,7 @@ import com.example.Bemole_API.service.security.JwtAuthenticationFilter;
 import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -48,18 +49,21 @@ public class SecurityConfig {
 
                         // Registro
                         .requestMatchers(
+                                HttpMethod.POST,
                                 "/api/usuarios"
                         ).permitAll()
 
                         // Inicio de sesión
                         .requestMatchers(
+                                HttpMethod.POST,
                                 "/api/auth"
                         ).permitAll()
 
                         // Catálogo público
                         .requestMatchers(
-                                "/api/productos/**",
-                                "/api/categorias/**"
+                                HttpMethod.GET,
+                                "/api/producto/**",
+                                "/api/categoria/**"
                         ).permitAll()
 
                         // Futuras rutas administrativas

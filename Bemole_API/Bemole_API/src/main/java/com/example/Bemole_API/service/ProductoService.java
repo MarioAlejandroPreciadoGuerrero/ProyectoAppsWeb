@@ -1,31 +1,87 @@
 package com.example.Bemole_API.service;
 
-import com.example.Bemole_API.models.Producto;
-import com.example.Bemole_API.repositorys.ProductoRepository;
+import com.example.Bemole_API.dto.PaginacionDTO;
+import com.example.Bemole_API.dto.producto.enums.OrdenProducto;
+import com.example.Bemole_API.dto.producto.ProductoDetalleDTO;
+import com.example.Bemole_API.dto.producto.ProductoResumenDTO;
 import com.example.Bemole_API.exception.NegocioException;
 import com.example.Bemole_API.exception.RecursoNoEncontradoException;
+import com.example.Bemole_API.service.mappers.ProductoMapper;
+import com.example.Bemole_API.models.Producto;
+import com.example.Bemole_API.repositorys.ProductoRepository;
+import com.example.Bemole_API.repositorys.specifications.ProductoSpecifications;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ProductoService {
 
     @Autowired
     private ProductoRepository repository;
 
-    public List<Producto> listarProductos() {
-        return repository.findAll();
+    @Autowired
+    private final ProductoMapper productoMapper;
+
+    public PaginacionDTO<ProductoResumenDTO> listarCatalogo(String q, Long categoriaId, BigDecimal precioMin, BigDecimal precioMax, Boolean soloConStock, OrdenProducto orden, int pagina, int tamano) {
+        validarPaginacion(pagina, tamano);
+        validarRangoPrecios(precioMin, precioMax);
+
+        Specification<Producto> specification =
+                Specification.where(
+                        ProductoSpecifications.activo()).and(ProductoSpecifications.nombreContiene(q)).and(
+                        ProductoSpecifications.categoriaIgual(categoriaId)).and(
+                        ProductoSpecifications.precioMayorOIgual(precioMin)).and(
+                        ProductoSpecifications.precioMenorOIgual(precioMax)).and(ProductoSpecifications.conStock(soloConStock));
+
+        Pageable pageable = PageRequest.of(
+                pagina,
+                tamano,
+                crearOrden(orden)
+        );
+
+        Page<Producto> resultado =
+                repository.findAll(
+                        specification,
+                        pageable
+                );
+
+        List<ProductoResumenDTO> contenido =
+                resultado.getContent()
+                        .stream()
+                        .map(productoMapper::toResumenDTO)
+                        .toList();
+
+        return new PaginacionDTO<>(contenido, resultado.getNumber(), resultado.getSize(), resultado.getTotalElements(), resultado.getTotalPages(), resultado.isFirst(), resultado.isLast());
     }
 
-    public Producto obtenerPorId(Long id) {
-        if (id == null || id <= 0) {
-            throw new NegocioException("El ID del producto debe ser un número positivo.");
+    public ProductoDetalleDTO obtenerDetalle(Long productoId) {
+        if (productoId == null || productoId <= 0) {
+            throw new IllegalArgumentException(
+                    "El ID del producto debe ser positivo."
+            );
         }
-        return repository.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontradoException("Producto con ID " + id + " no encontrado."));
+
+        Producto producto = repository
+                .findById(productoId)
+                .filter(Producto::getActivo)
+                .orElseThrow(() ->
+                        new RecursoNoEncontradoException(
+                                "No se encontró el producto solicitado."
+                        )
+                );
+
+        return productoMapper.toDetalleDTO(producto);
     }
 
     public Producto crearProducto(Producto producto) {
@@ -96,7 +152,7 @@ public class ProductoService {
             }
 
             if (productoParcial.getPrecio() != null) {
-                validarPrecio(BigDecimal.valueOf(productoParcial.getPrecio()));
+                validarPrecio(productoParcial.getPrecio());
                 producto.setPrecio(productoParcial.getPrecio());
             }
 
@@ -143,7 +199,7 @@ public class ProductoService {
         if (producto.getPrecio() == null) {
             throw new NegocioException("El precio del producto es obligatorio.");
         }
-        validarPrecio(BigDecimal.valueOf(producto.getPrecio()));
+        validarPrecio(producto.getPrecio());
 
         if (producto.getStock() == null) {
             throw new NegocioException("El stock del producto es obligatorio.");
@@ -173,6 +229,70 @@ public class ProductoService {
     private void validarStock(Integer stock) {
         if (stock < 0) {
             throw new NegocioException("El stock no puede ser negativo.");
+        }
+    }
+
+    private Sort crearOrden(OrdenProducto orden) {
+        if (orden == null) {
+            return Sort.by(
+                    Sort.Direction.ASC,
+                    "nombre"
+            );
+        }
+
+        return switch (orden) {
+            case NOMBRE_ASC ->
+                    Sort.by(Sort.Direction.ASC, "nombre");
+
+            case NOMBRE_DESC ->
+                    Sort.by(Sort.Direction.DESC, "nombre");
+
+            case PRECIO_ASC ->
+                    Sort.by(Sort.Direction.ASC, "precio");
+
+            case PRECIO_DESC ->
+                    Sort.by(Sort.Direction.DESC, "precio");
+        };
+    }
+
+    private void validarPaginacion(int pagina, int tamano) {
+        if (pagina < 0) {
+            throw new IllegalArgumentException(
+                    "La página no puede ser negativa."
+            );
+        }
+
+        if (tamano < 1 || tamano > 50) {
+            throw new IllegalArgumentException(
+                    "El tamaño de página debe estar entre 1 y 50."
+            );
+        }
+    }
+
+    private void validarRangoPrecios(
+            BigDecimal precioMin,
+            BigDecimal precioMax
+    ) {
+        if (precioMin != null
+                && precioMin.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException(
+                    "El precio mínimo no puede ser negativo."
+            );
+        }
+
+        if (precioMax != null
+                && precioMax.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException(
+                    "El precio máximo no puede ser negativo."
+            );
+        }
+
+        if (precioMin != null
+                && precioMax != null
+                && precioMin.compareTo(precioMax) > 0) {
+            throw new IllegalArgumentException(
+                    "El precio mínimo no puede ser mayor que el máximo."
+            );
         }
     }
 }

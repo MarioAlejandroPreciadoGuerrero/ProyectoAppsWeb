@@ -177,6 +177,29 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
     }
 
+    @ExceptionHandler(
+            org.springframework.web.method.annotation
+                    .MethodArgumentTypeMismatchException.class
+    )
+    public ResponseEntity<ErrorResponseDTO> manejarParametroInvalido(
+            org.springframework.web.method.annotation
+                    .MethodArgumentTypeMismatchException exception,
+            HttpServletRequest request
+    ) {
+        ErrorResponseDTO respuesta = crearRespuesta(
+                HttpStatus.BAD_REQUEST,
+                "PARAMETRO_INVALIDO",
+                "El parámetro '" + exception.getName()
+                        + "' contiene un valor no válido",
+                request.getRequestURI(),
+                Map.of()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(respuesta);
+    }
+
     private ErrorResponseDTO crearRespuesta(HttpStatus estado, String codigo, String mensaje, String ruta, Map<String, String> campos) {
         return new ErrorResponseDTO(
                 Instant.now(),

@@ -1,19 +1,34 @@
 package com.example.Bemole_API.service;
 
+import com.example.Bemole_API.dto.categoria.CategoriaResumenDTO;
 import com.example.Bemole_API.exception.NegocioException;
 import com.example.Bemole_API.exception.RecursoNoEncontradoException;
 import com.example.Bemole_API.models.Categoria;
 import com.example.Bemole_API.repositorys.CategoriaRepository;
+import com.example.Bemole_API.repositorys.ProductoRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CategoriaService {
 
     @Autowired
-    private CategoriaRepository repository;
+    private final CategoriaRepository repository;
+
+    @Autowired
+    private final ProductoRepository productoRepository;
+
+    public List<CategoriaResumenDTO> listarPublicas() {
+        return repository
+                .findAll()
+                .stream()
+                .map(this::toResumenDTO)
+                .toList();
+    }
 
     public List<Categoria> listarCategorias() {
         return repository.findAll();
@@ -107,5 +122,16 @@ public class CategoriaService {
         if (categoria.getDescripcion() != null && categoria.getDescripcion().trim().length() > 500) {
             throw new NegocioException("La descripción no puede superar los 500 caracteres.");
         }
+    }
+
+    private CategoriaResumenDTO toResumenDTO(Categoria categoria) {
+        long cantidadProductos = productoRepository.countByCategoriaIdAndActivoTrue(categoria.getId());
+
+        return new CategoriaResumenDTO(
+                categoria.getId(),
+                categoria.getNombre(),
+                categoria.getDescripcion(),
+                cantidadProductos
+        );
     }
 }

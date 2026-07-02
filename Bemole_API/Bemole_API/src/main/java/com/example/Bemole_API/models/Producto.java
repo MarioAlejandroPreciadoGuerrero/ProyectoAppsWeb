@@ -1,6 +1,8 @@
 package com.example.Bemole_API.models;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "productos")
 public class Producto {
@@ -19,7 +21,7 @@ public class Producto {
     private String descripcion;
 
     @Column(nullable = false)
-    private Double precio;
+    private BigDecimal precio;
 
     @Column(nullable = false)
     private Integer stock;
@@ -30,7 +32,7 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(Categoria categoria, String nombre, String descripcion, Double precio, Integer stock, Boolean activo) {
+    public Producto(Categoria categoria, String nombre, String descripcion, BigDecimal precio, Integer stock, Boolean activo) {
         this.categoria = categoria;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -39,7 +41,7 @@ public class Producto {
         this.activo = activo;
     }
 
-    public Producto(Long id, Categoria categoria, String nombre, String descripcion, Double precio, Integer stock, Boolean activo) {
+    public Producto(Long id, Categoria categoria, String nombre, String descripcion, BigDecimal precio, Integer stock, Boolean activo) {
         this.id = id;
         this.categoria = categoria;
         this.nombre = nombre;
@@ -81,11 +83,11 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public Double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 
