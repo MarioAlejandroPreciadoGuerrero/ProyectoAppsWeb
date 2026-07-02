@@ -76,6 +76,12 @@ public class SecurityConfig {
                                 "/api/carrito/**"
                         ).hasRole("CLIENTE")
 
+                        //Ordenes
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/ordenes"
+                        ).hasRole("CLIENTE")
+
                         // Todo lo demás requiere JWT
                         .anyRequest().authenticated()
                 )
