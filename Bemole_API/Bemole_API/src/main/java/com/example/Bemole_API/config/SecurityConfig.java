@@ -71,6 +71,11 @@ public class SecurityConfig {
                                 "/api/admin/**"
                         ).hasRole("ADMINISTRADOR")
 
+                        //Carrito
+                        .requestMatchers(
+                                "/api/carrito/**"
+                        ).hasRole("CLIENTE")
+
                         // Todo lo demás requiere JWT
                         .anyRequest().authenticated()
                 )

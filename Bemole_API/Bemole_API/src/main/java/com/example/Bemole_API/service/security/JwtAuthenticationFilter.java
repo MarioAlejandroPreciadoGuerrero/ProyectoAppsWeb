@@ -45,8 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String email = jwtService.obtenerEmail(token);
 
-            boolean noAutenticado =
-                    SecurityContextHolder
+            boolean noAutenticado = SecurityContextHolder
                             .getContext()
                             .getAuthentication() == null;
 
@@ -55,14 +54,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .findByEmail(email)
                         .orElse(null);
 
-                if (usuario != null
-                        && jwtService.esTokenValido(
-                        token,
-                        usuario
-                )) {
+                if (usuario != null && jwtService.esTokenValido(token, usuario)) {
 
-                    String autoridad =
-                            "ROLE_" + usuario.getRol().name();
+                    String autoridad = "ROLE_" + usuario.getRol().name();
 
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
