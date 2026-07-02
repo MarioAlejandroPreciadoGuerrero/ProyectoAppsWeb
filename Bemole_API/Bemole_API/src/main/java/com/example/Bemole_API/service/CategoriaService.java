@@ -1,5 +1,7 @@
 package com.example.Bemole_API.service;
 
+import com.example.Bemole_API.exception.NegocioException;
+import com.example.Bemole_API.exception.RecursoNoEncontradoException;
 import com.example.Bemole_API.models.Categoria;
 import com.example.Bemole_API.repositorys.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,10 @@ public class CategoriaService {
 
     public Categoria obtenerPorId(Long id) {
         if (id == null || id <= 0) {
-            throw new IllegalArgumentException("El ID de la categoría debe ser un número positivo.");
+            throw new NegocioException("El ID de la categoría debe ser un número positivo.");
         }
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoría con ID " + id + " no encontrada."));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Categoría con ID " + id + " no encontrada."));
     }
 
     public Categoria crearCategoria(Categoria categoria) {
@@ -30,7 +32,7 @@ public class CategoriaService {
 
         String nombreNormalizado = categoria.getNombre().trim();
         if (repository.existsByNombreIgnoreCase(nombreNormalizado)) {
-            throw new IllegalArgumentException("Ya existe una categoría con el nombre: " + nombreNormalizado);
+            throw new NegocioException("Ya existe una categoría con el nombre: " + nombreNormalizado);
         }
 
         categoria.setNombre(nombreNormalizado);
@@ -43,10 +45,10 @@ public class CategoriaService {
 
     public Categoria editarCategoria(Long id, Categoria categoriaParcial) {
         if (id == null || id <= 0) {
-            throw new IllegalArgumentException("El ID de la categoría debe ser un número positivo.");
+            throw new NegocioException("El ID de la categoría debe ser un número positivo.");
         }
         if (categoriaParcial == null) {
-            throw new IllegalArgumentException("Los datos de la categoría no pueden ser nulos.");
+            throw new NegocioException("Los datos de la categoría no pueden ser nulos.");
         }
 
         return repository.findById(id).map(categoria -> {
@@ -54,15 +56,15 @@ public class CategoriaService {
             if (categoriaParcial.getNombre() != null) {
                 String nuevoNombre = categoriaParcial.getNombre().trim();
                 if (nuevoNombre.isEmpty()) {
-                    throw new IllegalArgumentException("El nombre de la categoría no puede estar vacío.");
+                    throw new NegocioException("El nombre de la categoría no puede estar vacío.");
                 }
                 if (nuevoNombre.length() > 100) {
-                    throw new IllegalArgumentException("El nombre de la categoría no puede superar los 100 caracteres.");
+                    throw new NegocioException("El nombre de la categoría no puede superar los 100 caracteres.");
                 }
                 // Verificar duplicado solo si el nombre cambió
                 if (!nuevoNombre.equalsIgnoreCase(categoria.getNombre())
                         && repository.existsByNombreIgnoreCase(nuevoNombre)) {
-                    throw new IllegalArgumentException("Ya existe una categoría con el nombre: " + nuevoNombre);
+                    throw new NegocioException("Ya existe una categoría con el nombre: " + nuevoNombre);
                 }
                 categoria.setNombre(nuevoNombre);
             }
@@ -70,22 +72,22 @@ public class CategoriaService {
             if (categoriaParcial.getDescripcion() != null) {
                 String nuevaDesc = categoriaParcial.getDescripcion().trim();
                 if (nuevaDesc.length() > 500) {
-                    throw new IllegalArgumentException("La descripción no puede superar los 500 caracteres.");
+                    throw new NegocioException("La descripción no puede superar los 500 caracteres.");
                 }
                 categoria.setDescripcion(nuevaDesc);
             }
 
             return repository.save(categoria);
 
-        }).orElseThrow(() -> new RuntimeException("Categoría con ID " + id + " no encontrada."));
+        }).orElseThrow(() -> new RecursoNoEncontradoException("Categoría con ID " + id + " no encontrada."));
     }
 
     public void eliminarCategoria(Long id) {
         if (id == null || id <= 0) {
-            throw new IllegalArgumentException("El ID de la categoría debe ser un número positivo.");
+            throw new NegocioException("El ID de la categoría debe ser un número positivo.");
         }
         if (!repository.existsById(id)) {
-            throw new RuntimeException("Categoría con ID " + id + " no encontrada.");
+            throw new RecursoNoEncontradoException("Categoría con ID " + id + " no encontrada.");
         }
         repository.deleteById(id);
     }
@@ -94,16 +96,16 @@ public class CategoriaService {
 
     private void validarCategoria(Categoria categoria) {
         if (categoria == null) {
-            throw new IllegalArgumentException("La categoría no puede ser nula.");
+            throw new NegocioException("La categoría no puede ser nula.");
         }
         if (categoria.getNombre() == null || categoria.getNombre().isBlank()) {
-            throw new IllegalArgumentException("El nombre de la categoría es obligatorio.");
+            throw new NegocioException("El nombre de la categoría es obligatorio.");
         }
         if (categoria.getNombre().trim().length() > 100) {
-            throw new IllegalArgumentException("El nombre de la categoría no puede superar los 100 caracteres.");
+            throw new NegocioException("El nombre de la categoría no puede superar los 100 caracteres.");
         }
         if (categoria.getDescripcion() != null && categoria.getDescripcion().trim().length() > 500) {
-            throw new IllegalArgumentException("La descripción no puede superar los 500 caracteres.");
+            throw new NegocioException("La descripción no puede superar los 500 caracteres.");
         }
     }
 }

@@ -1,7 +1,8 @@
-package com.example.E_commerce_Bemole.modules;
+package com.example.E_commerce_Bemole.models;
 
 import com.example.E_commerce_Bemole.enums.EstadoPago;
 import com.example.E_commerce_Bemole.enums.MetodoPago;
+import com.example.E_commerce_Bemole.models.*;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

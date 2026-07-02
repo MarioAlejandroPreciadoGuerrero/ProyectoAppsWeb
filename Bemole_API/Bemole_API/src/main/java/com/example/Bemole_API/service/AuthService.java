@@ -1,10 +1,15 @@
 package com.example.Bemole_API.service;
 
-import com.example.Bemole_API.dto.usuarios.AuthResponseDTO;
-import com.example.Bemole_API.dto.usuarios.LoginDTO;
+import com.example.Bemole_API.dto.usuarios.SesionResponseDTO;
+import com.example.Bemole_API.dto.usuarios.InicioSesionRequestDTO;
+import com.example.Bemole_API.dto.usuarios.UsuarioResumenDTO;
+import com.example.Bemole_API.exception.NegocioException;
+import com.example.Bemole_API.exception.RecursoNoEncontradoException;
 import com.example.Bemole_API.models.Usuario;
 import com.example.Bemole_API.repositorys.UsuarioRepository;
+import com.example.Bemole_API.service.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +23,50 @@ public class AuthService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public AuthResponseDTO login(LoginDTO credenciales){
-        Optional<Usuario> usuarioEmail= repository.findByEmail(credenciales.getEmail());
+    @Autowired
+    private JwtService jwtService;
 
-        if (usuarioEmail==null){
-            throw new RuntimeException("Usuario no encontrado");
+    public SesionResponseDTO iniciarSesion(
+            InicioSesionRequestDTO request
+    ) {
+        String emailNormalizado = request
+                .getEmail()
+                .trim()
+                .toLowerCase();
+
+        Usuario usuario = repository.findByEmail(emailNormalizado).orElseThrow(() ->
+                        new BadCredentialsException(
+                                "Credenciales incorrectas"
+                        )
+                );
+
+        boolean passwordCorrecta = passwordEncoder.matches(
+                request.getPassword(),
+                usuario.getPassword()
+        );
+
+        if (!passwordCorrecta) {
+            throw new BadCredentialsException(
+                    "Credenciales incorrectas"
+            );
         }
 
-        boolean passwordCorrecta = passwordEncoder.matches(credenciales.getPassword(), usuarioEmail.get().getPassword());
+        String token = jwtService.generarToken(usuario);
 
-        if (!passwordCorrecta){
-            throw new RuntimeException("Contraseña o email incorrectos");
-        }
+        UsuarioResumenDTO usuarioDTO =
+                new UsuarioResumenDTO(
+                        usuario.getId(),
+                        usuario.getNombre(),
+                        usuario.getApellido(),
+                        usuario.getEmail(),
+                        usuario.getRol()
+                );
 
-        return new AuthResponseDTO("Login exitoso",null);
+        return new SesionResponseDTO(
+                token,
+                "Bearer",
+                jwtService.obtenerExpiracionEnSegundos(),
+                usuarioDTO
+        );
     }
 }

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Bemolé Admin — Categorías</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
+</head>
+<body class="admin-body">
+
+<!-- ── TOPBAR ── -->
+<header class="admin-topbar">
+    <div class="admin-topbar__brand">
+        <span class="admin-topbar__name">Bemolé</span>
+        <span class="admin-topbar__sub">Panel de administración</span>
+    </div>
+    <div class="admin-topbar__center">
+        <span>🔍</span>
+        <input type="text" placeholder="Buscar productos, usuarios…"/>
+    </div>
+    <div class="admin-topbar__right">
+        <button class="admin-topbar__notif" aria-label="Notificaciones">🔔<span class="admin-topbar__notif-dot"></span></button>
+        <a th:href="@{/}" class="admin-topbar__notif" title="Ver tienda" style="font-size:.85rem;color:rgba(255,255,255,.45);text-decoration:none;">🏪 Tienda</a>
+        <div class="admin-topbar__user">
+            <div class="admin-topbar__avatar">A</div>
+            <div>
+                <p class="admin-topbar__uname">Admin</p>
+                <p class="admin-topbar__role">Administrador</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="admin-shell">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="admin-sidebar">
+        <span class="admin-sidebar__section-label">Principal</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin}" class="admin-nav-link"><span class="icon">📊</span> Dashboard</a>
+        </nav>
+        <span class="admin-sidebar__section-label">Catálogo</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin/productos}" class="admin-nav-link"><span class="icon">🎸</span> Productos <span class="badge-count">2,400</span></a>
+            <a th:href="@{/admin/categorias}" class="admin-nav-link active"><span class="icon">📂</span> Categorías</a>
+        </nav>
+        <span class="admin-sidebar__section-label">Operaciones</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin/ordenes}" class="admin-nav-link"><span class="icon">📦</span> Órdenes <span class="badge-count">12</span></a>
+            <a th:href="@{/admin/usuarios}" class="admin-nav-link"><span class="icon">👥</span> Usuarios</a>
+        </nav>
+        <hr class="admin-sidebar__divider"/>
+        <div class="admin-sidebar__logout"><a th:href="@{/logout}"><span class="icon">←</span> Cerrar sesión</a></div>
+    </aside>
+
+    <!-- ── CONTENIDO ── -->
+    <main class="admin-content">
+
+        <div class="admin-page-header">
+            <div class="admin-page-header__titles">
+                <p class="admin-page-header__eyebrow">Catálogo</p>
+                <h1 class="admin-page-header__title">Gestión de categorías</h1>
+            </div>
+            <div class="admin-page-header__actions">
+                <button class="btn btn-primary" onclick="abrirModal('modal-nueva-cat')">+ Nueva categoría</button>
+            </div>
+        </div>
+
+        <!-- Stats rápidas -->
+        <div class="admin-stats" style="grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));">
+            <div class="stat-card">
+                <div class="stat-card__top">
+                    <span class="stat-card__label">Categorías</span>
+                    <div class="stat-card__icon stat-card__icon--gold">📂</div>
+                </div>
+                <div class="stat-card__value">6</div>
+                <p class="stat-card__delta">activas en tienda</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__top">
+                    <span class="stat-card__label">Más vendida</span>
+                    <div class="stat-card__icon stat-card__icon--success">🏆</div>
+                </div>
+                <div class="stat-card__value" style="font-size:1.4rem;">Guitarras</div>
+                <p class="stat-card__delta">348 productos</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__top">
+                    <span class="stat-card__label">Total productos</span>
+                    <div class="stat-card__icon stat-card__icon--info">📦</div>
+                </div>
+                <div class="stat-card__value">2,400</div>
+                <p class="stat-card__delta">en todas las categorías</p>
+            </div>
+        </div>
+
+        <!-- ── GRID DE CATEGORÍAS ── -->
+        <div class="cat-admin-grid">
+
+            <!-- Guitarras -->
+            <div class="cat-admin-card">
+                <div class="cat-admin-card__top">
+                    <div class="cat-admin-card__emoji">🎸</div>
+                    <div>
+                        <p class="cat-admin-card__name">Guitarras</p>
+                        <p class="cat-admin-card__slug">/catalogo/guitarras</p>
+                    </div>
+                    <span class="badge badge-success" style="margin-left:auto;">Activa</span>
+                </div>
+                <div class="cat-admin-card__stats">
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">348</span>
+                        <span class="cat-stat__label">Productos</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">$18K</span>
+                        <span class="cat-stat__label">Precio prom.</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">124</span>
+                        <span class="cat-stat__label">Vendidas/mes</span>
+                    </div>
+                </div>
+                <div class="cat-admin-card__actions">
+                    <button class="btn btn-ghost btn-sm" onclick="abrirModal('modal-editar-cat')">✏️ Editar</button>
+                    <button class="btn btn-ghost btn-sm" style="margin-left:auto;" onclick="abrirModal('modal-eliminar-cat')">🗑</button>
+                </div>
+            </div>
+
+            <!-- Pianos -->
+            <div class="cat-admin-card">
+                <div class="cat-admin-card__top">
+                    <div class="cat-admin-card__emoji">🎹</div>
+                    <div>
+                        <p class="cat-admin-card__name">Pianos</p>
+                        <p class="cat-admin-card__slug">/catalogo/pianos</p>
+                    </div>
+                    <span class="badge badge-success" style="margin-left:auto;">Activa</span>
+                </div>
+                <div class="cat-admin-card__stats">
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">192</span>
+                        <span class="cat-stat__label">Productos</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">$14K</span>
+                        <span class="cat-stat__label">Precio prom.</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">67</span>
+                        <span class="cat-stat__label">Vendidas/mes</span>
+                    </div>
+                </div>
+                <div class="cat-admin-card__actions">
+                    <button class="btn btn-ghost btn-sm" onclick="abrirModal('modal-editar-cat')">✏️ Editar</button>
+                    <button class="btn btn-ghost btn-sm" style="margin-left:auto;" onclick="abrirModal('modal-eliminar-cat')">🗑</button>
+                </div>
+            </div>
+
+            <!-- Percusión -->
+            <div class="cat-admin-card">
+                <div class="cat-admin-card__top">
+                    <div class="cat-admin-card__emoji">🥁</div>
+                    <div>
+                        <p class="cat-admin-card__name">Percusión</p>
+                        <p class="cat-admin-card__slug">/catalogo/percusion</p>
+                    </div>
+                    <span class="badge badge-success" style="margin-left:auto;">Activa</span>
+                </div>
+                <div class="cat-admin-card__stats">
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">276</span>
+                        <span class="cat-stat__label">Productos</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">$9K</span>
+                        <span class="cat-stat__label">Precio prom.</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">48</span>
+                        <span class="cat-stat__label">Vendidas/mes</span>
+                    </div>
+                </div>
+                <div class="cat-admin-card__actions">
+                    <button class="btn btn-ghost btn-sm" onclick="abrirModal('modal-editar-cat')">✏️ Editar</button>
+                    <button class="btn btn-ghost btn-sm" style="margin-left:auto;" onclick="abrirModal('modal-eliminar-cat')">🗑</button>
+                </div>
+            </div>
+
+            <!-- Vientos -->
+            <div class="cat-admin-card">
+                <div class="cat-admin-card__top">
+                    <div class="cat-admin-card__emoji">🎷</div>
+                    <div>
+                        <p class="cat-admin-card__name">Vientos</p>
+                        <p class="cat-admin-card__slug">/catalogo/vientos</p>
+                    </div>
+                    <span class="badge badge-success" style="margin-left:auto;">Activa</span>
+                </div>
+                <div class="cat-admin-card__stats">
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">204</span>
+                        <span class="cat-stat__label">Productos</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">$21K</span>
+                        <span class="cat-stat__label">Precio prom.</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">29</span>
+                        <span class="cat-stat__label">Vendidas/mes</span>
+                    </div>
+                </div>
+                <div class="cat-admin-card__actions">
+                    <button class="btn btn-ghost btn-sm" onclick="abrirModal('modal-editar-cat')">✏️ Editar</button>
+                    <button class="btn btn-ghost btn-sm" style="margin-left:auto;" onclick="abrirModal('modal-eliminar-cat')">🗑</button>
+                </div>
+            </div>
+
+            <!-- Cuerdas -->
+            <div class="cat-admin-card">
+                <div class="cat-admin-card__top">
+                    <div class="cat-admin-card__emoji">🎻</div>
+                    <div>
+                        <p class="cat-admin-card__name">Cuerdas</p>
+                        <p class="cat-admin-card__slug">/catalogo/cuerdas</p>
+                    </div>
+                    <span class="badge badge-success" style="margin-left:auto;">Activa</span>
+                </div>
+                <div class="cat-admin-card__stats">
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">158</span>
+                        <span class="cat-stat__label">Productos</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">$6K</span>
+                        <span class="cat-stat__label">Precio prom.</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">22</span>
+                        <span class="cat-stat__label">Vendidas/mes</span>
+                    </div>
+                </div>
+                <div class="cat-admin-card__actions">
+                    <button class="btn btn-ghost btn-sm" onclick="abrirModal('modal-editar-cat')">✏️ Editar</button>
+                    <button class="btn btn-ghost btn-sm" style="margin-left:auto;" onclick="abrirModal('modal-eliminar-cat')">🗑</button>
+                </div>
+            </div>
+
+            <!-- Audio -->
+            <div class="cat-admin-card">
+                <div class="cat-admin-card__top">
+                    <div class="cat-admin-card__emoji">🎤</div>
+                    <div>
+                        <p class="cat-admin-card__name">Audio</p>
+                        <p class="cat-admin-card__slug">/catalogo/audio</p>
+                    </div>
+                    <span class="badge badge-neutral" style="margin-left:auto;">Inactiva</span>
+                </div>
+                <div class="cat-admin-card__stats">
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">312</span>
+                        <span class="cat-stat__label">Productos</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">$5K</span>
+                        <span class="cat-stat__label">Precio prom.</span>
+                    </div>
+                    <div class="cat-stat">
+                        <span class="cat-stat__val">—</span>
+                        <span class="cat-stat__label">Vendidas/mes</span>
+                    </div>
+                </div>
+                <div class="cat-admin-card__actions">
+                    <button class="btn btn-ghost btn-sm" onclick="abrirModal('modal-editar-cat')">✏️ Editar</button>
+                    <button class="btn btn-primary btn-sm">Activar</button>
+                    <button class="btn btn-ghost btn-sm" style="margin-left:auto;" onclick="abrirModal('modal-eliminar-cat')">🗑</button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+
+<!-- ── MODAL: NUEVA CATEGORÍA ── -->
+<div id="modal-nueva-cat" class="modal-backdrop" onclick="cerrarModalFuera(event,'modal-nueva-cat')">
+    <div class="modal">
+        <div class="modal__header">
+            <h2 class="modal__title">Nueva categoría</h2>
+            <button class="modal__close" onclick="cerrarModal('modal-nueva-cat')">✕</button>
+        </div>
+        <div class="modal__body">
+            <div class="form-grid-2">
+                <div class="field">
+                    <label>Nombre</label>
+                    <input type="text" placeholder="Ej. Accesorios"/>
+                </div>
+                <div class="field">
+                    <label>Emoji / Ícono</label>
+                    <input type="text" placeholder="Ej. 🎵" maxlength="4"/>
+                </div>
+                <div class="field span-2">
+                    <label>Slug (URL)</label>
+                    <input type="text" placeholder="Ej. accesorios"/>
+                    <span class="helper">Solo minúsculas, sin espacios ni acentos</span>
+                </div>
+                <div class="field span-2">
+                    <label>Descripción</label>
+                    <textarea rows="3" placeholder="Descripción breve de la categoría…"></textarea>
+                </div>
+                <div class="field">
+                    <label>Estado inicial</label>
+                    <select>
+                        <option>Activa</option>
+                        <option>Inactiva</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Orden en tienda</label>
+                    <input type="number" placeholder="1" min="1"/>
+                    <span class="helper">Menor número = aparece primero</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn-ghost" onclick="cerrarModal('modal-nueva-cat')">Cancelar</button>
+            <button class="btn btn-primary">Crear categoría</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── MODAL: EDITAR CATEGORÍA ── -->
+<div id="modal-editar-cat" class="modal-backdrop" onclick="cerrarModalFuera(event,'modal-editar-cat')">
+    <div class="modal">
+        <div class="modal__header">
+            <h2 class="modal__title">Editar categoría</h2>
+            <button class="modal__close" onclick="cerrarModal('modal-editar-cat')">✕</button>
+        </div>
+        <div class="modal__body">
+            <div class="form-grid-2">
+                <div class="field">
+                    <label>Nombre</label>
+                    <input type="text" value="Guitarras"/>
+                </div>
+                <div class="field">
+                    <label>Emoji / Ícono</label>
+                    <input type="text" value="🎸" maxlength="4"/>
+                </div>
+                <div class="field span-2">
+                    <label>Slug (URL)</label>
+                    <input type="text" value="guitarras"/>
+                    <span class="helper">Solo minúsculas, sin espacios ni acentos</span>
+                </div>
+                <div class="field span-2">
+                    <label>Descripción</label>
+                    <textarea rows="3">Guitarras eléctricas, acústicas y clásicas de las mejores marcas.</textarea>
+                </div>
+                <div class="field">
+                    <label>Estado</label>
+                    <select>
+                        <option selected>Activa</option>
+                        <option>Inactiva</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Orden en tienda</label>
+                    <input type="number" value="1"/>
+                </div>
+            </div>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn-ghost" onclick="cerrarModal('modal-editar-cat')">Cancelar</button>
+            <button class="btn btn-primary">Guardar cambios</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── MODAL: CONFIRMAR ELIMINAR ── -->
+<div id="modal-eliminar-cat" class="modal-backdrop" onclick="cerrarModalFuera(event,'modal-eliminar-cat')">
+    <div class="modal" style="max-width:26rem;">
+        <div class="modal__header">
+            <h2 class="modal__title">Eliminar categoría</h2>
+            <button class="modal__close" onclick="cerrarModal('modal-eliminar-cat')">✕</button>
+        </div>
+        <div class="modal__body">
+            <div class="admin-alert admin-alert--error" style="margin:0;">
+                <span class="admin-alert__icon">⚠</span>
+                <div><strong>No puedes eliminar</strong> una categoría que tenga productos asignados. Primero reasígnalos o elimínalos.</div>
+            </div>
+            <p style="font-size:.875rem;color:#6b7280;margin-top:.75rem;">¿Deseas eliminar la categoría <strong>Guitarras</strong>? Esta acción no se puede deshacer.</p>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn-ghost" onclick="cerrarModal('modal-eliminar-cat')">Cancelar</button>
+            <button class="btn btn-danger">Sí, eliminar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function abrirModal(id) { document.getElementById(id).classList.add('open'); }
+    function cerrarModal(id) { document.getElementById(id).classList.remove('open'); }
+    function cerrarModalFuera(e, id) { if (e.target.id === id) cerrarModal(id); }
+</script>
+
+</body>
+</html>

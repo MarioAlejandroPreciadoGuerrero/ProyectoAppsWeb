@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bemolé — Fender Stratocaster Player</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header class="navbar">
+  <div class="container navbar__inner">
+    <div class="logo">
+      <span class="logo__name">Bemolé</span>
+      <span class="logo__tagline">Instrumentos para cada nota</span>
+    </div>
+    <ul class="nav-links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a th:href="@{/catalogo}" class="active">Catálogo</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button aria-label="Buscar">🔍</button>
+      <a th:href="@{/carrito}">
+        <button class="cart-btn" aria-label="Carrito">🛒<span class="cart-badge">2</span></button>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ── BREADCRUMB ── -->
+<div class="container">
+  <nav class="breadcrumb">
+    <a th:href="@{/}">Inicio</a>
+    <span class="breadcrumb__sep">›</span>
+    <a th:href="@{/catalogo}">Guitarras</a>
+    <span class="breadcrumb__sep">›</span>
+    <span class="breadcrumb__current">Fender Stratocaster Player</span>
+  </nav>
+</div>
+
+<!-- ── DETALLE PRODUCTO ── -->
+<section class="container">
+  <div class="product-detail">
+
+    <!-- Galería -->
+    <div class="gallery">
+      <div class="gallery__main">🎸</div>
+      <div class="gallery__thumbs">
+        <div class="gallery__thumb gallery__thumb--active">🎸</div>
+        <div class="gallery__thumb">🎸</div>
+        <div class="gallery__thumb">🎸</div>
+        <div class="gallery__thumb">🎸</div>
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="product-info">
+      <div class="product-info__tags">
+        <span class="product-info__badge-new">Nuevo</span>
+        <span class="product-info__cat">Guitarras</span>
+      </div>
+      <h1 class="product-info__title">Fender Stratocaster Player</h1>
+      <div class="product-info__stars">
+        <span class="stars">★★★★★</span>
+        <span class="reviews">4.8 · 124 reseñas</span>
+      </div>
+
+      <p class="product-info__price">$18,999 <span>MXN</span></p>
+      <p class="product-info__msi">o 12 mensualidades sin intereses de <strong>$1,583</strong></p>
+
+      <div class="color-section">
+        <p class="color-label">Color: <span>Sonic Blue</span></p>
+        <div class="color-swatches">
+          <button class="swatch swatch--active" style="background:#93c5fd;" aria-label="Sonic Blue"></button>
+          <button class="swatch" style="background:#c8a882;" aria-label="Sunburst"></button>
+          <button class="swatch" style="background:#1a1a1a;" aria-label="Negro"></button>
+          <button class="swatch" style="background:#7f1d1d;" aria-label="Rojo"></button>
+        </div>
+      </div>
+
+      <div class="qty-section">
+        <p class="qty-label">Cantidad</p>
+        <div class="qty-row">
+          <button class="qty-btn">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn">+</button>
+          <span class="qty-stock">· 8 en stock</span>
+        </div>
+      </div>
+
+      <div class="product-ctas">
+        <button class="btn-gold">🛒 Agregar al carrito</button>
+        <button class="btn-ghost-gold">⚡ Comprar ahora</button>
+      </div>
+
+      <div class="product-perks">
+        <div class="perk"><span>🚚</span> Envío gratis</div>
+        <div class="perk"><span>🛡️</span> Garantía 2 años</div>
+        <div class="perk"><span>🔄</span> 30 días devolución</div>
+        <div class="perk"><span>🎓</span> Asesoría experta</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Descripción + Specs -->
+  <div class="product-tabs">
+    <div>
+      <p class="eyebrow">Descripción</p>
+      <h2 class="display" style="font-size:1.25rem;margin-bottom:1rem;">Sobre este instrumento</h2>
+      <p style="font-size:.875rem;color:#6b7280;font-weight:300;line-height:1.7;margin-bottom:.75rem;">
+        La Fender Stratocaster Player es la guitarra perfecta para el músico que busca el sonido clásico de Fender con acabados modernos. Equipada con tres pastillas single-coil, ofrece un rango de tonos desde cristalinos limpios hasta gruñidos con overdrive.
+      </p>
+      <p style="font-size:.875rem;color:#6b7280;font-weight:300;line-height:1.7;">
+        Ideal para géneros como rock, blues, country y pop. Su cuerpo de aliso proporciona un equilibrio de frecuencias envidiable, mientras que el mástil de arce garantiza estabilidad y facilidad de ejecución en cualquier escenario.
+      </p>
+    </div>
+    <div>
+      <p class="eyebrow">Especificaciones</p>
+      <h2 class="display" style="font-size:1.25rem;margin-bottom:1rem;">Ficha técnica</h2>
+      <table class="specs-table">
+        <tbody>
+          <tr><td>Cuerpo</td><td>Aliso</td></tr>
+          <tr><td>Mástil</td><td>Arce maple</td></tr>
+          <tr><td>Diapasón</td><td>Maple, radio 9.5"</td></tr>
+          <tr><td>Trastes</td><td>22 Medium-Jumbo</td></tr>
+          <tr><td>Pastillas</td><td>3× Player Single-Coil</td></tr>
+          <tr><td>Puente</td><td>2-Point Tremolo</td></tr>
+          <tr><td>Peso</td><td>3.6 kg</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Reseñas -->
+  <div class="mt-16">
+    <p class="eyebrow">Opiniones</p>
+    <h2 class="display" style="font-size:1.25rem;margin-bottom:1rem;">Reseñas de clientes</h2>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-card__header">
+          <div class="review-card__avatar">M</div>
+          <div>
+            <p class="review-card__name">Miguel R.</p>
+            <p class="review-card__meta">Hace 2 semanas · <span class="stars">★★★★★</span></p>
+          </div>
+        </div>
+        <p class="review-card__text">Excelente guitarra, llegó en perfecto estado. El sonido es increíble para blues y rock clásico. La acción de las cuerdas viene muy bien ajustada de fábrica.</p>
+      </div>
+      <div class="review-card">
+        <div class="review-card__header">
+          <div class="review-card__avatar">S</div>
+          <div>
+            <p class="review-card__name">Sandra L.</p>
+            <p class="review-card__meta">Hace 1 mes · <span class="stars">★★★★</span>★</p>
+          </div>
+        </div>
+        <p class="review-card__text">La compré para mi hijo y quedó enamorado. La calidad de construcción es muy superior a otras guitarras en el mismo rango de precio. El envío fue rápido y bien embalado.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer" style="margin-top:5rem;">
+  <div class="container footer__inner">
+    <div>
+      <span class="footer__brand">Bemolé</span>
+      <span class="footer__copy">© 2025 · Todos los derechos reservados</span>
+    </div>
+    <ul class="footer__links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>

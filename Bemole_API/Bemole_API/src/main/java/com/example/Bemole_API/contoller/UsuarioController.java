@@ -1,9 +1,13 @@
 package com.example.Bemole_API.contoller;
 
 import com.example.Bemole_API.dto.usuarios.UsuarioRegistroDTO;
+import com.example.Bemole_API.dto.usuarios.UsuarioResponseDTO;
+import com.example.Bemole_API.dto.usuarios.UsuarioResumenDTO;
 import com.example.Bemole_API.models.Usuario;
 import com.example.Bemole_API.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +30,9 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> registrar(@RequestBody Usuario usuario){
-        return ResponseEntity.ok(service.registrarUsuario(usuario));
+    public ResponseEntity<UsuarioResponseDTO> registrar(@Valid @RequestBody UsuarioRegistroDTO usuarioDTO){
+        UsuarioResponseDTO usuarioRegistrado= service.registrarUsuario(usuarioDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRegistrado);
     }
 
     @PatchMapping("/{id}")

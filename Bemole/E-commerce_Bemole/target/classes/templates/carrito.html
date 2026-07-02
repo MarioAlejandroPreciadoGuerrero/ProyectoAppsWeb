@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bemolé — Mi carrito</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header class="navbar">
+  <div class="container navbar__inner">
+    <div class="logo">
+      <span class="logo__name">Bemolé</span>
+      <span class="logo__tagline">Instrumentos para cada nota</span>
+    </div>
+    <ul class="nav-links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button aria-label="Buscar">🔍</button>
+      <a th:href="@{/carrito}">
+        <button class="cart-btn" aria-label="Carrito">🛒<span class="cart-badge">2</span></button>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ── BREADCRUMB ── -->
+<div class="container">
+  <nav class="breadcrumb">
+    <a th:href="@{/}">Inicio</a>
+    <span class="breadcrumb__sep">›</span>
+    <span class="breadcrumb__current">Mi carrito</span>
+  </nav>
+</div>
+
+<div class="container">
+  <div class="cart-header">
+    <p class="eyebrow">Resumen</p>
+    <h1>Mi carrito <span>(2 artículos)</span></h1>
+  </div>
+
+  <div class="cart-layout">
+
+    <!-- Lista de productos -->
+    <div>
+      <div class="cart-items">
+
+        <!-- Item 1 -->
+        <div class="cart-item">
+          <div class="cart-item__img">🎸</div>
+          <div class="cart-item__info">
+            <p class="cart-item__brand">Guitarras · Fender</p>
+            <h3 class="cart-item__name">Fender Stratocaster Player</h3>
+            <p class="cart-item__variant">Color: Sonic Blue</p>
+            <div class="cart-item__bottom">
+              <div class="qty-controls">
+                <button class="qty-ctrl-btn">−</button>
+                <span style="font-weight:500;font-size:.875rem;width:1rem;text-align:center;">1</span>
+                <button class="qty-ctrl-btn">+</button>
+              </div>
+              <div class="cart-item__price">
+                <p class="amount">$18,999</p>
+                <p class="currency">MXN</p>
+              </div>
+            </div>
+          </div>
+          <button class="cart-item__remove">✕</button>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="cart-item">
+          <div class="cart-item__img">🎹</div>
+          <div class="cart-item__info">
+            <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.15rem;">
+              <p class="cart-item__brand">Pianos · Yamaha</p>
+              <span class="badge badge--sale">−20%</span>
+            </div>
+            <h3 class="cart-item__name">Yamaha P-145</h3>
+            <p class="cart-item__variant">Color: Negro</p>
+            <div class="cart-item__bottom">
+              <div class="qty-controls">
+                <button class="qty-ctrl-btn">−</button>
+                <span style="font-weight:500;font-size:.875rem;width:1rem;text-align:center;">1</span>
+                <button class="qty-ctrl-btn">+</button>
+              </div>
+              <div class="cart-item__price">
+                <p class="old">$15,624</p>
+                <p class="amount">$12,499</p>
+                <p class="currency">MXN</p>
+              </div>
+            </div>
+          </div>
+          <button class="cart-item__remove">✕</button>
+        </div>
+
+      </div>
+
+      <!-- Cupón -->
+      <div class="coupon-box">
+        <p>¿Tienes un cupón de descuento?</p>
+        <div class="coupon-row">
+          <input type="text" class="input" placeholder="Ingresa tu código"/>
+          <button class="btn-dark">Aplicar</button>
+        </div>
+      </div>
+
+      <a th:href="@{/catalogo}" class="continue-link">← Continuar comprando</a>
+    </div>
+
+    <!-- Resumen de orden -->
+    <div>
+      <div class="order-summary">
+        <p class="summary-title">Resumen de compra</p>
+
+        <div class="summary-rows">
+          <div class="summary-row">
+            <span>Subtotal (2 artículos)</span>
+            <span class="val">$31,498</span>
+          </div>
+          <div class="summary-row">
+            <span>Descuento aplicado</span>
+            <span class="val--red">−$3,125</span>
+          </div>
+          <div class="summary-row">
+            <span>Envío</span>
+            <span class="val--green">Gratis</span>
+          </div>
+        </div>
+
+        <div class="summary-total">
+          <span class="summary-total__label">Total</span>
+          <div class="summary-total__amount">
+            <p class="big">$28,373</p>
+            <p class="sub">MXN · IVA incluido</p>
+          </div>
+        </div>
+
+        <p class="summary-msi">o 12 meses sin intereses de <strong>$2,364 MXN</strong></p>
+
+        <a th:href="@{/checkout}">
+          <button class="btn-gold">Proceder al pago →</button>
+        </a>
+
+        <div class="summary-perks">
+          <span>🔒 Pago 100% seguro y encriptado</span>
+          <span>🚚 Envío gratis por compra mayor a $2,000</span>
+          <span>🔄 30 días para devolución sin preguntas</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer" style="margin-top:5rem;">
+  <div class="container footer__inner">
+    <div>
+      <span class="footer__brand">Bemolé</span>
+      <span class="footer__copy">© 2025 · Todos los derechos reservados</span>
+    </div>
+    <ul class="footer__links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>

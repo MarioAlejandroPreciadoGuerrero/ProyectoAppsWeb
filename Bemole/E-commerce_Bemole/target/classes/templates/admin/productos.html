@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Bemolé Admin — Productos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
+</head>
+<body class="admin-body">
+
+<!-- ── TOPBAR ── -->
+<header class="admin-topbar">
+    <div class="admin-topbar__brand">
+        <span class="admin-topbar__name">Bemolé</span>
+        <span class="admin-topbar__sub">Panel de administración</span>
+    </div>
+    <div class="admin-topbar__center">
+        <span>🔍</span>
+        <input type="text" placeholder="Buscar productos, usuarios…"/>
+    </div>
+    <div class="admin-topbar__right">
+        <button class="admin-topbar__notif" aria-label="Notificaciones">🔔<span class="admin-topbar__notif-dot"></span></button>
+        <a th:href="@{/}" class="admin-topbar__notif" title="Ver tienda" style="font-size:.85rem;color:rgba(255,255,255,.45);text-decoration:none;">🏪 Tienda</a>
+        <div class="admin-topbar__user">
+            <div class="admin-topbar__avatar">A</div>
+            <div>
+                <p class="admin-topbar__uname">Admin</p>
+                <p class="admin-topbar__role">Administrador</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="admin-shell">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="admin-sidebar">
+        <span class="admin-sidebar__section-label">Principal</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin}" class="admin-nav-link"><span class="icon">📊</span> Dashboard</a>
+        </nav>
+        <span class="admin-sidebar__section-label">Catálogo</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin/productos}" class="admin-nav-link active">
+                <span class="icon">🎸</span> Productos <span class="badge-count">2,400</span>
+            </a>
+            <a th:href="@{/admin/categorias}" class="admin-nav-link"><span class="icon">📂</span> Categorías</a>
+        </nav>
+        <span class="admin-sidebar__section-label">Operaciones</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin/ordenes}" class="admin-nav-link"><span class="icon">📦</span> Órdenes <span class="badge-count">12</span></a>
+            <a th:href="@{/admin/usuarios}" class="admin-nav-link"><span class="icon">👥</span> Usuarios</a>
+        </nav>
+        <hr class="admin-sidebar__divider"/>
+        <div class="admin-sidebar__logout"><a th:href="@{/logout}"><span class="icon">←</span> Cerrar sesión</a></div>
+    </aside>
+
+    <!-- ── CONTENIDO ── -->
+    <main class="admin-content">
+
+        <div class="admin-page-header">
+            <div class="admin-page-header__titles">
+                <p class="admin-page-header__eyebrow">Catálogo</p>
+                <h1 class="admin-page-header__title">Gestión de productos</h1>
+            </div>
+            <div class="admin-page-header__actions">
+                <button class="btn btn-ghost btn-sm">⬇ Exportar CSV</button>
+                <button class="btn btn-primary" onclick="abrirModal('modal-nuevo')">+ Nuevo producto</button>
+            </div>
+        </div>
+
+        <!-- Alerta éxito (condicional Thymeleaf) -->
+        <div class="admin-alert admin-alert--success" th:if="${param.guardado}">
+            <span class="admin-alert__icon">✓</span>
+            <div><strong>Producto guardado correctamente.</strong></div>
+        </div>
+
+        <!-- ── TABLA PRODUCTOS ── -->
+        <div class="admin-table-wrap">
+
+            <div class="admin-table-toolbar">
+                <div class="admin-table-toolbar__left">
+                    <div class="admin-search">
+                        <span>🔍</span>
+                        <input type="text" placeholder="Buscar por nombre, SKU…"/>
+                    </div>
+                    <select class="admin-filter-select">
+                        <option value="">Todas las categorías</option>
+                        <option>Guitarras</option>
+                        <option>Pianos</option>
+                        <option>Percusión</option>
+                        <option>Vientos</option>
+                        <option>Cuerdas</option>
+                        <option>Audio</option>
+                    </select>
+                    <select class="admin-filter-select">
+                        <option value="">Cualquier estado</option>
+                        <option>Activo</option>
+                        <option>Inactivo</option>
+                        <option>Agotado</option>
+                    </select>
+                </div>
+                <div class="admin-table-toolbar__right">
+                    <span style="font-size:.75rem;color:#9ca3af;">2,400 productos</span>
+                </div>
+            </div>
+
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th style="width:2.5rem;"><input type="checkbox"/></th>
+                    <th class="sortable sorted">Producto <span class="sort-icon">↑</span></th>
+                    <th class="sortable">Categoría <span class="sort-icon">↕</span></th>
+                    <th class="sortable">Precio <span class="sort-icon">↕</span></th>
+                    <th class="sortable">Stock <span class="sort-icon">↕</span></th>
+                    <th>Estado</th>
+                    <th>Actualizado</th>
+                    <th style="width:7rem;">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="td-img">🎸</div>
+                            <div>
+                                <p class="td-name">Fender Stratocaster Player</p>
+                                <p class="td-sub">SKU: FEN-STRAT-PL</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">Guitarras</td>
+                    <td>$18,999</td>
+                    <td>8</td>
+                    <td><span class="badge badge-success"><span class="badge-dot"></span>Activo</span></td>
+                    <td class="muted">12 jun 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <a th:href="@{/admin/productos/editar/1}" class="action-icon-btn" title="Editar">✏️</a>
+                            <button class="action-icon-btn" title="Duplicar">⧉</button>
+                            <button class="action-icon-btn action-icon-btn--delete" title="Eliminar" onclick="abrirModal('modal-eliminar')">🗑</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="td-img">🎹</div>
+                            <div>
+                                <p class="td-name">Yamaha P-145</p>
+                                <p class="td-sub">SKU: YAM-P145</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">Pianos</td>
+                    <td>$12,499</td>
+                    <td>14</td>
+                    <td><span class="badge badge-success"><span class="badge-dot"></span>Activo</span></td>
+                    <td class="muted">8 jun 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <a th:href="@{/admin/productos/editar/2}" class="action-icon-btn" title="Editar">✏️</a>
+                            <button class="action-icon-btn" title="Duplicar">⧉</button>
+                            <button class="action-icon-btn action-icon-btn--delete" title="Eliminar" onclick="abrirModal('modal-eliminar')">🗑</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="td-img">🎻</div>
+                            <div>
+                                <p class="td-name">Violín 4/4 Stentor II</p>
+                                <p class="td-sub">SKU: VLN-STEN-44</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">Cuerdas</td>
+                    <td>$4,299</td>
+                    <td style="color:var(--error);font-weight:700;">2</td>
+                    <td><span class="badge badge-error"><span class="badge-dot"></span>Stock crítico</span></td>
+                    <td class="muted">5 jun 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <a th:href="@{/admin/productos/editar/3}" class="action-icon-btn" title="Editar">✏️</a>
+                            <button class="action-icon-btn" title="Duplicar">⧉</button>
+                            <button class="action-icon-btn action-icon-btn--delete" title="Eliminar" onclick="abrirModal('modal-eliminar')">🗑</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="td-img">🥁</div>
+                            <div>
+                                <p class="td-name">Roland TD-07KV</p>
+                                <p class="td-sub">SKU: ROL-TD07KV</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">Percusión</td>
+                    <td>$32,000</td>
+                    <td>3</td>
+                    <td><span class="badge badge-warning"><span class="badge-dot"></span>Stock bajo</span></td>
+                    <td class="muted">1 jun 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <a th:href="@{/admin/productos/editar/4}" class="action-icon-btn" title="Editar">✏️</a>
+                            <button class="action-icon-btn" title="Duplicar">⧉</button>
+                            <button class="action-icon-btn action-icon-btn--delete" title="Eliminar" onclick="abrirModal('modal-eliminar')">🗑</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="td-img">🎸</div>
+                            <div>
+                                <p class="td-name">Gibson Les Paul Standard</p>
+                                <p class="td-sub">SKU: GIB-LP-STD</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">Guitarras</td>
+                    <td>$44,200</td>
+                    <td>6</td>
+                    <td><span class="badge badge-success"><span class="badge-dot"></span>Activo</span></td>
+                    <td class="muted">28 may 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <a th:href="@{/admin/productos/editar/5}" class="action-icon-btn" title="Editar">✏️</a>
+                            <button class="action-icon-btn" title="Duplicar">⧉</button>
+                            <button class="action-icon-btn action-icon-btn--delete" title="Eliminar" onclick="abrirModal('modal-eliminar')">🗑</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="td-img">🎷</div>
+                            <div>
+                                <p class="td-name">Saxofón Alto Yamaha YAS-280</p>
+                                <p class="td-sub">SKU: SAX-YAM-A280</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">Vientos</td>
+                    <td>$22,500</td>
+                    <td>0</td>
+                    <td><span class="badge badge-neutral"><span class="badge-dot"></span>Agotado</span></td>
+                    <td class="muted">14 may 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <a th:href="@{/admin/productos/editar/6}" class="action-icon-btn" title="Editar">✏️</a>
+                            <button class="action-icon-btn" title="Duplicar">⧉</button>
+                            <button class="action-icon-btn action-icon-btn--delete" title="Eliminar" onclick="abrirModal('modal-eliminar')">🗑</button>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="admin-table-footer">
+                <span>Mostrando 6 de 2,400 productos</span>
+                <div class="admin-pagination">
+                    <button class="admin-pag-btn">‹</button>
+                    <button class="admin-pag-btn active">1</button>
+                    <button class="admin-pag-btn">2</button>
+                    <button class="admin-pag-btn">3</button>
+                    <span style="padding:.25rem;">…</span>
+                    <button class="admin-pag-btn">400</button>
+                    <button class="admin-pag-btn">›</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- ── MODAL: NUEVO PRODUCTO ── -->
+<div id="modal-nuevo" class="modal-backdrop" onclick="cerrarModalFuera(event,'modal-nuevo')">
+    <div class="modal">
+        <div class="modal__header">
+            <h2 class="modal__title">Nuevo producto</h2>
+            <button class="modal__close" onclick="cerrarModal('modal-nuevo')">✕</button>
+        </div>
+        <div class="modal__body">
+            <div class="form-grid-2">
+                <div class="field span-2">
+                    <label>Nombre del producto</label>
+                    <input type="text" placeholder="Ej. Fender Stratocaster Player"/>
+                </div>
+                <div class="field">
+                    <label>Categoría</label>
+                    <select>
+                        <option value="">Seleccionar…</option>
+                        <option>Guitarras</option>
+                        <option>Pianos</option>
+                        <option>Percusión</option>
+                        <option>Vientos</option>
+                        <option>Cuerdas</option>
+                        <option>Audio</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Marca</label>
+                    <input type="text" placeholder="Ej. Fender"/>
+                </div>
+                <div class="field">
+                    <label>Precio (MXN)</label>
+                    <input type="number" placeholder="0.00"/>
+                </div>
+                <div class="field">
+                    <label>Stock inicial</label>
+                    <input type="number" placeholder="0"/>
+                </div>
+                <div class="field">
+                    <label>SKU</label>
+                    <input type="text" placeholder="Ej. FEN-STRAT-PL"/>
+                    <span class="helper">Debe ser único</span>
+                </div>
+                <div class="field">
+                    <label>Estado</label>
+                    <select>
+                        <option>Activo</option>
+                        <option>Inactivo</option>
+                    </select>
+                </div>
+                <div class="field span-2">
+                    <label>Descripción corta</label>
+                    <textarea rows="3" placeholder="Descripción visible en la tarjeta del catálogo…"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn-ghost" onclick="cerrarModal('modal-nuevo')">Cancelar</button>
+            <button class="btn btn-primary">Guardar producto</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── MODAL: CONFIRMAR ELIMINAR ── -->
+<div id="modal-eliminar" class="modal-backdrop" onclick="cerrarModalFuera(event,'modal-eliminar')">
+    <div class="modal" style="max-width:26rem;">
+        <div class="modal__header">
+            <h2 class="modal__title">Eliminar producto</h2>
+            <button class="modal__close" onclick="cerrarModal('modal-eliminar')">✕</button>
+        </div>
+        <div class="modal__body">
+            <div class="admin-alert admin-alert--error" style="margin:0;">
+                <span class="admin-alert__icon">⚠</span>
+                <div>Esta acción <strong>no se puede deshacer</strong>. El producto será eliminado permanentemente del catálogo.</div>
+            </div>
+            <p style="font-size:.875rem;color:#6b7280;">¿Estás seguro de que deseas eliminar <strong>Fender Stratocaster Player</strong>?</p>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn-ghost" onclick="cerrarModal('modal-eliminar')">Cancelar</button>
+            <button class="btn btn-danger">Sí, eliminar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function abrirModal(id) { document.getElementById(id).classList.add('open'); }
+    function cerrarModal(id) { document.getElementById(id).classList.remove('open'); }
+    function cerrarModalFuera(e, id) { if (e.target.id === id) cerrarModal(id); }
+</script>
+
+</body>
+</html>
