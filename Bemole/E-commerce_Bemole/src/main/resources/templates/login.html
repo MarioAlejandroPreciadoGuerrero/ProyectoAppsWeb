@@ -1,212 +1,272 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bemolé — Iniciar sesión</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/style.css}">
 </head>
 <body class="auth-page">
 
-  <!-- NAVBAR MINIMAL -->
-  <header class="navbar navbar--minimal">
-    <div class="container navbar__inner">
-      <a th:href="@{/home_page_no_loggeado}" class="logo" style="text-decoration:none;">
-        <span class="logo__name">Bemolé</span>
-        <span class="logo__tagline">Instrumentos para cada nota</span>
-      </a>
-      <a th:href="@{/home_page_no_loggeado}" class="back-link" style="font-weight: bold;">← Volver a la tienda</a>
-    </div>
-  </header>
+<header class="navbar navbar--minimal">
+  <div class="container navbar__inner">
+    <a th:href="@{/}" class="logo" style="text-decoration:none;">
+      <span class="logo__name">Bemolé</span>
+      <span class="logo__tagline">Instrumentos para cada nota</span>
+    </a>
 
-  <div class="auth-center">
-    <div class="auth-box">
+    <a th:href="@{/}" class="back-link" style="font-weight:bold;">
+      ← Volver a la tienda
+    </a>
+  </div>
+</header>
 
-      <div class="auth-icon">🎵</div>
-      <p class="auth-subtitle">Accede a tu cuenta Bemolé</p>
+<main class="auth-center">
+  <div class="auth-box">
+    <div class="auth-icon">🎵</div>
+    <p class="auth-subtitle">Accede a tu cuenta Bemolé</p>
 
-      <div class="auth-card">
+    <div class="auth-card">
+      <div class="auth-tabs" role="tablist" aria-label="Acceso a Bemolé">
+        <button
+          id="tab-login"
+          type="button"
+          class="auth-tab auth-tab--active"
+          role="tab"
+          aria-controls="panel-login"
+          aria-selected="true"
+          onclick="showTab('login')">
+          Iniciar sesión
+        </button>
 
-        <!-- Tabs -->
-        <div class="auth-tabs">
-          <button id="tab-login" class="auth-tab auth-tab--active" onclick="showTab('login')">Iniciar sesión</button>
-          <button id="tab-registro" class="auth-tab" onclick="showTab('registro')">Crear cuenta</button>
-        </div>
-
-        <!-- Panel Login -->
-        <div id="panel-login" class="auth-panel auth-panel--visible">
-          <form th:action="@{/login}" method="post" th:object="${credenciales}">
-            <div>
-              <label class="label" for="loginEmail">
-                Correo electrónico
-              </label>
-
-              <input id="loginEmail" type="email" class="input" th:field="*{email}" placeholder="tu@correo.com"/>
-
-              <small class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
-            </div>
-
-            <div>
-              <label class="label" for="loginPassword">
-                Contraseña
-              </label>
-
-              <input id="loginPassword" type="password" class="input" th:field="*{password}" placeholder="••••••••"/>
-
-              <small class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
-            </div>
-
-            <div class="auth-error" th:if="${errorLogin}" th:text="${errorLogin}"></div>
-
-            <button type="submit" class="btn-gold">
-              Iniciar sesión
-            </button>
-          </form>
-          <div class="auth-success" th:if="${param.registroExitoso}">
-            Tu cuenta fue creada correctamente. Ya puedes iniciar sesión.
-          </div>
-
-          <div class="auth-success" th:if="${param.logout}">
-            Tu sesión se cerró correctamente.
-          </div>
-
-          <div class="social-divider"><span>o continúa con</span></div>
-
-          <div class="social-btns">
-            <button class="social-btn"><span>🇬</span> Google</button>
-            <button class="social-btn"><span>📘</span> Facebook</button>
-          </div>
-
-          <p class="auth-footer-text">
-            ¿No tienes cuenta?
-            <button onclick="showTab('registro')">Regístrate gratis</button>
-          </p>
-        </div>
-
-        <!-- Panel Registro -->
-        <div id="panel-registro" class="auth-panel">
-          <form th:action="@{/registro}" method="post" th:object="${registro}">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
-              <div>
-                <label class="label">Nombre</label>
-
-                <input type="text" class="input" th:field="*{nombre}" placeholder="Juan"/>
-
-                <small class="field-error" th:errors="*{nombre}"></small>
-              </div>
-
-              <div>
-                <label class="label">Apellido</label>
-
-                <input type="text" class="input" th:field="*{apellido}" placeholder="García"/>
-
-                <small class="field-error" th:errors="*{apellido}"></small>
-              </div>
-            </div>
-
-            <div>
-              <label class="label">Correo electrónico</label>
-
-              <input type="email" class="input" th:field="*{email}" placeholder="tu@correo.com"/>
-
-              <small class="field-error" th:errors="*{email}"></small>
-            </div>
-
-            <div>
-              <label class="label">Teléfono (opcional)</label>
-
-              <input type="tel" class="input" th:field="*{telefono}" placeholder="6441234567"/>
-
-              <small class="field-error" th:errors="*{telefono}"></small>
-            </div>
-
-            <div>
-              <label class="label">Contraseña</label>
-
-              <input type="password" class="input" th:field="*{password}" placeholder="Mínimo 8 caracteres"/>
-              <small class="field-error" th:errors="*{password}"></small>
-            </div>
-
-            <div>
-              <label class="label">Confirmar contraseña</label>
-
-              <input type="password" class="input" th:field="*{confirmarPassword}" placeholder="Repite tu contraseña"/>
-
-              <small class="field-error" th:errors="*{confirmarPassword}"></small>
-            </div>
-
-            <div class="auth-checkbox-row">
-              <input type="checkbox" id="terminos" th:field="*{aceptaTerminos}"/>
-
-              <label for="terminos">
-                Acepto los términos y condiciones y el aviso de privacidad.
-              </label>
-            </div>
-
-            <small
-                    class="field-error"
-                    th:errors="*{aceptaTerminos}">
-            </small>
-
-            <div
-                    class="auth-error"
-                    th:if="${errorRegistro}"
-                    th:text="${errorRegistro}">
-            </div>
-
-            <button type="submit" class="btn-gold">
-              Crear mi cuenta
-            </button>
-          </form>
-          <p class="auth-footer-text">
-            ¿Ya tienes cuenta?
-            <button onclick="showTab('login')">Inicia sesión</button>
-          </p>
-        </div>
-
+        <button
+          id="tab-registro"
+          type="button"
+          class="auth-tab"
+          role="tab"
+          aria-controls="panel-registro"
+          aria-selected="false"
+          onclick="showTab('registro')">
+          Crear cuenta
+        </button>
       </div>
 
-      <p class="auth-ssl">🔒 Tus datos están protegidos con encriptación SSL</p>
+      <section id="panel-login" class="auth-panel auth-panel--visible" role="tabpanel" aria-labelledby="tab-login">
+        <div class="auth-success" th:if="${param.registroExitoso}">
+          Tu cuenta fue creada correctamente. Ya puedes iniciar sesión.
+        </div>
+
+        <div class="auth-success" th:if="${param.logout}">
+          Tu sesión se cerró correctamente.
+        </div>
+
+        <div class="auth-error" th:if="${param.sesionExpirada}">
+          Tu sesión expiró. Inicia sesión nuevamente.
+        </div>
+
+        <form th:action="@{/login}" method="post" th:object="${credenciales}">
+          <div>
+            <label class="label" for="loginEmail">Correo electrónico</label>
+            <input
+              id="loginEmail"
+              type="email"
+              class="input"
+              th:field="*{email}"
+              placeholder="tu@correo.com"
+              autocomplete="email"
+              required>
+
+            <small
+              class="field-error"
+              th:if="${#fields.hasErrors('email')}"
+              th:errors="*{email}">
+            </small>
+          </div>
+
+          <div>
+            <label class="label" for="loginPassword">Contraseña</label>
+            <input
+              id="loginPassword"
+              type="password"
+              class="input"
+              th:field="*{password}"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required>
+
+            <small
+              class="field-error"
+              th:if="${#fields.hasErrors('password')}"
+              th:errors="*{password}">
+            </small>
+          </div>
+
+          <div
+            class="auth-error"
+            th:if="${errorLogin}"
+            th:text="${errorLogin}">
+          </div>
+
+          <button type="submit" class="btn-gold">Iniciar sesión</button>
+        </form>
+
+        <p class="auth-footer-text">
+          ¿No tienes cuenta?
+          <button type="button" onclick="showTab('registro')">Regístrate gratis</button>
+        </p>
+      </section>
+
+      <section id="panel-registro" class="auth-panel" role="tabpanel" aria-labelledby="tab-registro" hidden>
+        <form th:action="@{/registro}" method="post" th:object="${registro}">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+            <div>
+              <label class="label" for="registroNombre">Nombre</label>
+              <input
+                id="registroNombre"
+                type="text"
+                class="input"
+                th:field="*{nombre}"
+                placeholder="Juan"
+                autocomplete="given-name"
+                required>
+              <small class="field-error" th:errors="*{nombre}"></small>
+            </div>
+
+            <div>
+              <label class="label" for="registroApellido">Apellido</label>
+              <input
+                id="registroApellido"
+                type="text"
+                class="input"
+                th:field="*{apellido}"
+                placeholder="García"
+                autocomplete="family-name"
+                required>
+              <small class="field-error" th:errors="*{apellido}"></small>
+            </div>
+          </div>
+
+          <div>
+            <label class="label" for="registroEmail">Correo electrónico</label>
+            <input
+              id="registroEmail"
+              type="email"
+              class="input"
+              th:field="*{email}"
+              placeholder="tu@correo.com"
+              autocomplete="email"
+              required>
+            <small class="field-error" th:errors="*{email}"></small>
+          </div>
+
+          <div>
+            <label class="label" for="registroTelefono">Teléfono (opcional)</label>
+            <input
+              id="registroTelefono"
+              type="tel"
+              class="input"
+              th:field="*{telefono}"
+              placeholder="6441234567"
+              autocomplete="tel">
+            <small class="field-error" th:errors="*{telefono}"></small>
+          </div>
+
+          <div>
+            <label class="label" for="registroPassword">Contraseña</label>
+            <input
+              id="registroPassword"
+              type="password"
+              class="input"
+              th:field="*{password}"
+              placeholder="Mínimo 8 caracteres"
+              autocomplete="new-password"
+              required>
+            <small class="field-error" th:errors="*{password}"></small>
+          </div>
+
+          <div>
+            <label class="label" for="registroConfirmarPassword">Confirmar contraseña</label>
+            <input
+              id="registroConfirmarPassword"
+              type="password"
+              class="input"
+              th:field="*{confirmarPassword}"
+              placeholder="Repite tu contraseña"
+              autocomplete="new-password"
+              required>
+            <small class="field-error" th:errors="*{confirmarPassword}"></small>
+          </div>
+
+          <div class="auth-checkbox-row">
+            <input
+              type="checkbox"
+              id="terminos"
+              th:field="*{aceptaTerminos}">
+            <label for="terminos">
+              Acepto los términos y condiciones y el aviso de privacidad.
+            </label>
+          </div>
+
+          <small class="field-error" th:errors="*{aceptaTerminos}"></small>
+
+          <div
+            class="auth-error"
+            th:if="${errorRegistro}"
+            th:text="${errorRegistro}">
+          </div>
+
+          <div
+            class="auth-error"
+            th:if="${erroresApi != null and !erroresApi.isEmpty()}">
+            <p th:each="error : ${erroresApi}">
+              <strong th:text="${error.key}">Campo</strong>:
+              <span th:text="${error.value}">Error</span>
+            </p>
+          </div>
+
+          <button type="submit" class="btn-gold">Crear mi cuenta</button>
+        </form>
+
+        <p class="auth-footer-text">
+          ¿Ya tienes cuenta?
+          <button type="button" onclick="showTab('login')">Inicia sesión</button>
+        </p>
+      </section>
     </div>
+
+    <p class="auth-ssl">🔒 Tus datos se envían mediante una conexión protegida</p>
   </div>
+</main>
 
-  <div class="auth-error" th:if="${erroresApi != null and !erroresApi.isEmpty()}">
-    <p th:each="error : ${erroresApi}">
-      <strong th:text="${error.key}"></strong>:
-      <span th:text="${error.value}"></span>
-    </p>
-  </div>
+<script>
+  function showTab(tab) {
+    const mostrarRegistro = tab === 'registro';
+    const panelLogin = document.getElementById('panel-login');
+    const panelRegistro = document.getElementById('panel-registro');
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegistro = document.getElementById('tab-registro');
 
-  <script>
-    function showTab(tab) {
-      const panelLogin    = document.getElementById('panel-login');
-      const panelRegistro = document.getElementById('panel-registro');
-      const tabLogin      = document.getElementById('tab-login');
-      const tabRegistro   = document.getElementById('tab-registro');
+    panelLogin.hidden = mostrarRegistro;
+    panelRegistro.hidden = !mostrarRegistro;
 
-      if (tab === 'login') {
-        panelLogin.style.display    = 'flex';
-        panelRegistro.style.display = 'none';
-        tabLogin.classList.add('auth-tab--active');
-        tabRegistro.classList.remove('auth-tab--active');
-      } else {
-        panelLogin.style.display    = 'none';
-        panelRegistro.style.display = 'flex';
-        tabRegistro.classList.add('auth-tab--active');
-        tabLogin.classList.remove('auth-tab--active');
-      }
-    }
-  </script>
-  <script th:inline="javascript">
-    document.addEventListener("DOMContentLoaded", function () {
-      const panelActivo = /*[[${panelActivo}]]*/ "login";
+    panelLogin.classList.toggle('auth-panel--visible', !mostrarRegistro);
+    panelRegistro.classList.toggle('auth-panel--visible', mostrarRegistro);
 
-      if (typeof showTab === "function") {
-        showTab(panelActivo);
-      }
-    });
-  </script>
+    tabLogin.classList.toggle('auth-tab--active', !mostrarRegistro);
+    tabRegistro.classList.toggle('auth-tab--active', mostrarRegistro);
+
+    tabLogin.setAttribute('aria-selected', String(!mostrarRegistro));
+    tabRegistro.setAttribute('aria-selected', String(mostrarRegistro));
+  }
+</script>
+
+<script th:inline="javascript">
+  document.addEventListener('DOMContentLoaded', function () {
+    const panelActivo = /*[[${panelActivo}]]*/ null;
+    showTab(panelActivo === 'registro' ? 'registro' : 'login');
+  });
+</script>
 
 </body>
 </html>

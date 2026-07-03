@@ -55,10 +55,7 @@ public class NavController {
         return "home";
     }
 
-    @GetMapping("/carrito")
-    public String carrito() {
-        return "carrito";
-    }
+
 
     @GetMapping("/checkout")
     public String checkout() {

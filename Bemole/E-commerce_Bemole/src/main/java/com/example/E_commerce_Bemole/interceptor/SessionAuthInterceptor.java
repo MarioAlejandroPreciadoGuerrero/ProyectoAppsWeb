@@ -10,9 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class SessionAuthInterceptor implements HandlerInterceptor{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Object token = request.getSession().getAttribute(
-                        AuthViewController.SESSION_TOKEN
-                );
+        Object token = request.getSession().getAttribute(AuthViewController.SESSION_TOKEN);
 
         if (token == null) {
             response.sendRedirect("/login");

@@ -21,12 +21,12 @@
     <ul class="nav-links">
       <li><a th:href="@{/}">Inicio</a></li>
       <li><a th:href="@{/catalogo}" class="active">Catálogo</a></li>
-      <li><a th:href="@{/#nosotros}">Nosotros</a></li>
-      <li><a th:href="@{/#contacto}">Contacto</a></li>
+      <li><a href="/#nosotros">Nosotros</a></li>
+      <li><a href="/#contacto">Contacto</a></li>
     </ul>
 
     <div class="nav-actions">
-      <a th:if="${autenticado}" th:href="@{/carrito}" class="cart-btn" aria-label="Carrito">🛒</a>
+      <a th:if="${autenticado}" th:href="@{/carrito}" class="cart-btn" aria-label="Abrir carrito">🛒</a>
 
       <a th:unless="${autenticado}" th:href="@{/login}" class="login-link">
         Iniciar sesión
@@ -37,7 +37,7 @@
         <span th:text="${usuarioSesion != null ? usuarioSesion.nombre : 'Mi cuenta'}">Mi cuenta</span>
       </a>
 
-      <form th:if="${autenticado}" th:action="@{/logout}" method="post" style="display:inline">
+      <form th:if="${autenticado}" th:action="@{/logout}" method="post" style="display:inline;">
         <button type="submit">Cerrar sesión</button>
       </form>
     </div>
@@ -56,6 +56,7 @@
         <a th:href="@{/}">Inicio</a>
         <span class="breadcrumb__sep">›</span>
         <a th:href="@{/catalogo}">Catálogo</a>
+
         <span class="breadcrumb__sep" th:if="${producto.categoria != null}">›</span>
         <a
           th:if="${producto.categoria != null}"
@@ -63,6 +64,7 @@
           th:text="${producto.categoria.nombre}">
           Categoría
         </a>
+
         <span class="breadcrumb__sep">›</span>
         <span class="breadcrumb__current" th:text="${producto.nombre}">Producto</span>
       </nav>
@@ -81,6 +83,7 @@
               th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">
               Categoría
             </span>
+
             <span th:if="${producto.disponible}" class="available">Disponible</span>
             <span th:unless="${producto.disponible}" class="unavailable">Sin existencias</span>
           </div>
@@ -95,7 +98,7 @@
 
           <p class="product-info__msi" th:if="${producto.disponible}">
             Existencias disponibles:
-            <strong th:text="${producto.stock}">0</strong>
+            <strong th:text="${producto.stock != null ? producto.stock : 0}">0</strong>
           </p>
 
           <div class="product-ctas">
@@ -110,6 +113,7 @@
               th:if="${autenticado and producto.disponible}"
               th:action="@{/carrito/items}"
               method="post">
+
               <input type="hidden" name="productoId" th:value="${producto.id}">
 
               <div class="qty-section">
@@ -121,11 +125,13 @@
                     type="number"
                     name="cantidad"
                     min="1"
-                    th:max="${producto.stock}"
+                    th:max="${producto.stock != null ? producto.stock : 1}"
                     value="1"
+                    inputmode="numeric"
                     required>
+
                   <span class="qty-stock">
-                    · <span th:text="${producto.stock}">0</span> en stock
+                    · <span th:text="${producto.stock != null ? producto.stock : 0}">0</span> en stock
                   </span>
                 </div>
               </div>
@@ -169,24 +175,27 @@
           <h2 class="display" style="font-size:1.25rem;margin-bottom:1rem;">
             Datos del producto
           </h2>
+
           <table class="specs-table">
             <tbody>
-              <tr>
-                <td>Categoría</td>
-                <td th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</td>
-              </tr>
-              <tr>
-                <td>Precio</td>
-                <td th:text="${producto.precio != null ? '$' + #numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT') + ' MXN' : 'No disponible'}">$0.00 MXN</td>
-              </tr>
-              <tr>
-                <td>Existencias</td>
-                <td th:text="${producto.stock}">0</td>
-              </tr>
-              <tr>
-                <td>Estado</td>
-                <td th:text="${producto.disponible ? 'Disponible' : 'Sin existencias'}">Disponible</td>
-              </tr>
+            <tr>
+              <td>Categoría</td>
+              <td th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</td>
+            </tr>
+            <tr>
+              <td>Precio</td>
+              <td th:text="${producto.precio != null ? '$' + #numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT') + ' MXN' : 'No disponible'}">
+                $0.00 MXN
+              </td>
+            </tr>
+            <tr>
+              <td>Existencias</td>
+              <td th:text="${producto.stock != null ? producto.stock : 0}">0</td>
+            </tr>
+            <tr>
+              <td>Estado</td>
+              <td th:text="${producto.disponible ? 'Disponible' : 'Sin existencias'}">Disponible</td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -201,10 +210,11 @@
       <span class="footer__brand">Bemolé</span>
       <span class="footer__copy">© 2026 · Todos los derechos reservados</span>
     </div>
+
     <ul class="footer__links">
       <li><a th:href="@{/}">Inicio</a></li>
       <li><a th:href="@{/catalogo}">Catálogo</a></li>
-      <li><a th:href="@{/#contacto}">Contacto</a></li>
+      <li><a href="/#contacto">Contacto</a></li>
     </ul>
   </div>
 </footer>
