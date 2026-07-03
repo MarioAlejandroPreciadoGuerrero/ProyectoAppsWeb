@@ -1,7 +1,9 @@
 package com.example.Bemole_API.service;
 
+import com.example.Bemole_API.dto.PaginacionDTO;
 import com.example.Bemole_API.dto.ordenes.request.CrearOrdenRequestDTO;
 import com.example.Bemole_API.dto.ordenes.response.OrdenCreadaResponseDTO;
+import com.example.Bemole_API.dto.ordenes.response.OrdenResumenResponseDTO;
 import com.example.Bemole_API.exception.RecursoNoEncontradoException;
 import com.example.Bemole_API.exception.NegocioException;
 import com.example.Bemole_API.service.mappers.OrdenMapper;
@@ -14,6 +16,10 @@ import com.example.Bemole_API.repositorys.OrdenRepository;
 import com.example.Bemole_API.repositorys.ProductoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -105,6 +111,61 @@ public class OrdenService {
         vaciarCarrito(carrito);
 
         return ordenMapper.toCreadaResponseDTO(ordenGuardada);
+    }
+
+    public PaginacionDTO<OrdenResumenResponseDTO> listarOrdenes(Usuario usuario, EstadoOrden estado, int pagina, int tamano) {
+        validarUsuarioAutenticado(usuario);
+        validarPaginacion(pagina, tamano);
+
+        Pageable pageable = PageRequest.of(
+                pagina,
+                tamano,
+                Sort.by(
+                        Sort.Direction.DESC,
+                        "fecha"
+                )
+        );
+
+        Page<Orden> resultado;
+
+        if (estado == null) {
+            resultado = ordenRepository.findByUsuarioId(
+                    usuario.getId(),
+                    pageable
+            );
+        } else {
+            resultado =
+                    ordenRepository
+                            .findByUsuarioIdAndEstado(
+                                    usuario.getId(),
+                                    estado,
+                                    pageable
+                            );
+        }
+
+        List<OrdenResumenResponseDTO> contenido =
+                resultado.getContent()
+                        .stream()
+                        .map(
+                                ordenMapper::toResumenResponseDTO
+                        )
+                        .toList();
+
+        return new PaginacionDTO<>(contenido, resultado.getNumber(), resultado.getSize(), resultado.getTotalElements(), resultado.getTotalPages(), resultado.isFirst(), resultado.isLast());
+    }
+
+    private void validarPaginacion(int pagina, int tamano) {
+        if (pagina < 0) {
+            throw new IllegalArgumentException(
+                    "La página no puede ser negativa."
+            );
+        }
+
+        if (tamano < 1 || tamano > 50) {
+            throw new IllegalArgumentException(
+                    "El tamaño de página debe estar entre 1 y 50."
+            );
+        }
     }
 
     private Orden crearOrdenBase(Usuario usuario, CrearOrdenRequestDTO request) {

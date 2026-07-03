@@ -1,4 +1,4 @@
-package com.example.E_commerce_Bemole.contoller;
+package com.example.E_commerce_Bemole.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,14 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class NavController {
 
 
-    @GetMapping("/" )
+    @GetMapping("/")
     public String inicio() {
-        return "home_page_loggeado";
-    }
-
-    @GetMapping("/home_page_no_loggeado" )
-    public String inicio_logOut() {
-        return "home_page_no_loggeado";
+        return "home";
     }
 
     @GetMapping("/catalogo")

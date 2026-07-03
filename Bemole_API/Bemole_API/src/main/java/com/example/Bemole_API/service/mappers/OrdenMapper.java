@@ -1,9 +1,6 @@
 package com.example.Bemole_API.service.mappers;
 
-import com.example.Bemole_API.dto.ordenes.response.ContactoOrdenResponseDTO;
-import com.example.Bemole_API.dto.ordenes.response.DireccionOrdenResponseDTO;
-import com.example.Bemole_API.dto.ordenes.response.ItemOrdenResponseDTO;
-import com.example.Bemole_API.dto.ordenes.response.OrdenCreadaResponseDTO;
+import com.example.Bemole_API.dto.ordenes.response.*;
 import org.springframework.stereotype.Component;
 
 import com.example.Bemole_API.models.DireccionOrden;
@@ -88,6 +85,40 @@ public class OrdenMapper {
                 direccion.getCodigoPostal(),
                 direccion.getCiudad(),
                 direccion.getEstado()
+        );
+    }
+
+    public OrdenResumenResponseDTO toResumenResponseDTO(
+            Orden orden
+    ) {
+        int cantidadProductos = orden.getItems()
+                .stream()
+                .mapToInt(ItemOrden::getCantidad)
+                .sum();
+
+        String productoPrincipal = null;
+        int productosAdicionales = 0;
+
+        if (!orden.getItems().isEmpty()) {
+            productoPrincipal = orden
+                    .getItems()
+                    .get(0)
+                    .getProducto()
+                    .getNombre();
+
+            productosAdicionales =
+                    orden.getItems().size() - 1;
+        }
+
+        return new OrdenResumenResponseDTO(
+                orden.getId(),
+                orden.getNumero(),
+                orden.getFecha(),
+                orden.getEstado(),
+                orden.getTotal(),
+                cantidadProductos,
+                productoPrincipal,
+                productosAdicionales
         );
     }
 }

@@ -37,31 +37,39 @@
         <!-- Panel Login -->
         <div id="panel-login" class="auth-panel auth-panel--visible">
           <form th:action="@{/login}" method="post" th:object="${credenciales}">
+            <div>
+              <label class="label" for="loginEmail">
+                Correo electrónico
+              </label>
+
+              <input id="loginEmail" type="email" class="input" th:field="*{email}" placeholder="tu@correo.com"/>
+
+              <small class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+            </div>
 
             <div>
-              <label class="label">Correo electrónico</label>
-              <input type="email" class="input" th:field="*{email}" placeholder="tu@correo.com"/>
+              <label class="label" for="loginPassword">
+                Contraseña
+              </label>
+
+              <input id="loginPassword" type="password" class="input" th:field="*{password}" placeholder="••••••••"/>
+
+              <small class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
             </div>
 
-            <div>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
-                <label class="label" style="margin:0;">Contraseña</label>
-                <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
-              </div>
-
-              <input type="password" class="input" th:field="*{password}" placeholder="••••••••"/>
-            </div>
-
-            <div style="display:flex;align-items:center;gap:.5rem;">
-              <input type="checkbox" id="remember"/>
-              <label for="remember">Recordar mi sesión</label>
-            </div>
+            <div class="auth-error" th:if="${errorLogin}" th:text="${errorLogin}"></div>
 
             <button type="submit" class="btn-gold">
               Iniciar sesión
             </button>
-
           </form>
+          <div class="auth-success" th:if="${param.registroExitoso}">
+            Tu cuenta fue creada correctamente. Ya puedes iniciar sesión.
+          </div>
+
+          <div class="auth-success" th:if="${param.logout}">
+            Tu sesión se cerró correctamente.
+          </div>
 
           <div class="social-divider"><span>o continúa con</span></div>
 
@@ -78,57 +86,78 @@
 
         <!-- Panel Registro -->
         <div id="panel-registro" class="auth-panel">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
-            <form th:action="@{/registro}" method="post" th:object="${usuarioDTO}">
-
+          <form th:action="@{/registro}" method="post" th:object="${registro}">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
               <div>
                 <label class="label">Nombre</label>
-                <input type="text" class="input" th:field="*{nombre}" placeholder="Ej. Juan"/>
+
+                <input type="text" class="input" th:field="*{nombre}" placeholder="Juan"/>
+
+                <small class="field-error" th:errors="*{nombre}"></small>
               </div>
+
               <div>
                 <label class="label">Apellido</label>
-                <input type="text" class="input" th:field="*{apellido}" placeholder="Ej. Garcia"/>
-              </div>
 
-              <div>
-                <label class="label">Correo electrónico</label>
-                <input type="email" class="input" th:field="*{email}" placeholder="tu@correo.com"/>
-              </div>
-              <div>
-                <label class="label">Teléfono (opcional)</label>
-                <input type="text" class="input" th:field="*{telefono}" placeholder="6444512390"/>
-              </div>
-              <div>
-                <label class="label">Contraseña</label>
-                <input type="password" class="input" th:field="*{password}" placeholder="Mínimo 8 caracteres"/>
-                <div class="strength-bar">
-                  <div class="strength-bar__seg strength-bar__seg--red"></div>
-                  <div class="strength-bar__seg strength-bar__seg--yellow"></div>
-                  <div class="strength-bar__seg"></div>
-                  <div class="strength-bar__seg"></div>
-                </div>
-                <p class="strength-hint">Contraseña moderada</p>
-              </div>
-              <div>
-                <label class="label">Confirmar contraseña</label>
-                <input type="password" class="input" placeholder="Repite tu contraseña"/>
-              </div>
+                <input type="text" class="input" th:field="*{apellido}" placeholder="García"/>
 
-              <div class="auth-checkbox-row">
-                <input type="checkbox" id="terminos" style="accent-color:var(--gold-cta);"/>
-                <label for="terminos">
-                  Acepto los <a th:href="@{/terminos}">Términos y condiciones</a> y el <a th:href="@{/privacidad}">Aviso de privacidad</a> de Bemolé.
-                </label>
+                <small class="field-error" th:errors="*{apellido}"></small>
               </div>
+            </div>
 
-              <div class="auth-checkbox-row">
-                <input type="checkbox" id="promo" checked style="accent-color:var(--gold-cta);"/>
-                <label for="promo">Deseo recibir ofertas, novedades y noticias de Bemolé por correo.</label>
-              </div>
+            <div>
+              <label class="label">Correo electrónico</label>
 
-              <button type="submit" class="btn-gold">
-                Crear mi cuenta
-              </button>
+              <input type="email" class="input" th:field="*{email}" placeholder="tu@correo.com"/>
+
+              <small class="field-error" th:errors="*{email}"></small>
+            </div>
+
+            <div>
+              <label class="label">Teléfono (opcional)</label>
+
+              <input type="tel" class="input" th:field="*{telefono}" placeholder="6441234567"/>
+
+              <small class="field-error" th:errors="*{telefono}"></small>
+            </div>
+
+            <div>
+              <label class="label">Contraseña</label>
+
+              <input type="password" class="input" th:field="*{password}" placeholder="Mínimo 8 caracteres"/>
+              <small class="field-error" th:errors="*{password}"></small>
+            </div>
+
+            <div>
+              <label class="label">Confirmar contraseña</label>
+
+              <input type="password" class="input" th:field="*{confirmarPassword}" placeholder="Repite tu contraseña"/>
+
+              <small class="field-error" th:errors="*{confirmarPassword}"></small>
+            </div>
+
+            <div class="auth-checkbox-row">
+              <input type="checkbox" id="terminos" th:field="*{aceptaTerminos}"/>
+
+              <label for="terminos">
+                Acepto los términos y condiciones y el aviso de privacidad.
+              </label>
+            </div>
+
+            <small
+                    class="field-error"
+                    th:errors="*{aceptaTerminos}">
+            </small>
+
+            <div
+                    class="auth-error"
+                    th:if="${errorRegistro}"
+                    th:text="${errorRegistro}">
+            </div>
+
+            <button type="submit" class="btn-gold">
+              Crear mi cuenta
+            </button>
           </form>
           <p class="auth-footer-text">
             ¿Ya tienes cuenta?
@@ -141,6 +170,12 @@
       <p class="auth-ssl">🔒 Tus datos están protegidos con encriptación SSL</p>
     </div>
   </div>
+
+  <div class="auth-error" th:if="${erroresApi != null and !erroresApi.isEmpty()}">
+    <p th:each="error : ${erroresApi}">
+      <strong th:text="${error.key}"></strong>:
+      <span th:text="${error.value}"></span>
+    </p>
   </div>
 
   <script>
@@ -162,6 +197,15 @@
         tabLogin.classList.remove('auth-tab--active');
       }
     }
+  </script>
+  <script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+      const panelActivo = /*[[${panelActivo}]]*/ "login";
+
+      if (typeof showTab === "function") {
+        showTab(panelActivo);
+      }
+    });
   </script>
 
 </body>

@@ -47,11 +47,31 @@
       <a th:href="@{/carrito}" class="cart-btn">
         🛒<span class="cart-badge">2</span>
       </a>
-
-      <!-- Perfil -->
-      <a th:href="@{/ordenes}" class="profile-btn" aria-label="Mi perfil">👤</a>
-
+      <div class="login-link" th:unless="${autenticado}">
+        <a th:href="@{/login}">
+          Iniciar sesión
+        </a>
+      </div>
     </div>
+
+
+    <div class="nav-actions" th:if="${autenticado}">
+      <a th:href="@{/carrito}" class="cart-btn">
+        🛒
+      </a>
+
+      <a th:href="@{/ordenes}" class="profile-btn">
+        👤
+        <span th:text="${usuarioSesion.nombre}"></span>
+      </a>
+
+      <form th:action="@{/logout}" method="post" style="display:inline">
+        <button type="submit">
+          Cerrar sesión
+        </button>
+      </form>
+    </div>
+
 
   </div>
 </header>

@@ -50,7 +50,7 @@ public class SecurityConfig {
                         // Registro
                         .requestMatchers(
                                 HttpMethod.POST,
-                                "/api/usuarios"
+                                "/api/usuario"
                         ).permitAll()
 
                         // Inicio de sesión
@@ -80,6 +80,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/ordenes"
+                        ).hasRole("CLIENTE")
+
+                        .requestMatchers(
+                                "/api/ordenes/**"
                         ).hasRole("CLIENTE")
 
                         // Todo lo demás requiere JWT

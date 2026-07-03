@@ -1,4 +1,4 @@
-package com.example.E_commerce_Bemole.contoller;
+package com.example.E_commerce_Bemole.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
