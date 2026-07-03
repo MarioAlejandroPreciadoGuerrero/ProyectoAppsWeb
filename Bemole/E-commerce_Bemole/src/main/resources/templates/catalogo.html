@@ -1,236 +1,264 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bemolé — Catálogo</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/style.css}">
 </head>
 <body>
 
-<!-- ── NAVBAR ── -->
 <header class="navbar">
   <div class="container navbar__inner">
-    <div class="logo">
+    <a class="logo" th:href="@{/}" aria-label="Ir al inicio">
       <span class="logo__name">Bemolé</span>
       <span class="logo__tagline">Instrumentos para cada nota</span>
-    </div>
+    </a>
+
     <ul class="nav-links">
       <li><a th:href="@{/}">Inicio</a></li>
       <li><a th:href="@{/catalogo}" class="active">Catálogo</a></li>
-      <li><a href="#nosotros">Nosotros</a></li>
-      <li><a href="#contacto">Contacto</a></li>
+      <li><a th:href="@{/#nosotros}">Nosotros</a></li>
+      <li><a th:href="@{/#contacto}">Contacto</a></li>
     </ul>
+
     <div class="nav-actions">
-      <button aria-label="Buscar">🔍</button>
-      <a th:href="@{/carrito}">
-        <button class="cart-btn" aria-label="Carrito">🛒<span class="cart-badge">2</span></button>
+      <a th:if="${autenticado}" th:href="@{/carrito}" class="cart-btn" aria-label="Carrito">🛒</a>
+
+      <a th:unless="${autenticado}" th:href="@{/login}" class="login-link">
+        Iniciar sesión
       </a>
+
+      <a th:if="${autenticado}" th:href="@{/ordenes}" class="profile-btn">
+        👤
+        <span th:text="${usuarioSesion != null ? usuarioSesion.nombre : 'Mi cuenta'}">Mi cuenta</span>
+      </a>
+
+      <form th:if="${autenticado}" th:action="@{/logout}" method="post" style="display:inline">
+        <button type="submit">Cerrar sesión</button>
+      </form>
     </div>
   </div>
 </header>
 
-<!-- ── HEADER SECCIÓN ── -->
-<div class="catalog-hero">
+<section class="catalog-hero">
   <div class="catalog-hero__inner">
     <p class="eyebrow">Explora</p>
     <h1>Catálogo completo</h1>
-    <p>2,400+ instrumentos · Filtros para encontrar el tuyo</p>
+    <p>Busca, filtra y ordena los productos disponibles.</p>
   </div>
-</div>
+</section>
 
-<div class="container py-10">
+<main class="container py-10">
+  <div
+    class="alert-error"
+    th:if="${param.productoNoEncontrado}">
+    El producto solicitado no existe o ya no está disponible.
+  </div>
+
+  <div
+    class="alert-error"
+    th:if="${errorCatalogo}"
+    th:text="${errorCatalogo}">
+    No fue posible cargar el catálogo.
+  </div>
+
   <div class="catalog-layout">
-
-    <!-- SIDEBAR FILTROS -->
     <aside class="sidebar">
-      <div class="sidebar__section">
-        <input type="text" class="input" placeholder="Buscar instrumento…"/>
-      </div>
-
-      <div class="sidebar__section">
-        <span class="sidebar__label">Categoría</span>
-        <div class="sidebar__options">
-          <label class="sidebar__option"><input type="radio" name="cat" checked/> Todas</label>
-          <label class="sidebar__option"><input type="radio" name="cat"/> 🎸 Guitarras <span class="count">348</span></label>
-          <label class="sidebar__option"><input type="radio" name="cat"/> 🎹 Pianos <span class="count">192</span></label>
-          <label class="sidebar__option"><input type="radio" name="cat"/> 🥁 Percusión <span class="count">276</span></label>
-          <label class="sidebar__option"><input type="radio" name="cat"/> 🎷 Vientos <span class="count">204</span></label>
-          <label class="sidebar__option"><input type="radio" name="cat"/> 🎻 Cuerdas <span class="count">158</span></label>
-          <label class="sidebar__option"><input type="radio" name="cat"/> 🎤 Audio <span class="count">312</span></label>
+      <form th:action="@{/catalogo}" method="get" th:object="${filtro}">
+        <div class="sidebar__section">
+          <label class="sidebar__label" for="q">Buscar</label>
+          <input
+            id="q"
+            type="search"
+            class="input"
+            th:field="*{q}"
+            placeholder="Buscar instrumento…">
         </div>
-      </div>
 
-      <div class="sidebar__section">
-        <span class="sidebar__label">Precio (MXN)</span>
-        <div class="sidebar__price-row">
-          <input type="text" class="input" placeholder="Mín"/>
-          <input type="text" class="input" placeholder="Máx"/>
+        <div class="sidebar__section">
+          <label class="sidebar__label" for="categoriaId">Categoría</label>
+          <select id="categoriaId" class="select" th:field="*{categoriaId}">
+            <option value="">Todas las categorías</option>
+            <option
+              th:each="categoria : ${categorias}"
+              th:value="${categoria.id}"
+              th:text="${categoria.nombre + ' (' + categoria.cantidadProductos + ')'}">
+              Categoría
+            </option>
+          </select>
         </div>
-      </div>
 
-      <div class="sidebar__section">
-        <span class="sidebar__label">Marca</span>
-        <div class="sidebar__options">
-          <label class="sidebar__option"><input type="checkbox" checked/> Fender</label>
-          <label class="sidebar__option"><input type="checkbox"/> Gibson</label>
-          <label class="sidebar__option"><input type="checkbox"/> Yamaha</label>
-          <label class="sidebar__option"><input type="checkbox"/> Roland</label>
-          <label class="sidebar__option"><input type="checkbox"/> Casio</label>
-          <a href="#" class="sidebar__more-link">+ Ver más marcas</a>
+        <div class="sidebar__section">
+          <span class="sidebar__label">Precio (MXN)</span>
+          <div class="sidebar__price-row">
+            <input
+              type="number"
+              class="input"
+              min="0"
+              step="0.01"
+              th:field="*{precioMin}"
+              placeholder="Mín">
+            <input
+              type="number"
+              class="input"
+              min="0"
+              step="0.01"
+              th:field="*{precioMax}"
+              placeholder="Máx">
+          </div>
         </div>
-      </div>
 
-      <div class="sidebar__section">
-        <span class="sidebar__label">Disponibilidad</span>
-        <label class="sidebar__option"><input type="checkbox" checked/> Solo con stock</label>
-      </div>
+        <div class="sidebar__section">
+          <label class="sidebar__option" for="soloConStock">
+            <input id="soloConStock" type="checkbox" th:field="*{soloConStock}">
+            Solo productos con stock
+          </label>
+        </div>
 
-      <button class="btn-gold">Aplicar filtros</button>
-      <button style="width:100%;margin-top:.5rem;font-size:.75rem;color:#9ca3af;padding:.35rem;background:none;border:none;cursor:pointer;">Limpiar filtros</button>
+        <div class="sidebar__section">
+          <label class="sidebar__label" for="orden">Ordenar por</label>
+          <select id="orden" class="select" th:field="*{orden}">
+            <option value="">Nombre: A-Z</option>
+            <option value="NOMBRE_ASC">Nombre: A-Z</option>
+            <option value="NOMBRE_DESC">Nombre: Z-A</option>
+            <option value="PRECIO_ASC">Precio: menor a mayor</option>
+            <option value="PRECIO_DESC">Precio: mayor a menor</option>
+          </select>
+        </div>
+
+        <input type="hidden" th:field="*{tamano}">
+
+        <button type="submit" class="btn-gold">Aplicar filtros</button>
+        <a th:href="@{/catalogo}" class="sidebar__more-link" style="display:block;text-align:center;margin-top:.75rem;">
+          Limpiar filtros
+        </a>
+      </form>
     </aside>
 
-    <!-- GRID PRODUCTOS -->
-    <div class="catalog-main">
-
+    <section class="catalog-main">
       <div class="catalog-topbar">
-        <p class="catalog-count"><strong>2,400</strong> productos encontrados</p>
-        <select class="select" style="width:auto;">
-          <option>Ordenar: Relevancia</option>
-          <option>Precio: menor a mayor</option>
-          <option>Precio: mayor a menor</option>
-          <option>Más nuevos</option>
-          <option>Mejor valorados</option>
-        </select>
+        <p class="catalog-count" th:if="${paginaProductos != null}">
+          <strong th:text="${paginaProductos.totalElementos}">0</strong>
+          <span th:text="${paginaProductos.totalElementos == 1 ? ' producto encontrado' : ' productos encontrados'}">
+            productos encontrados
+          </span>
+        </p>
       </div>
 
-      <div class="chips">
-        <span class="chip">Fender <button>×</button></span>
-        <span class="chip">Guitarras <button>×</button></span>
+      <div class="chips" th:if="${filtro != null}">
+        <span class="chip" th:if="${filtro.q != null and !filtro.q.isBlank()}">
+          Búsqueda: <span th:text="${filtro.q}">texto</span>
+        </span>
+        <span class="chip" th:if="${filtro.categoriaId != null}">
+          Categoría seleccionada
+        </span>
+        <span class="chip" th:if="${filtro.soloConStock}">
+          Solo con stock
+        </span>
       </div>
 
-      <div class="grid-catalog">
-
-        <div class="catalog-card">
-          <div class="catalog-card__img">🎸</div>
-          <div class="catalog-card__body">
-            <span class="badge badge--new">Nuevo</span>
-            <p class="catalog-card__cat">Guitarras</p>
-            <h3 class="catalog-card__name"><a th:href="@{/producto}">Fender Stratocaster Player</a></h3>
-            <p class="catalog-card__desc">Cuerpo de aliso, mástil de arce, 3 single-coil.</p>
-            <div class="catalog-card__stars">★★★★★ <span>(124)</span></div>
-            <div class="catalog-card__footer">
-              <span class="catalog-card__price">$18,999 <span class="currency">MXN</span></span>
-              <button class="btn-add">+ Agregar</button>
-            </div>
+      <div class="products-grid" th:if="${productos != null and !productos.isEmpty()}">
+        <article class="product-card" th:each="producto : ${productos}">
+          <div class="product-image">
+            <span aria-hidden="true">🎵</span>
           </div>
-        </div>
 
-        <div class="catalog-card">
-          <div class="catalog-card__img">🎸</div>
-          <div class="catalog-card__body">
-            <span class="badge badge--sale">−15%</span>
-            <p class="catalog-card__cat">Guitarras</p>
-            <h3 class="catalog-card__name"><a th:href="@{/producto}">Gibson Les Paul Standard</a></h3>
-            <p class="catalog-card__desc">Caoba y arce, pastillas BurstBucker Pro.</p>
-            <div class="catalog-card__stars">★★★★★ <span>(89)</span></div>
-            <div class="catalog-card__footer">
-              <div>
-                <span class="price-old">$52,000</span>
-                <span class="catalog-card__price">$44,200 <span class="currency">MXN</span></span>
-              </div>
-              <button class="btn-add">+ Agregar</button>
-            </div>
+          <div class="product-content">
+            <span
+              class="category"
+              th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">
+              Categoría
+            </span>
+
+            <h2 th:text="${producto.nombre}">Producto</h2>
+
+            <p th:text="${producto.descripcion != null and !producto.descripcion.isBlank() ? producto.descripcion : 'Sin descripción disponible.'}">
+              Descripción
+            </p>
+
+            <p class="stock">
+              <span th:if="${producto.disponible}" class="available">
+                Disponible · <span th:text="${producto.stock}">0</span> unidades
+              </span>
+              <span th:unless="${producto.disponible}" class="unavailable">Sin existencias</span>
+            </p>
+
+            <strong
+              class="price"
+              th:text="${producto.precio != null ? '$' + #numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT') + ' MXN' : 'Precio no disponible'}">
+              $0.00 MXN
+            </strong>
+
+            <a class="btn-detail" th:href="@{/producto/{id}(id=${producto.id})}">
+              Ver detalles
+            </a>
           </div>
-        </div>
-
-        <div class="catalog-card">
-          <div class="catalog-card__img">🎸</div>
-          <div class="catalog-card__body">
-            <p class="catalog-card__cat" style="margin-top:1.25rem;">Guitarras</p>
-            <h3 class="catalog-card__name"><a th:href="@{/producto}">Fender Telecaster Deluxe</a></h3>
-            <p class="catalog-card__desc">Aliso, 2 humbuckers, clavijero Stratocaster.</p>
-            <div class="catalog-card__stars">★★★★ <span>(57)</span></div>
-            <div class="catalog-card__footer">
-              <span class="catalog-card__price">$21,500 <span class="currency">MXN</span></span>
-              <button class="btn-add">+ Agregar</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="catalog-card">
-          <div class="catalog-card__img">🎸</div>
-          <div class="catalog-card__body">
-            <span class="badge badge--limited">Últimas unidades</span>
-            <p class="catalog-card__cat">Guitarras</p>
-            <h3 class="catalog-card__name"><a th:href="@{/producto}">Fender Jazzmaster</a></h3>
-            <p class="catalog-card__desc">Offset body, pastillas Jazzmaster, vibrato flotante.</p>
-            <div class="catalog-card__stars">★★★★★ <span>(41)</span></div>
-            <div class="catalog-card__footer">
-              <span class="catalog-card__price">$23,999 <span class="currency">MXN</span></span>
-              <button class="btn-add">+ Agregar</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="catalog-card">
-          <div class="catalog-card__img">🎸</div>
-          <div class="catalog-card__body">
-            <span class="badge badge--new">Nuevo</span>
-            <p class="catalog-card__cat">Guitarras</p>
-            <h3 class="catalog-card__name"><a th:href="@{/producto}">Gibson SG Standard</a></h3>
-            <p class="catalog-card__desc">Doble cutaway, humbuckers 490R/490T.</p>
-            <div class="catalog-card__stars">★★★★★ <span>(76)</span></div>
-            <div class="catalog-card__footer">
-              <span class="catalog-card__price">$35,800 <span class="currency">MXN</span></span>
-              <button class="btn-add">+ Agregar</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="catalog-card">
-          <div class="catalog-card__img">🎸</div>
-          <div class="catalog-card__body">
-            <p class="catalog-card__cat" style="margin-top:1.25rem;">Guitarras</p>
-            <h3 class="catalog-card__name"><a th:href="@{/producto}">Fender Mustang Player</a></h3>
-            <p class="catalog-card__desc">Escala corta, aliso, 2 single-coil, ideal principiantes.</p>
-            <div class="catalog-card__stars">★★★★ <span>(33)</span></div>
-            <div class="catalog-card__footer">
-              <span class="catalog-card__price">$11,200 <span class="currency">MXN</span></span>
-              <button class="btn-add">+ Agregar</button>
-            </div>
-          </div>
-        </div>
-
+        </article>
       </div>
 
-      <!-- Paginación -->
-      <div class="pagination">
-        <button class="pag-btn">‹</button>
-        <button class="pag-btn pag-btn--active">1</button>
-        <button class="pag-btn">2</button>
-        <button class="pag-btn">3</button>
-        <span class="pag-dots">…</span>
-        <button class="pag-btn">24</button>
-        <button class="pag-btn">›</button>
+      <div class="empty-state" th:if="${productos == null or productos.isEmpty()}">
+        <h2>No encontramos productos</h2>
+        <p>Prueba con otros filtros de búsqueda.</p>
       </div>
 
-    </div>
+      <nav
+        class="pagination"
+        aria-label="Paginación del catálogo"
+        th:if="${paginaProductos != null and paginaProductos.totalPaginas > 1}">
+
+        <a
+          th:if="${!paginaProductos.primera}"
+          th:href="@{/catalogo(
+            q=${filtro.q},
+            categoriaId=${filtro.categoriaId},
+            precioMin=${filtro.precioMin},
+            precioMax=${filtro.precioMax},
+            soloConStock=${filtro.soloConStock},
+            orden=${filtro.orden},
+            pagina=${paginaProductos.pagina - 1},
+            tamano=${filtro.tamano}
+          )}">
+          Anterior
+        </a>
+
+        <span>
+          Página
+          <strong th:text="${paginaProductos.pagina + 1}">1</strong>
+          de
+          <strong th:text="${paginaProductos.totalPaginas}">1</strong>
+        </span>
+
+        <a
+          th:if="${!paginaProductos.ultima}"
+          th:href="@{/catalogo(
+            q=${filtro.q},
+            categoriaId=${filtro.categoriaId},
+            precioMin=${filtro.precioMin},
+            precioMax=${filtro.precioMax},
+            soloConStock=${filtro.soloConStock},
+            orden=${filtro.orden},
+            pagina=${paginaProductos.pagina + 1},
+            tamano=${filtro.tamano}
+          )}">
+          Siguiente
+        </a>
+      </nav>
+    </section>
   </div>
-</div>
+</main>
 
-<!-- ── FOOTER ── -->
 <footer class="footer">
   <div class="container footer__inner">
     <div>
       <span class="footer__brand">Bemolé</span>
-      <span class="footer__copy">© 2025 · Todos los derechos reservados</span>
+      <span class="footer__copy">© 2026 · Todos los derechos reservados</span>
     </div>
     <ul class="footer__links">
       <li><a th:href="@{/}">Inicio</a></li>
       <li><a th:href="@{/catalogo}">Catálogo</a></li>
-      <li><a href="#contacto">Contacto</a></li>
+      <li><a th:href="@{/#contacto}">Contacto</a></li>
     </ul>
   </div>
 </footer>
