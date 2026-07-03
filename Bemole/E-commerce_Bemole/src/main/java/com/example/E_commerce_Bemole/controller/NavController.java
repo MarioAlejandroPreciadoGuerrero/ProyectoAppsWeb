@@ -55,14 +55,6 @@ public class NavController {
         return "home";
     }
 
-
-
-    @GetMapping("/checkout")
-    public String checkout() {
-        return "checkout";
-    }
-
-
     @GetMapping("/ordenes")
     public String ordenes(){
         return "ordenes";

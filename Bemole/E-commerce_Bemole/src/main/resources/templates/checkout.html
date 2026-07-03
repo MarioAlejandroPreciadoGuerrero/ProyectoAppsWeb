@@ -1,216 +1,366 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bemolé — Checkout</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/style.css}">
 </head>
 <body>
 
-<!-- ── NAVBAR MINIMAL ── -->
 <header class="navbar navbar--minimal">
   <div class="container navbar__inner">
-    <a th:href="@{/}" class="logo" style="text-decoration:none;">
+    <a th:href="@{/}" class="logo" aria-label="Volver al inicio">
       <span class="logo__name">Bemolé</span>
       <span class="logo__tagline">Instrumentos para cada nota</span>
     </a>
+
     <div class="secure-label">
-      <span>🔒</span>
-      <span>Pago seguro</span>
+      <span aria-hidden="true">🔒</span>
+      <span>Orden protegida</span>
     </div>
   </div>
 </header>
 
-<!-- ── STEPS ── -->
 <div class="steps-bar">
   <div class="steps-bar__inner">
     <div class="step step__done">
-      <span class="step__num">✓</span> Carrito
+      <span class="step__num">✓</span>
+      Carrito
     </div>
-    <span class="steps-divider">——</span>
+
+    <span class="steps-divider" aria-hidden="true">——</span>
+
     <div class="step step--active">
-      <span class="step__num">2</span> Envío
+      <span class="step__num">2</span>
+      Envío
     </div>
-    <span class="steps-divider">——</span>
+
+    <span class="steps-divider" aria-hidden="true">——</span>
+
     <div class="step">
-      <span class="step__num">3</span> Pago
-    </div>
-    <span class="steps-divider">——</span>
-    <div class="step">
-      <span class="step__num">4</span> Confirmación
+      <span class="step__num">3</span>
+      Confirmación
     </div>
   </div>
 </div>
 
-<div class="container">
-  <div class="checkout-layout">
-
-    <!-- FORMULARIOS -->
-    <div class="checkout-forms">
-
-      <!-- Contacto -->
-      <div class="form-section">
-        <h2><span class="form-num">1</span> Información de contacto</h2>
-        <div class="form-grid">
-          <div>
-            <label class="label">Nombre</label>
-            <input type="text" class="input" placeholder="Juan" value="Juan"/>
-          </div>
-          <div>
-            <label class="label">Apellido</label>
-            <input type="text" class="input" placeholder="García" value="García"/>
-          </div>
-          <div class="form-grid--full">
-            <label class="label">Correo electrónico</label>
-            <input type="email" class="input" placeholder="juan@correo.com" value="juan@correo.com"/>
-          </div>
-          <div class="form-grid--full">
-            <label class="label">Teléfono</label>
-            <input type="tel" class="input" placeholder="+52 644 000 0000" value="+52 644 123 4567"/>
-          </div>
-        </div>
-      </div>
-
-      <!-- Dirección -->
-      <div class="form-section">
-        <h2><span class="form-num">2</span> Dirección de envío</h2>
-        <div class="form-grid">
-          <div class="form-grid--full">
-            <label class="label">Calle y número</label>
-            <input type="text" class="input" placeholder="Av. Principal #123" value="Av. Sonora #456 Int. 2"/>
-          </div>
-          <div>
-            <label class="label">Colonia</label>
-            <input type="text" class="input" placeholder="Col. Centro" value="Col. Modelo"/>
-          </div>
-          <div>
-            <label class="label">C.P.</label>
-            <input type="text" class="input" placeholder="85000" value="85000"/>
-          </div>
-          <div>
-            <label class="label">Ciudad</label>
-            <input type="text" class="input" placeholder="Ciudad Obregón" value="Ciudad Obregón"/>
-          </div>
-          <div>
-            <label class="label">Estado</label>
-            <select class="select">
-              <option selected>Sonora</option>
-              <option>CDMX</option>
-              <option>Jalisco</option>
-              <option>Nuevo León</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- Método de envío -->
-      <div class="form-section">
-        <h2><span class="form-num">3</span> Método de envío</h2>
-        <div class="shipping-options">
-          <label class="shipping-option shipping-option--selected">
-            <input type="radio" name="envio" checked style="accent-color:var(--gold-cta);margin-top:.15rem;"/>
-            <div class="shipping-option__info">
-              <p class="shipping-option__name">Envío estándar</p>
-              <p class="shipping-option__days">5–7 días hábiles</p>
-            </div>
-            <span class="shipping-option__price shipping-option__price--free">Gratis</span>
-          </label>
-          <label class="shipping-option">
-            <input type="radio" name="envio" style="accent-color:var(--gold-cta);margin-top:.15rem;"/>
-            <div class="shipping-option__info">
-              <p class="shipping-option__name">Envío express</p>
-              <p class="shipping-option__days">2–3 días hábiles</p>
-            </div>
-            <span class="shipping-option__price">$199 MXN</span>
-          </label>
-          <label class="shipping-option">
-            <input type="radio" name="envio" style="accent-color:var(--gold-cta);margin-top:.15rem;"/>
-            <div class="shipping-option__info">
-              <p class="shipping-option__name">Recoger en tienda</p>
-              <p class="shipping-option__days">Disponible mañana · Sucursal Obregón</p>
-            </div>
-            <span class="shipping-option__price shipping-option__price--free">Gratis</span>
-          </label>
-        </div>
-      </div>
-
-      <button class="btn-gold">Continuar al pago →</button>
+<main>
+  <div class="container">
+    <div
+      class="alert-error checkout-alert"
+      th:if="${errorCheckout}"
+      th:text="${errorCheckout}">
+      No fue posible crear la orden.
     </div>
 
-    <!-- RESUMEN -->
-    <div>
-      <div class="checkout-summary">
-        <p class="summary-title">Tu pedido</p>
+    <form
+      id="checkoutForm"
+      class="checkout-form-shell"
+      th:action="@{/checkout}"
+      method="post"
+      th:object="${checkout}">
 
-        <div class="checkout-items">
-          <div class="checkout-item">
-            <div class="checkout-item__img">
-              🎸
-              <span class="checkout-item__qty">1</span>
+      <div class="checkout-layout">
+        <div class="checkout-forms">
+
+          <section class="form-section">
+            <h2>
+              <span class="form-num">1</span>
+              Información de contacto
+            </h2>
+
+            <div class="form-grid">
+              <div>
+                <label class="label" for="contactoNombre">Nombre</label>
+                <input
+                  id="contactoNombre"
+                  type="text"
+                  class="input"
+                  th:classappend="${#fields.hasErrors('contacto.nombre')} ? ' input--error'"
+                  th:field="*{contacto.nombre}"
+                  placeholder="Juan"
+                  autocomplete="given-name">
+                <small class="field-error" th:errors="*{contacto.nombre}"></small>
+              </div>
+
+              <div>
+                <label class="label" for="contactoApellido">Apellido</label>
+                <input
+                  id="contactoApellido"
+                  type="text"
+                  class="input"
+                  th:classappend="${#fields.hasErrors('contacto.apellido')} ? ' input--error'"
+                  th:field="*{contacto.apellido}"
+                  placeholder="García"
+                  autocomplete="family-name">
+                <small class="field-error" th:errors="*{contacto.apellido}"></small>
+              </div>
+
+              <div class="form-grid--full">
+                <label class="label" for="contactoEmail">Correo electrónico</label>
+                <input
+                  id="contactoEmail"
+                  type="email"
+                  class="input"
+                  th:classappend="${#fields.hasErrors('contacto.email')} ? ' input--error'"
+                  th:field="*{contacto.email}"
+                  placeholder="tu@correo.com"
+                  autocomplete="email">
+                <small class="field-error" th:errors="*{contacto.email}"></small>
+              </div>
+
+              <div class="form-grid--full">
+                <label class="label" for="contactoTelefono">Teléfono</label>
+                <input
+                  id="contactoTelefono"
+                  type="tel"
+                  class="input"
+                  th:classappend="${#fields.hasErrors('contacto.telefono')} ? ' input--error'"
+                  th:field="*{contacto.telefono}"
+                  placeholder="6441234567"
+                  autocomplete="tel">
+                <small class="field-error" th:errors="*{contacto.telefono}"></small>
+              </div>
             </div>
-            <div>
-              <p class="checkout-item__name">Fender Stratocaster Player</p>
-              <p class="checkout-item__variant">Sonic Blue</p>
+          </section>
+
+          <section class="form-section">
+            <h2>
+              <span class="form-num">2</span>
+              Dirección de envío
+            </h2>
+
+            <div class="form-grid">
+              <div class="form-grid--full">
+                <label class="label" for="calleNumero">Calle y número</label>
+                <input
+                  id="calleNumero"
+                  type="text"
+                  class="input"
+                  th:classappend="${#fields.hasErrors('direccionEnvio.calleNumero')} ? ' input--error'"
+                  th:field="*{direccionEnvio.calleNumero}"
+                  placeholder="Av. Principal #123"
+                  autocomplete="street-address">
+                <small class="field-error" th:errors="*{direccionEnvio.calleNumero}"></small>
+              </div>
+
+              <div>
+                <label class="label" for="colonia">Colonia</label>
+                <input
+                  id="colonia"
+                  type="text"
+                  class="input"
+                  th:classappend="${#fields.hasErrors('direccionEnvio.colonia')} ? ' input--error'"
+                  th:field="*{direccionEnvio.colonia}"
+                  placeholder="Col. Centro">
+                <small class="field-error" th:errors="*{direccionEnvio.colonia}"></small>
+              </div>
+
+              <div>
+                <label class="label" for="codigoPostal">Código postal</label>
+                <input
+                  id="codigoPostal"
+                  type="text"
+                  class="input"
+                  th:classappend="${#fields.hasErrors('direccionEnvio.codigoPostal')} ? ' input--error'"
+                  th:field="*{direccionEnvio.codigoPostal}"
+                  placeholder="85000"
+                  maxlength="5"
+                  inputmode="numeric"
+                  pattern="[0-9]{5}"
+                  autocomplete="postal-code">
+                <small class="field-error" th:errors="*{direccionEnvio.codigoPostal}"></small>
+              </div>
+
+              <div>
+                <label class="label" for="ciudad">Ciudad</label>
+                <input
+                  id="ciudad"
+                  type="text"
+                  class="input"
+                  th:classappend="${#fields.hasErrors('direccionEnvio.ciudad')} ? ' input--error'"
+                  th:field="*{direccionEnvio.ciudad}"
+                  placeholder="Ciudad Obregón"
+                  autocomplete="address-level2">
+                <small class="field-error" th:errors="*{direccionEnvio.ciudad}"></small>
+              </div>
+
+              <div>
+                <label class="label" for="estado">Estado</label>
+                <input
+                  id="estado"
+                  type="text"
+                  class="input"
+                  th:classappend="${#fields.hasErrors('direccionEnvio.estado')} ? ' input--error'"
+                  th:field="*{direccionEnvio.estado}"
+                  placeholder="Sonora"
+                  autocomplete="address-level1">
+                <small class="field-error" th:errors="*{direccionEnvio.estado}"></small>
+              </div>
             </div>
-            <span class="checkout-item__price">$18,999</span>
-          </div>
-          <div class="checkout-item">
-            <div class="checkout-item__img">
-              🎹
-              <span class="checkout-item__qty">1</span>
+          </section>
+
+          <section class="form-section">
+            <h2>
+              <span class="form-num">3</span>
+              Método de envío
+            </h2>
+
+            <div class="shipping-options">
+              <label class="shipping-option">
+                <input type="radio" th:field="*{metodoEnvio}" value="ESTANDAR">
+                <span class="shipping-option__marker" aria-hidden="true"></span>
+                <span class="shipping-option__info">
+                  <span class="shipping-option__name">Envío estándar</span>
+                  <span class="shipping-option__days">Entrega regular</span>
+                </span>
+                <span class="shipping-option__price shipping-option__price--free">Gratis</span>
+              </label>
+
+              <label class="shipping-option">
+                <input type="radio" th:field="*{metodoEnvio}" value="EXPRESS">
+                <span class="shipping-option__marker" aria-hidden="true"></span>
+                <span class="shipping-option__info">
+                  <span class="shipping-option__name">Envío express</span>
+                  <span class="shipping-option__days">Entrega prioritaria</span>
+                </span>
+                <span class="shipping-option__price">$199.00 MXN</span>
+              </label>
+
+              <label class="shipping-option">
+                <input type="radio" th:field="*{metodoEnvio}" value="RECOGER_TIENDA">
+                <span class="shipping-option__marker" aria-hidden="true"></span>
+                <span class="shipping-option__info">
+                  <span class="shipping-option__name">Recoger en tienda</span>
+                  <span class="shipping-option__days">Sin costo de envío</span>
+                </span>
+                <span class="shipping-option__price shipping-option__price--free">Gratis</span>
+              </label>
             </div>
-            <div>
-              <p class="checkout-item__name">Yamaha P-145</p>
-              <p class="checkout-item__variant">Negro</p>
-            </div>
-            <span class="checkout-item__price">$12,499</span>
-          </div>
+
+            <small class="field-error" th:errors="*{metodoEnvio}"></small>
+
+            <p class="checkout-note">
+              La dirección se solicita para todas las opciones en esta versión de la tienda.
+            </p>
+          </section>
         </div>
 
-        <div class="summary-rows">
-          <div class="summary-row">
-            <span>Subtotal</span>
-            <span class="val">$31,498</span>
-          </div>
-          <div class="summary-row">
-            <span>Descuento</span>
-            <span class="val--red">−$3,125</span>
-          </div>
-          <div class="summary-row">
-            <span>Envío</span>
-            <span class="val--green">Gratis</span>
-          </div>
-        </div>
+        <aside
+          class="checkout-summary"
+          th:if="${carrito != null and carrito.items != null and !carrito.items.isEmpty()}">
 
-        <div class="summary-total">
-          <span class="summary-total__label">Total</span>
-          <div class="summary-total__amount">
-            <p class="big">$28,373</p>
-            <p class="sub">MXN</p>
+          <p class="summary-title">Tu pedido</p>
+
+          <div class="checkout-items">
+            <article class="checkout-item" th:each="item : ${carrito.items}">
+              <div class="checkout-item__img">
+                🎵
+                <span class="checkout-item__qty" th:text="${item.cantidad}">1</span>
+              </div>
+
+              <div class="checkout-item__content">
+                <a
+                  class="checkout-item__name"
+                  th:href="@{/producto/{id}(id=${item.productoId})}"
+                  th:text="${item.nombreProducto}">
+                  Producto
+                </a>
+                <p class="checkout-item__variant" th:text="${item.categoria}">Categoría</p>
+              </div>
+
+              <span
+                class="checkout-item__price"
+                th:text="${item.subtotal != null ? '$' + #numbers.formatDecimal(item.subtotal, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                $0.00
+              </span>
+            </article>
           </div>
-        </div>
+
+          <div class="summary-rows">
+            <div class="summary-row">
+              <span>
+                Subtotal
+                (<span th:text="${carrito.cantidadProductos != null ? carrito.cantidadProductos : 0}">0</span>
+                artículos)
+              </span>
+              <span
+                class="val"
+                th:text="${carrito.subtotal != null ? '$' + #numbers.formatDecimal(carrito.subtotal, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                $0.00
+              </span>
+            </div>
+
+            <div class="summary-row">
+              <span>Descuento</span>
+              <span
+                class="val"
+                th:text="${carrito.descuento != null ? '$' + #numbers.formatDecimal(carrito.descuento, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                $0.00
+              </span>
+            </div>
+
+            <div class="summary-row">
+              <span>Envío</span>
+              <span class="summary-muted">Según la opción elegida</span>
+            </div>
+          </div>
+
+          <div class="summary-total">
+            <span class="summary-total__label">Total antes del envío</span>
+            <div class="summary-total__amount">
+              <p
+                class="big"
+                th:text="${carrito.total != null ? '$' + #numbers.formatDecimal(carrito.total, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                $0.00
+              </p>
+              <p class="sub">MXN</p>
+            </div>
+          </div>
+
+          <p class="checkout-total-note">
+            El total definitivo será calculado y validado por la API.
+          </p>
+
+          <button id="confirmarOrdenButton" type="submit" class="btn-gold">
+            Confirmar orden
+          </button>
+
+          <a th:href="@{/carrito}" class="checkout-back-link">
+            ← Volver al carrito
+          </a>
+        </aside>
       </div>
-    </div>
-
+    </form>
   </div>
-</div>
+</main>
 
-<!-- ── FOOTER ── -->
-<footer class="footer" style="margin-top:5rem;">
+<footer class="footer checkout-footer">
   <div class="container footer__inner">
     <div>
       <span class="footer__brand">Bemolé</span>
-      <span class="footer__copy">© 2025 · Todos los derechos reservados</span>
+      <span class="footer__copy">© 2026 · Todos los derechos reservados</span>
     </div>
+
     <div class="footer__legal">
-      <span>🔒 Sitio seguro SSL</span>
-      <a th:href="@{/privacidad}">Aviso de privacidad</a>
-      <a th:href="@{/terminos}">Términos y condiciones</a>
+      <span>🔒 Conexión protegida</span>
+      <span>Los precios finales se validan en el servidor</span>
     </div>
   </div>
 </footer>
+
+<script>
+  document.getElementById("checkoutForm")?.addEventListener("submit", function () {
+    const button = document.getElementById("confirmarOrdenButton");
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Procesando orden…";
+    }
+  });
+</script>
 
 </body>
 </html>
