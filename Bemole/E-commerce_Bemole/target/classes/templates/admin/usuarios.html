@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Bemolé Admin — Usuarios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
+</head>
+<body class="admin-body">
+
+<!-- ── TOPBAR ── -->
+<header class="admin-topbar">
+    <div class="admin-topbar__brand">
+        <span class="admin-topbar__name">Bemolé</span>
+        <span class="admin-topbar__sub">Panel de administración</span>
+    </div>
+    <div class="admin-topbar__center">
+        <span>🔍</span>
+        <input type="text" placeholder="Buscar productos, usuarios…"/>
+    </div>
+    <div class="admin-topbar__right">
+        <button class="admin-topbar__notif" aria-label="Notificaciones">🔔<span class="admin-topbar__notif-dot"></span></button>
+        <a th:href="@{/}" class="admin-topbar__notif" title="Ver tienda" style="font-size:.85rem;color:rgba(255,255,255,.45);text-decoration:none;">🏪 Tienda</a>
+        <div class="admin-topbar__user">
+            <div class="admin-topbar__avatar">A</div>
+            <div>
+                <p class="admin-topbar__uname">Admin</p>
+                <p class="admin-topbar__role">Administrador</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="admin-shell">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="admin-sidebar">
+        <span class="admin-sidebar__section-label">Principal</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin}" class="admin-nav-link"><span class="icon">📊</span> Dashboard</a>
+        </nav>
+        <span class="admin-sidebar__section-label">Catálogo</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin/productos}" class="admin-nav-link"><span class="icon">🎸</span> Productos <span class="badge-count">2,400</span></a>
+            <a th:href="@{/admin/categorias}" class="admin-nav-link"><span class="icon">📂</span> Categorías</a>
+        </nav>
+        <span class="admin-sidebar__section-label">Operaciones</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin/ordenes}" class="admin-nav-link"><span class="icon">📦</span> Órdenes <span class="badge-count">12</span></a>
+            <a th:href="@{/admin/usuarios}" class="admin-nav-link active"><span class="icon">👥</span> Usuarios</a>
+        </nav>
+        <hr class="admin-sidebar__divider"/>
+        <div class="admin-sidebar__logout"><a th:href="@{/logout}"><span class="icon">←</span> Cerrar sesión</a></div>
+    </aside>
+
+    <!-- ── CONTENIDO ── -->
+    <main class="admin-content">
+
+        <div class="admin-page-header">
+            <div class="admin-page-header__titles">
+                <p class="admin-page-header__eyebrow">Operaciones</p>
+                <h1 class="admin-page-header__title">Gestión de usuarios</h1>
+            </div>
+            <div class="admin-page-header__actions">
+                <button class="btn btn-ghost btn-sm">⬇ Exportar CSV</button>
+                <button class="btn btn-primary" onclick="abrirModal('modal-nuevo-user')">+ Nuevo usuario</button>
+            </div>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="admin-stats" style="grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));margin-bottom:1.5rem;">
+            <div class="stat-card">
+                <div class="stat-card__top">
+                    <span class="stat-card__label">Total usuarios</span>
+                    <div class="stat-card__icon stat-card__icon--info">👥</div>
+                </div>
+                <div class="stat-card__value">1,284</div>
+                <p class="stat-card__delta"><span class="up">↑ 34</span> esta semana</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__top">
+                    <span class="stat-card__label">Activos hoy</span>
+                    <div class="stat-card__icon stat-card__icon--success">🟢</div>
+                </div>
+                <div class="stat-card__value">87</div>
+                <p class="stat-card__delta">en los últimos 60 min</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__top">
+                    <span class="stat-card__label">Administradores</span>
+                    <div class="stat-card__icon stat-card__icon--gold">🛡</div>
+                </div>
+                <div class="stat-card__value">3</div>
+                <p class="stat-card__delta">con acceso completo</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__top">
+                    <span class="stat-card__label">Suspendidos</span>
+                    <div class="stat-card__icon stat-card__icon--warning">🚫</div>
+                </div>
+                <div class="stat-card__value">8</div>
+                <p class="stat-card__delta">por incumplimiento</p>
+            </div>
+        </div>
+
+        <!-- ── TABLA USUARIOS ── -->
+        <div class="admin-table-wrap">
+
+            <div class="admin-table-toolbar">
+                <div class="admin-table-toolbar__left">
+                    <div class="admin-search">
+                        <span>🔍</span>
+                        <input type="text" placeholder="Buscar por nombre, correo…"/>
+                    </div>
+                    <select class="admin-filter-select">
+                        <option value="">Todos los roles</option>
+                        <option>Administrador</option>
+                        <option>Cliente</option>
+                    </select>
+                    <select class="admin-filter-select">
+                        <option value="">Cualquier estado</option>
+                        <option>Activo</option>
+                        <option>Suspendido</option>
+                        <option>Sin verificar</option>
+                    </select>
+                </div>
+                <div class="admin-table-toolbar__right">
+                    <span style="font-size:.75rem;color:#9ca3af;">1,284 usuarios</span>
+                </div>
+            </div>
+
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th style="width:2.5rem;"><input type="checkbox"/></th>
+                    <th class="sortable sorted">Usuario <span class="sort-icon">↑</span></th>
+                    <th class="sortable">Correo <span class="sort-icon">↕</span></th>
+                    <th>Rol</th>
+                    <th class="sortable">Órdenes <span class="sort-icon">↕</span></th>
+                    <th>Estado</th>
+                    <th class="sortable">Registro <span class="sort-icon">↕</span></th>
+                    <th style="width:7rem;">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="user-avatar">J</div>
+                            <div>
+                                <p class="td-name">Juan García</p>
+                                <p class="td-sub">ID: #USR-0001</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">juan@correo.com</td>
+                    <td><span class="badge badge-neutral">Cliente</span></td>
+                    <td>3</td>
+                    <td><span class="badge badge-success"><span class="badge-dot"></span>Activo</span></td>
+                    <td class="muted">8 ene 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <button class="action-icon-btn" title="Ver perfil" onclick="abrirModal('modal-ver-user')">👁</button>
+                            <button class="action-icon-btn" title="Editar" onclick="abrirModal('modal-editar-user')">✏️</button>
+                            <button class="action-icon-btn action-icon-btn--delete" title="Suspender" onclick="abrirModal('modal-suspender-user')">🚫</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="user-avatar user-avatar--admin">A</div>
+                            <div>
+                                <p class="td-name">Admin Principal</p>
+                                <p class="td-sub">ID: #USR-0000</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">admin@bemole.mx</td>
+                    <td><span class="badge badge-info">Admin</span></td>
+                    <td>—</td>
+                    <td><span class="badge badge-success"><span class="badge-dot"></span>Activo</span></td>
+                    <td class="muted">1 ene 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <button class="action-icon-btn" title="Ver perfil" onclick="abrirModal('modal-ver-user')">👁</button>
+                            <button class="action-icon-btn" title="Editar" onclick="abrirModal('modal-editar-user')">✏️</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="user-avatar">L</div>
+                            <div>
+                                <p class="td-name">Laura Méndez</p>
+                                <p class="td-sub">ID: #USR-0102</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">laura.m@mail.com</td>
+                    <td><span class="badge badge-neutral">Cliente</span></td>
+                    <td>1</td>
+                    <td><span class="badge badge-success"><span class="badge-dot"></span>Activo</span></td>
+                    <td class="muted">14 feb 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <button class="action-icon-btn" title="Ver perfil" onclick="abrirModal('modal-ver-user')">👁</button>
+                            <button class="action-icon-btn" title="Editar" onclick="abrirModal('modal-editar-user')">✏️</button>
+                            <button class="action-icon-btn action-icon-btn--delete" title="Suspender">🚫</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="user-avatar">C</div>
+                            <div>
+                                <p class="td-name">Carlos Ruiz</p>
+                                <p class="td-sub">ID: #USR-0233</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">c.ruiz@email.mx</td>
+                    <td><span class="badge badge-neutral">Cliente</span></td>
+                    <td>2</td>
+                    <td><span class="badge badge-warning"><span class="badge-dot"></span>Sin verificar</span></td>
+                    <td class="muted">3 mar 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <button class="action-icon-btn" title="Ver perfil" onclick="abrirModal('modal-ver-user')">👁</button>
+                            <button class="action-icon-btn" title="Reenviar verificación" style="color:var(--info);">✉</button>
+                            <button class="action-icon-btn action-icon-btn--delete" title="Suspender">🚫</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="user-avatar" style="background:#f3f4f6;color:#9ca3af;">M</div>
+                            <div>
+                                <p class="td-name">Mario López</p>
+                                <p class="td-sub">ID: #USR-0087</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">mario.l@outlook.com</td>
+                    <td><span class="badge badge-neutral">Cliente</span></td>
+                    <td>0</td>
+                    <td><span class="badge badge-error"><span class="badge-dot"></span>Suspendido</span></td>
+                    <td class="muted">20 ene 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <button class="action-icon-btn" title="Ver perfil" onclick="abrirModal('modal-ver-user')">👁</button>
+                            <button class="action-icon-btn" title="Reactivar" style="color:var(--success);">✓</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"/></td>
+                    <td>
+                        <div class="td-product">
+                            <div class="user-avatar user-avatar--admin">S</div>
+                            <div>
+                                <p class="td-name">Sandra Reyes</p>
+                                <p class="td-sub">ID: #USR-0002</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">sandra@bemole.mx</td>
+                    <td><span class="badge badge-info">Admin</span></td>
+                    <td>—</td>
+                    <td><span class="badge badge-success"><span class="badge-dot"></span>Activo</span></td>
+                    <td class="muted">5 ene 2025</td>
+                    <td>
+                        <div class="td-actions">
+                            <button class="action-icon-btn" title="Ver perfil" onclick="abrirModal('modal-ver-user')">👁</button>
+                            <button class="action-icon-btn" title="Editar" onclick="abrirModal('modal-editar-user')">✏️</button>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="admin-table-footer">
+                <span>Mostrando 6 de 1,284 usuarios</span>
+                <div class="admin-pagination">
+                    <button class="admin-pag-btn">‹</button>
+                    <button class="admin-pag-btn active">1</button>
+                    <button class="admin-pag-btn">2</button>
+                    <button class="admin-pag-btn">3</button>
+                    <span style="padding:.25rem;">…</span>
+                    <button class="admin-pag-btn">215</button>
+                    <button class="admin-pag-btn">›</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- ── MODAL: NUEVO USUARIO ── -->
+<div id="modal-nuevo-user" class="modal-backdrop" onclick="cerrarModalFuera(event,'modal-nuevo-user')">
+    <div class="modal">
+        <div class="modal__header">
+            <h2 class="modal__title">Nuevo usuario</h2>
+            <button class="modal__close" onclick="cerrarModal('modal-nuevo-user')">✕</button>
+        </div>
+        <div class="modal__body">
+            <div class="form-grid-2">
+                <div class="field">
+                    <label>Nombre</label>
+                    <input type="text" placeholder="Juan"/>
+                </div>
+                <div class="field">
+                    <label>Apellido</label>
+                    <input type="text" placeholder="García"/>
+                </div>
+                <div class="field span-2">
+                    <label>Correo electrónico</label>
+                    <input type="email" placeholder="correo@ejemplo.com"/>
+                </div>
+                <div class="field">
+                    <label>Teléfono</label>
+                    <input type="tel" placeholder="+52 644 000 0000"/>
+                </div>
+                <div class="field">
+                    <label>Rol</label>
+                    <select>
+                        <option>Cliente</option>
+                        <option>Administrador</option>
+                    </select>
+                </div>
+                <div class="field span-2">
+                    <label>Contraseña temporal</label>
+                    <input type="password" placeholder="Se enviará por correo si se deja en blanco"/>
+                    <span class="helper">El usuario deberá cambiarla en su primer inicio de sesión</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn-ghost" onclick="cerrarModal('modal-nuevo-user')">Cancelar</button>
+            <button class="btn btn-primary">Crear usuario</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── MODAL: VER USUARIO ── -->
+<div id="modal-ver-user" class="modal-backdrop" onclick="cerrarModalFuera(event,'modal-ver-user')">
+    <div class="modal">
+        <div class="modal__header">
+            <h2 class="modal__title">Perfil de usuario</h2>
+            <button class="modal__close" onclick="cerrarModal('modal-ver-user')">✕</button>
+        </div>
+        <div class="modal__body">
+            <div style="display:flex;align-items:center;gap:1rem;padding-bottom:1rem;border-bottom:1px solid var(--borde);margin-bottom:1rem;">
+                <div class="user-avatar" style="width:3.5rem;height:3.5rem;font-size:1.25rem;">J</div>
+                <div>
+                    <p style="font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;">Juan García</p>
+                    <p style="font-size:.75rem;color:#9ca3af;">juan@correo.com · ID #USR-0001</p>
+                </div>
+                <span class="badge badge-neutral" style="margin-left:auto;">Cliente</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;font-size:.82rem;">
+                <div><p style="color:#9ca3af;margin-bottom:.2rem;">Teléfono</p><p>+52 644 123 4567</p></div>
+                <div><p style="color:#9ca3af;margin-bottom:.2rem;">Registro</p><p>8 enero 2025</p></div>
+                <div><p style="color:#9ca3af;margin-bottom:.2rem;">Órdenes totales</p><p style="font-weight:700;">3</p></div>
+                <div><p style="color:#9ca3af;margin-bottom:.2rem;">Gasto total</p><p style="font-weight:700;">$64,771 MXN</p></div>
+                <div><p style="color:#9ca3af;margin-bottom:.2rem;">Último acceso</p><p>Hace 2 horas</p></div>
+                <div><p style="color:#9ca3af;margin-bottom:.2rem;">Estado</p><span class="badge badge-success"><span class="badge-dot"></span>Activo</span></div>
+            </div>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn-ghost" onclick="cerrarModal('modal-ver-user')">Cerrar</button>
+            <button class="btn btn-secondary" onclick="cerrarModal('modal-ver-user');abrirModal('modal-editar-user')">✏️ Editar usuario</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── MODAL: EDITAR USUARIO ── -->
+<div id="modal-editar-user" class="modal-backdrop" onclick="cerrarModalFuera(event,'modal-editar-user')">
+    <div class="modal">
+        <div class="modal__header">
+            <h2 class="modal__title">Editar usuario</h2>
+            <button class="modal__close" onclick="cerrarModal('modal-editar-user')">✕</button>
+        </div>
+        <div class="modal__body">
+            <div class="form-grid-2">
+                <div class="field">
+                    <label>Nombre</label>
+                    <input type="text" value="Juan"/>
+                </div>
+                <div class="field">
+                    <label>Apellido</label>
+                    <input type="text" value="García"/>
+                </div>
+                <div class="field span-2">
+                    <label>Correo electrónico</label>
+                    <input type="email" value="juan@correo.com"/>
+                </div>
+                <div class="field">
+                    <label>Teléfono</label>
+                    <input type="tel" value="+52 644 123 4567"/>
+                </div>
+                <div class="field">
+                    <label>Rol</label>
+                    <select>
+                        <option selected>Cliente</option>
+                        <option>Administrador</option>
+                    </select>
+                </div>
+                <div class="field span-2">
+                    <label>Nueva contraseña <span style="color:#9ca3af;font-weight:300;">(dejar en blanco para no cambiar)</span></label>
+                    <input type="password" placeholder="••••••••"/>
+                </div>
+            </div>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn-ghost" onclick="cerrarModal('modal-editar-user')">Cancelar</button>
+            <button class="btn btn-primary">Guardar cambios</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── MODAL: SUSPENDER ── -->
+<div id="modal-suspender-user" class="modal-backdrop" onclick="cerrarModalFuera(event,'modal-suspender-user')">
+    <div class="modal" style="max-width:26rem;">
+        <div class="modal__header">
+            <h2 class="modal__title">Suspender usuario</h2>
+            <button class="modal__close" onclick="cerrarModal('modal-suspender-user')">✕</button>
+        </div>
+        <div class="modal__body">
+            <div class="admin-alert admin-alert--warning" style="margin:0;">
+                <span class="admin-alert__icon">⚠</span>
+                <div>El usuario <strong>no podrá iniciar sesión</strong> mientras esté suspendido. Sus órdenes activas no se verán afectadas.</div>
+            </div>
+            <p style="font-size:.875rem;color:#6b7280;margin-top:.75rem;">¿Deseas suspender a <strong>Juan García</strong>?</p>
+            <div class="field" style="margin-top:.5rem;">
+                <label>Motivo (opcional)</label>
+                <textarea rows="2" placeholder="Ej. Comportamiento inapropiado, fraude…"></textarea>
+            </div>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn-ghost" onclick="cerrarModal('modal-suspender-user')">Cancelar</button>
+            <button class="btn btn-danger">Suspender usuario</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function abrirModal(id) { document.getElementById(id).classList.add('open'); }
+    function cerrarModal(id) { document.getElementById(id).classList.remove('open'); }
+    function cerrarModalFuera(e, id) { if (e.target.id === id) cerrarModal(id); }
+</script>
+
+</body>
+</html>

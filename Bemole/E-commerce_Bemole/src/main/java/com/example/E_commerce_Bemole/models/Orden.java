@@ -1,4 +1,5 @@
 package com.example.E_commerce_Bemole.models;
+import com.example.E_commerce_Bemole.models.Pago;
 
 import com.example.E_commerce_Bemole.enums.EstadoOrden;
 import jakarta.persistence.*;

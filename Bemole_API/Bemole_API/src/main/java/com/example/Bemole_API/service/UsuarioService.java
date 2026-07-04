@@ -1,11 +1,16 @@
 package com.example.Bemole_API.service;
 
 import com.example.Bemole_API.dto.usuarios.UsuarioRegistroDTO;
+import com.example.Bemole_API.dto.usuarios.UsuarioResponseDTO;
+import com.example.Bemole_API.enums.RolUsuario;
 import com.example.Bemole_API.models.Usuario;
 import com.example.Bemole_API.repositorys.UsuarioRepository;
+import com.example.Bemole_API.service.mappers.UsuarioMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.example.Bemole_API.exception.RecursoNoEncontradoException;
+import com.example.Bemole_API.exception.NegocioException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,40 +32,75 @@ public class UsuarioService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UsuarioMapper usuarioMapper;
+
     public List<Usuario> listarUsuarios() {
         return repository.findAll();
     }
 
     public Usuario obtenerPorId(Long id) {
         if (id == null || id <= 0) {
-            throw new IllegalArgumentException("El ID del usuario debe ser un número positivo.");
+            throw new NegocioException("El ID del usuario debe ser un número positivo.");
         }
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario con ID " + id + " no encontrado."));
+                .orElseThrow(() ->
+                        new RecursoNoEncontradoException(
+                                "Usuario con ID " + id + " no encontrado."
+                        )
+                );
     }
 
-    public Usuario registrarUsuario(Usuario usuario) {
-        validarUsuarioCompleto(usuario);
+    public UsuarioResponseDTO registrarUsuario(UsuarioRegistroDTO usuarioDTO) {
 
-        String emailNormalizado = usuario.getEmail().trim().toLowerCase();
-        if (repository.existsByEmail((emailNormalizado))) {
-            throw new IllegalArgumentException("Ya existe un usuario con el email: " + emailNormalizado);
+        String nombreNormalizado = usuarioDTO.getNombre().trim();
+        String apellidoNormalizado = usuarioDTO.getApellido().trim();
+        String emailNormalizado = usuarioDTO.getEmail().trim().toLowerCase();
+
+        if (!usuarioDTO.getPassword().equals(usuarioDTO.getConfirmarPassword())) {
+            throw new NegocioException(
+                    "Las contraseñas no coinciden."
+            );
         }
 
-        usuario.setNombre(usuario.getNombre().trim());
+        if (repository.existsByEmail(emailNormalizado)) {
+            throw new NegocioException(
+                    "Ya existe un usuario con el correo: "
+                            + emailNormalizado
+            );
+        }
+
+        Usuario usuario = new Usuario();
+
+        usuario.setNombre(nombreNormalizado);
+        usuario.setApellido(apellidoNormalizado);
         usuario.setEmail(emailNormalizado);
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+
+        if (usuarioDTO.getTelefono() != null
+                && !usuarioDTO.getTelefono().isBlank()) {
+            usuario.setTelefono(usuarioDTO.getTelefono().trim());
+        } else {
+            usuario.setTelefono(null);
+        }
+
+        usuario.setPassword(
+                passwordEncoder.encode(usuarioDTO.getPassword())
+        );
+
+        usuario.setRol(RolUsuario.CLIENTE);
         usuario.setFechaRegistro(LocalDateTime.now());
 
-        return repository.save(usuario);
+        Usuario usuarioGuardado = repository.save(usuario);
+
+        return usuarioMapper.toResponseDTO(usuarioGuardado);
     }
 
     public Usuario actualizarUsuarioParcial(Long id, Usuario usuarioParcial) {
         if (id == null || id <= 0) {
-            throw new IllegalArgumentException("El ID del usuario debe ser un número positivo.");
+            throw new NegocioException("El ID del usuario debe ser un número positivo.");
         }
         if (usuarioParcial == null) {
-            throw new IllegalArgumentException("Los datos del usuario no pueden ser nulos.");
+            throw new NegocioException("Los datos del usuario no pueden ser nulos.");
         }
 
         return repository.findById(id).map(usuario -> {
@@ -68,10 +108,10 @@ public class UsuarioService {
             if (usuarioParcial.getNombre() != null) {
                 String nuevoNombre = usuarioParcial.getNombre().trim();
                 if (nuevoNombre.isEmpty()) {
-                    throw new IllegalArgumentException("El nombre del usuario no puede estar vacío.");
+                    throw new NegocioException("El nombre del usuario no puede estar vacío.");
                 }
                 if (nuevoNombre.length() > 100) {
-                    throw new IllegalArgumentException("El nombre no puede superar los 100 caracteres.");
+                    throw new NegocioException("El nombre no puede superar los 100 caracteres.");
                 }
                 usuario.setNombre(nuevoNombre);
             }
@@ -79,10 +119,10 @@ public class UsuarioService {
             if (usuarioParcial.getApellido() != null) {
                 String nuevoApellido = usuarioParcial.getApellido().trim();
                 if (nuevoApellido.isEmpty()) {
-                    throw new IllegalArgumentException("El nombre del usuario no puede estar vacío.");
+                    throw new NegocioException("El nombre del usuario no puede estar vacío.");
                 }
                 if (nuevoApellido.length() > 100) {
-                    throw new IllegalArgumentException("El nombre no puede superar los 100 caracteres.");
+                    throw new NegocioException("El nombre no puede superar los 100 caracteres.");
                 }
                 usuario.setApellido(nuevoApellido);
             }
@@ -90,11 +130,11 @@ public class UsuarioService {
             if (usuarioParcial.getEmail() != null) {
                 String nuevoEmail = usuarioParcial.getEmail().trim().toLowerCase();
                 if (!EMAIL_PATTERN.matcher(nuevoEmail).matches()) {
-                    throw new IllegalArgumentException("El formato del email no es válido.");
+                    throw new NegocioException("El formato del email no es válido.");
                 }
                 if (!nuevoEmail.equals(usuario.getEmail())
                         && repository.existsByEmail(nuevoEmail)) {
-                    throw new IllegalArgumentException("Ya existe un usuario con el email: " + nuevoEmail);
+                    throw new NegocioException("Ya existe un usuario con el email: " + nuevoEmail);
                 }
                 usuario.setEmail(nuevoEmail);
             }
@@ -109,21 +149,21 @@ public class UsuarioService {
 
             return repository.save(usuario);
 
-        }).orElseThrow(() -> new RuntimeException("Usuario con ID " + id + " no encontrado."));
+        }).orElseThrow(() -> new RecursoNoEncontradoException("Usuario con ID " + id + " no encontrado."));
     }
 
     public Usuario actualizarPassword(Long id, Usuario usuarioParcial) {
         if (id == null || id <= 0) {
-            throw new IllegalArgumentException("El ID del usuario debe ser un número positivo.");
+            throw new NegocioException("El ID del usuario debe ser un número positivo.");
         }
         if (usuarioParcial == null || usuarioParcial.getPassword() == null
                 || usuarioParcial.getPassword().isBlank()) {
-            throw new IllegalArgumentException("La nueva contraseña es obligatoria.");
+            throw new NegocioException("La nueva contraseña es obligatoria.");
         }
 
         String nuevaPassword = usuarioParcial.getPassword();
         if (!PASSWORD_PATTERN.matcher(nuevaPassword).matches()) {
-            throw new IllegalArgumentException(
+            throw new NegocioException(
                     "La contraseña debe tener al menos 8 caracteres e incluir " +
                             "una mayúscula, una minúscula, un número y un símbolo especial.");
         }
@@ -131,51 +171,48 @@ public class UsuarioService {
         return repository.findById(id).map(usuario -> {
             // Evitar reusar la misma contraseña
             if (passwordEncoder.matches(nuevaPassword, usuario.getPassword())) {
-                throw new IllegalArgumentException("La nueva contraseña no puede ser igual a la contraseña actual.");
+                throw new NegocioException("La nueva contraseña no puede ser igual a la contraseña actual.");
             }
             usuario.setPassword(passwordEncoder.encode(nuevaPassword));
             return repository.save(usuario);
-        }).orElseThrow(() -> new RuntimeException("Usuario con ID " + id + " no encontrado."));
+        }).orElseThrow(() -> new RecursoNoEncontradoException("Usuario con ID " + id + " no encontrado."));
     }
 
     public void eliminarUsuario(Long id) {
         if (id == null || id <= 0) {
-            throw new IllegalArgumentException("El ID del usuario debe ser un número positivo.");
+            throw new NegocioException("El ID del usuario debe ser un número positivo.");
         }
         if (!repository.existsById(id)) {
-            throw new RuntimeException("Usuario con ID " + id + " no encontrado.");
+            throw new RecursoNoEncontradoException("Usuario con ID " + id + " no encontrado.");
         }
         repository.deleteById(id);
     }
 
-    // ── Helpers ──────────────────────────────────────────────────────────────
+    //Metodos Auxiliares
 
-    private void validarUsuarioCompleto(Usuario usuario) {
+    private void validarUsuarioCompleto(UsuarioRegistroDTO usuario) {
         if (usuario == null) {
-            throw new IllegalArgumentException("El usuario no puede ser nulo.");
+            throw new NegocioException("El usuario no puede ser nulo.");
         }
         if (usuario.getNombre() == null || usuario.getNombre().isBlank()) {
-            throw new IllegalArgumentException("El nombre del usuario es obligatorio.");
+            throw new NegocioException("El nombre del usuario es obligatorio.");
         }
         if (usuario.getNombre().trim().length() > 100) {
-            throw new IllegalArgumentException("El nombre no puede superar los 100 caracteres.");
+            throw new NegocioException("El nombre no puede superar los 100 caracteres.");
         }
         if (usuario.getEmail() == null || usuario.getEmail().isBlank()) {
-            throw new IllegalArgumentException("El email del usuario es obligatorio.");
+            throw new NegocioException("El email del usuario es obligatorio.");
         }
         if (!EMAIL_PATTERN.matcher(usuario.getEmail().trim()).matches()) {
-            throw new IllegalArgumentException("El formato del email no es válido.");
+            throw new NegocioException("El formato del email no es válido.");
         }
         if (usuario.getPassword() == null || usuario.getPassword().isBlank()) {
-            throw new IllegalArgumentException("La contraseña del usuario es obligatoria.");
+            throw new NegocioException("La contraseña del usuario es obligatoria.");
         }
         if (!PASSWORD_PATTERN.matcher(usuario.getPassword()).matches()) {
-            throw new IllegalArgumentException(
+            throw new NegocioException(
                     "La contraseña debe tener al menos 8 caracteres e incluir " +
                             "una mayúscula, una minúscula, un número y un símbolo especial.");
-        }
-        if (usuario.getRol() == null) {
-            throw new IllegalArgumentException("El rol del usuario es obligatorio.");
         }
     }
 }

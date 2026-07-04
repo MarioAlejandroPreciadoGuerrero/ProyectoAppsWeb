@@ -1,101 +1,62 @@
 package com.example.Bemole_API.models;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "items_orden")
+@Table(
+        name = "items_orden",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_orden_producto",
+                        columnNames = {
+                                "orden_id",
+                                "producto_id"
+                        }
+                )
+        }
+)
+@Data
+@NoArgsConstructor
 public class ItemOrden {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "orden_id", nullable = false)
-    private Orden orden;
-
-    @ManyToOne
-    @JoinColumn(name = "producto_id", nullable = false)
-    private Producto producto;
-
     @Column(nullable = false)
     private Integer cantidad;
 
-    @Column(nullable = false)
-    private Double precioUnitario;
+    @Column(
+            nullable = false,
+            precision = 10,
+            scale = 2
+    )
+    private BigDecimal descuento = BigDecimal.ZERO;
 
-    @Column(nullable = false)
-    private Double descuento;
+    @Column(
+            name = "precio_unitario",
+            nullable = false,
+            precision = 10,
+            scale = 2
+    )
+    private BigDecimal precioUnitario;
 
-    public ItemOrden() {
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "orden_id",
+            nullable = false
+    )
+    private Orden orden;
 
-    public ItemOrden(Orden orden, Producto producto, Integer cantidad, Double precioUnitario, Double descuento) {
-        this.orden = orden;
-        this.producto = producto;
-        this.cantidad = cantidad;
-        this.precioUnitario = precioUnitario;
-        this.descuento = descuento;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "producto_id",
+            nullable = false
+    )
+    private Producto producto;
 
-    public ItemOrden(Long id, Orden orden, Producto producto, Integer cantidad, Double precioUnitario, Double descuento) {
-        this.id = id;
-        this.orden = orden;
-        this.producto = producto;
-        this.cantidad = cantidad;
-        this.precioUnitario = precioUnitario;
-        this.descuento = descuento;
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Orden getOrden() {
-        return orden;
-    }
-
-    public void setOrden(Orden orden) {
-        this.orden = orden;
-    }
-
-    public Producto getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-
-    public Integer getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public Double getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(Double precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
-    public Double getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(Double descuento) {
-        this.descuento = descuento;
-    }
-
-    @Override
-    public String toString() {
-        return "ItemOrden{id=" + id + ", producto=" + producto.getNombre() + ", cantidad=" + cantidad + ", precioUnitario=" + precioUnitario + "}";
-    }
 }
