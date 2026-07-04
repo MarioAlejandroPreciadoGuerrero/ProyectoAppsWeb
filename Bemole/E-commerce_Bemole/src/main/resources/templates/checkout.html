@@ -210,7 +210,11 @@
 
             <div class="shipping-options">
               <label class="shipping-option">
-                <input type="radio" th:field="*{metodoEnvio}" value="ESTANDAR">
+                <input
+                  type="radio"
+                  th:field="*{metodoEnvio}"
+                  value="ESTANDAR"
+                  data-costo-envio="0.00">
                 <span class="shipping-option__marker" aria-hidden="true"></span>
                 <span class="shipping-option__info">
                   <span class="shipping-option__name">Envío estándar</span>
@@ -220,7 +224,11 @@
               </label>
 
               <label class="shipping-option">
-                <input type="radio" th:field="*{metodoEnvio}" value="EXPRESS">
+                <input
+                  type="radio"
+                  th:field="*{metodoEnvio}"
+                  value="EXPRESS"
+                  data-costo-envio="199.00">
                 <span class="shipping-option__marker" aria-hidden="true"></span>
                 <span class="shipping-option__info">
                   <span class="shipping-option__name">Envío express</span>
@@ -230,7 +238,11 @@
               </label>
 
               <label class="shipping-option">
-                <input type="radio" th:field="*{metodoEnvio}" value="RECOGER_TIENDA">
+                <input
+                  type="radio"
+                  th:field="*{metodoEnvio}"
+                  value="RECOGER_TIENDA"
+                  data-costo-envio="0.00">
                 <span class="shipping-option__marker" aria-hidden="true"></span>
                 <span class="shipping-option__info">
                   <span class="shipping-option__name">Recoger en tienda</span>
@@ -249,8 +261,10 @@
         </div>
 
         <aside
+          id="checkoutSummary"
           class="checkout-summary"
-          th:if="${carrito != null and carrito.items != null and !carrito.items.isEmpty()}">
+          th:if="${carrito != null and carrito.items != null and !carrito.items.isEmpty()}"
+          th:attr="data-total-base=${carrito.total != null ? carrito.total : 0}">
 
           <p class="summary-title">Tu pedido</p>
 
@@ -304,15 +318,22 @@
 
             <div class="summary-row">
               <span>Envío</span>
-              <span class="summary-muted">Según la opción elegida</span>
+              <span
+                id="costoEnvioTexto"
+                class="val checkout-live-price"
+                aria-live="polite">
+                $0.00
+              </span>
             </div>
           </div>
 
-          <div class="summary-total">
-            <span class="summary-total__label">Total antes del envío</span>
+          <div class="summary-total summary-total--estimated">
+            <span class="summary-total__label">Total estimado</span>
             <div class="summary-total__amount">
               <p
-                class="big"
+                id="totalEstimadoTexto"
+                class="big checkout-live-total"
+                aria-live="polite"
                 th:text="${carrito.total != null ? '$' + #numbers.formatDecimal(carrito.total, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
                 $0.00
               </p>
@@ -321,7 +342,7 @@
           </div>
 
           <p class="checkout-total-note">
-            El total definitivo será calculado y validado por la API.
+            El total mostrado se actualiza según el método de envío. La API volverá a validarlo al crear la orden.
           </p>
 
           <button id="confirmarOrdenButton" type="submit" class="btn-gold">
@@ -352,13 +373,75 @@
 </footer>
 
 <script>
-  document.getElementById("checkoutForm")?.addEventListener("submit", function () {
-    const button = document.getElementById("confirmarOrdenButton");
+  document.addEventListener("DOMContentLoaded", function () {
+    const checkoutForm = document.getElementById("checkoutForm");
+    const checkoutSummary = document.getElementById("checkoutSummary");
+    const costoEnvioTexto = document.getElementById("costoEnvioTexto");
+    const totalEstimadoTexto = document.getElementById("totalEstimadoTexto");
+    const opcionesEnvio = document.querySelectorAll(
+      'input[name="metodoEnvio"]'
+    );
 
-    if (button) {
-      button.disabled = true;
-      button.textContent = "Procesando orden…";
+    const formatoMoneda = new Intl.NumberFormat("es-MX", {
+      style: "currency",
+      currency: "MXN",
+      minimumFractionDigits: 2
+    });
+
+    function convertirNumero(valor) {
+      if (valor === null || valor === undefined || valor === "") {
+        return 0;
+      }
+
+      const numero = Number(String(valor).replace(",", "."));
+      return Number.isFinite(numero) ? numero : 0;
     }
+
+    function actualizarResumenEnvio() {
+      if (!checkoutSummary || !costoEnvioTexto || !totalEstimadoTexto) {
+        return;
+      }
+
+      const totalBase = convertirNumero(
+        checkoutSummary.dataset.totalBase
+      );
+
+      const opcionSeleccionada = document.querySelector(
+        'input[name="metodoEnvio"]:checked'
+      );
+
+      const costoEnvio = opcionSeleccionada
+        ? convertirNumero(opcionSeleccionada.dataset.costoEnvio)
+        : 0;
+
+      document.querySelectorAll(".shipping-option").forEach(function (opcion) {
+        const radio = opcion.querySelector('input[name="metodoEnvio"]');
+        opcion.classList.toggle(
+          "shipping-option--selected",
+          Boolean(radio && radio.checked)
+        );
+      });
+
+      costoEnvioTexto.textContent = formatoMoneda.format(costoEnvio);
+      totalEstimadoTexto.textContent = formatoMoneda.format(
+        totalBase + costoEnvio
+      );
+    }
+
+    opcionesEnvio.forEach(function (opcion) {
+      opcion.addEventListener("change", actualizarResumenEnvio);
+    });
+
+    actualizarResumenEnvio();
+
+    checkoutForm?.addEventListener("submit", function () {
+      const button = document.getElementById("confirmarOrdenButton");
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Procesando orden…";
+      }
+    });
   });
 </script>
 

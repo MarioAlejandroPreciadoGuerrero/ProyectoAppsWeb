@@ -54,9 +54,4 @@ public class NavController {
 
         return "home";
     }
-
-    @GetMapping("/ordenes")
-    public String ordenes(){
-        return "ordenes";
-    }
 }

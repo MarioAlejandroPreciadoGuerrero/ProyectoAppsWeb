@@ -1,214 +1,331 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bemolé — Mis órdenes</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/style.css}">
 </head>
 <body>
 
-<!-- ── NAVBAR ── -->
 <header class="navbar">
   <div class="container navbar__inner">
-    <div class="logo">
+    <a class="logo" th:href="@{/}" aria-label="Ir al inicio">
       <span class="logo__name">Bemolé</span>
       <span class="logo__tagline">Instrumentos para cada nota</span>
-    </div>
+    </a>
+
     <ul class="nav-links">
       <li><a th:href="@{/}">Inicio</a></li>
       <li><a th:href="@{/catalogo}">Catálogo</a></li>
-      <li><a href="#nosotros">Nosotros</a></li>
-      <li><a href="#contacto">Contacto</a></li>
+      <li><a th:href="@{/#nosotros}">Nosotros</a></li>
+      <li><a th:href="@{/#contacto}">Contacto</a></li>
     </ul>
+
     <div class="nav-actions">
-      <button aria-label="Buscar">🔍</button>
-      <a th:href="@{/carrito}">
-        <button class="cart-btn" aria-label="Carrito">🛒<span class="cart-badge">2</span></button>
+      <a th:href="@{/carrito}" class="cart-btn" aria-label="Ir al carrito">🛒</a>
+
+      <a th:href="@{/ordenes}" class="profile-btn" aria-label="Ver mis órdenes">
+        👤
+        <span th:text="${usuarioOrdenes != null ? usuarioOrdenes.nombre : 'Mi cuenta'}">Mi cuenta</span>
       </a>
-      <div class="nav-avatar">J</div>
     </div>
   </div>
 </header>
 
-<div class="container">
+<main class="container">
   <div class="account-layout">
 
-    <!-- SIDEBAR CUENTA -->
     <aside class="account-sidebar">
       <div class="account-profile">
-        <div class="account-avatar">J</div>
-        <p class="account-profile__name">Jesus Adrian</p>
-        <p class="account-profile__email">adrian@correo.com</p>
+        <div class="account-avatar" th:text="${inicialUsuario != null ? inicialUsuario : 'U'}">U</div>
+
+        <p
+          class="account-profile__name"
+          th:text="${usuarioOrdenes != null
+            ? usuarioOrdenes.nombre + ' ' + usuarioOrdenes.apellido
+            : 'Mi cuenta'}">
+          Mi cuenta
+        </p>
+
+        <p
+          class="account-profile__email"
+          th:text="${usuarioOrdenes != null ? usuarioOrdenes.email : ''}">
+          usuario@correo.com
+        </p>
       </div>
-      <nav class="account-nav">
-        <a th:href="@{/perfil}">👤 Mi perfil</a>
+
+      <nav class="account-nav" aria-label="Navegación de la cuenta">
         <a th:href="@{/ordenes}" class="active">📦 Mis órdenes</a>
-        <a th:href="@{/favoritos}">❤️ Favoritos</a>
-        <a th:href="@{/direcciones}">📍 Mis direcciones</a>
-        <a th:href="@{/notificaciones}">🔔 Notificaciones</a>
-        <hr/>
-        <a th:href="@{/logout}" class="logout">← Cerrar sesión</a>
+        <a th:href="@{/carrito}">🛒 Mi carrito</a>
+
+        <hr>
+
+        <form th:action="@{/logout}" method="post">
+          <button type="submit" class="account-logout">← Cerrar sesión</button>
+        </form>
       </nav>
     </aside>
 
-    <!-- CONTENIDO -->
-    <div style="flex:1;">
-      <div style="margin-bottom:1.75rem;">
-        <p class="eyebrow">Mi cuenta</p>
-        <h1 class="display" style="font-size:2rem;">Historial de órdenes</h1>
+    <section class="orders-content">
+      <div class="orders-heading">
+        <div>
+          <p class="eyebrow">Mi cuenta</p>
+          <h1 class="display">Historial de órdenes</h1>
+        </div>
+
+        <a th:href="@{/catalogo}" class="orders-heading__link">Seguir comprando →</a>
       </div>
 
-      <!-- Filtros -->
-      <div class="order-filters">
-        <button class="filter-btn filter-btn--active">Todas</button>
-        <button class="filter-btn">En proceso</button>
-        <button class="filter-btn">Enviadas</button>
-        <button class="filter-btn">Entregadas</button>
-        <button class="filter-btn">Canceladas</button>
+      <div
+        class="alert-error"
+        role="alert"
+        th:if="${errorOrdenes}"
+        th:text="${errorOrdenes}">
+        No fue posible cargar las órdenes.
       </div>
 
-      <div class="orders-list">
+      <nav class="order-filters" aria-label="Filtrar órdenes por estado">
+        <a
+          class="filter-btn"
+          th:classappend="${estadoSeleccionado == null} ? ' filter-btn--active'"
+          th:href="@{/ordenes(pagina=0,tamano=${tamanoSeleccionado})}">
+          Todas
+        </a>
 
-        <!-- Orden 1 — En tránsito -->
-        <div class="order-card">
-          <div class="order-card__header">
-            <div>
-              <p class="order-card__id">Orden <strong>#BMO-2025-0348</strong></p>
-              <p class="order-card__date">Realizada el 8 de junio de 2025</p>
-            </div>
-            <div class="order-card__right">
-              <span class="status-badge status-badge--transit">🚚 En tránsito</span>
-              <p class="order-card__total">$28,373 MXN</p>
-            </div>
-          </div>
-          <div class="order-card__body">
-            <div class="order-card__products">
-              <div class="order-card__imgs">
-                <div class="order-product-img">🎸</div>
-                <div class="order-product-img">🎹</div>
-              </div>
-              <div>
-                <p class="order-card__product-name">Fender Stratocaster Player + 1 más</p>
-                <p class="order-card__product-date">Llegada estimada: 13 jun 2025</p>
-              </div>
-            </div>
-            <div class="order-card__actions">
-              <button class="action-btn action-btn--gold">Rastrear envío</button>
-              <button class="action-btn action-btn--ghost">Ver detalle</button>
-            </div>
-          </div>
-          <div class="order-progress">
-            <div class="progress-steps">
-              <span class="progress-step--done">✓ Confirmada</span>
-              <div class="progress-line progress-line--done"></div>
-              <span class="progress-step--done">✓ Preparando</span>
-              <div class="progress-line progress-line--done"></div>
-              <span class="progress-step--done">✓ Enviada</span>
-              <div class="progress-line"></div>
-              <span>Entregada</span>
-            </div>
-          </div>
-        </div>
+        <a
+          class="filter-btn"
+          th:classappend="${estadoSeleccionado != null and estadoSeleccionado.name() == 'PENDIENTE'} ? ' filter-btn--active'"
+          th:href="@{/ordenes(estado='PENDIENTE',pagina=0,tamano=${tamanoSeleccionado})}">
+          Pendientes
+        </a>
 
-        <!-- Orden 2 — Entregada -->
-        <div class="order-card">
-          <div class="order-card__header">
-            <div>
-              <p class="order-card__id">Orden <strong>#BMO-2025-0201</strong></p>
-              <p class="order-card__date">Realizada el 14 de abril de 2025</p>
-            </div>
-            <div class="order-card__right">
-              <span class="status-badge status-badge--delivered">✓ Entregada</span>
-              <p class="order-card__total">$4,299 MXN</p>
-            </div>
-          </div>
-          <div class="order-card__body">
-            <div class="order-card__products">
-              <div class="order-product-img">🎻</div>
-              <div>
-                <p class="order-card__product-name">Violín 4/4 Stentor II</p>
-                <p class="order-card__product-date">Entregada el 19 abr 2025</p>
-              </div>
-            </div>
-            <div class="order-card__actions">
-              <button class="action-btn action-btn--gold">Reseñar</button>
-              <button class="action-btn action-btn--ghost">Ver detalle</button>
-              <button class="action-btn action-btn--ghost">Volver a comprar</button>
-            </div>
-          </div>
-        </div>
+        <a
+          class="filter-btn"
+          th:classappend="${estadoSeleccionado != null and estadoSeleccionado.name() == 'PROCESANDO'} ? ' filter-btn--active'"
+          th:href="@{/ordenes(estado='PROCESANDO',pagina=0,tamano=${tamanoSeleccionado})}">
+          Procesando
+        </a>
 
-        <!-- Orden 3 — Entregada -->
-        <div class="order-card">
-          <div class="order-card__header">
-            <div>
-              <p class="order-card__id">Orden <strong>#BMO-2024-1876</strong></p>
-              <p class="order-card__date">Realizada el 2 de diciembre de 2024</p>
-            </div>
-            <div class="order-card__right">
-              <span class="status-badge status-badge--delivered">✓ Entregada</span>
-              <p class="order-card__total">$32,000 MXN</p>
-            </div>
-          </div>
-          <div class="order-card__body">
-            <div class="order-card__products">
-              <div class="order-product-img">🥁</div>
-              <div>
-                <p class="order-card__product-name">Roland TD-07KV</p>
-                <p class="order-card__product-date">Entregada el 7 dic 2024</p>
-              </div>
-            </div>
-            <div class="order-card__actions">
-              <button class="action-btn action-btn--ghost">Ver detalle</button>
-              <button class="action-btn action-btn--ghost">Volver a comprar</button>
-            </div>
-          </div>
-        </div>
+        <a
+          class="filter-btn"
+          th:classappend="${estadoSeleccionado != null and estadoSeleccionado.name() == 'ENVIADO'} ? ' filter-btn--active'"
+          th:href="@{/ordenes(estado='ENVIADO',pagina=0,tamano=${tamanoSeleccionado})}">
+          Enviadas
+        </a>
 
-        <!-- Orden 4 — Cancelada -->
-        <div class="order-card order-card--cancelled">
-          <div class="order-card__header">
-            <div>
-              <p class="order-card__id">Orden <strong>#BMO-2024-1453</strong></p>
-              <p class="order-card__date">Realizada el 10 de octubre de 2024</p>
-            </div>
-            <div class="order-card__right">
-              <span class="status-badge status-badge--cancelled">✕ Cancelada</span>
-              <p class="order-card__total">$12,499 MXN</p>
-            </div>
-          </div>
-          <div class="order-card__body">
-            <div class="order-card__products">
-              <div class="order-product-img">🎹</div>
-              <div>
-                <p class="order-card__product-name">Yamaha P-145</p>
-                <p class="order-card__product-date">Cancelada por el cliente</p>
-              </div>
-            </div>
-            <div class="order-card__actions">
-              <button class="action-btn action-btn--gold">Volver a comprar</button>
-            </div>
-          </div>
-        </div>
+        <a
+          class="filter-btn"
+          th:classappend="${estadoSeleccionado != null and estadoSeleccionado.name() == 'ENTREGADO'} ? ' filter-btn--active'"
+          th:href="@{/ordenes(estado='ENTREGADO',pagina=0,tamano=${tamanoSeleccionado})}">
+          Entregadas
+        </a>
 
+        <a
+          class="filter-btn"
+          th:classappend="${estadoSeleccionado != null and estadoSeleccionado.name() == 'CANCELADA'} ? ' filter-btn--active'"
+          th:href="@{/ordenes(estado='CANCELADA',pagina=0,tamano=${tamanoSeleccionado})}">
+          Canceladas
+        </a>
+      </nav>
+
+      <div
+        class="orders-result-summary"
+        th:if="${paginaOrdenes != null}">
+        <span>
+          <strong th:text="${paginaOrdenes.totalElementos}">0</strong>
+          <span th:text="${paginaOrdenes.totalElementos == 1 ? ' orden encontrada' : ' órdenes encontradas'}">
+            órdenes encontradas
+          </span>
+        </span>
+
+        <span th:if="${paginaOrdenes.totalPaginas > 0}">
+          Página
+          <strong th:text="${paginaOrdenes.pagina + 1}">1</strong>
+          de
+          <strong th:text="${paginaOrdenes.totalPaginas}">1</strong>
+        </span>
       </div>
-    </div>
+
+      <div class="orders-list" th:if="${ordenes != null and !ordenes.isEmpty()}">
+        <article
+          class="order-card"
+          th:each="orden : ${ordenes}"
+          th:classappend="${orden.cancelada} ? ' order-card--cancelled'">
+
+          <header class="order-card__header">
+            <div>
+              <p class="order-card__id">
+                Orden
+                <strong th:text="${'#' + orden.numero}">#BMO-0000</strong>
+              </p>
+
+              <p
+                class="order-card__date"
+                th:text="${'Realizada el ' + orden.fechaTexto}">
+                Fecha de la orden
+              </p>
+            </div>
+
+            <div class="order-card__right">
+              <span
+                class="status-badge"
+                th:classappend="${' ' + orden.estadoCss}"
+                th:text="${orden.estadoIcono + ' ' + orden.estadoTexto}">
+                Estado
+              </span>
+
+              <p
+                class="order-card__total"
+                th:text="${orden.total != null
+                  ? '$' + #numbers.formatDecimal(orden.total, 1, 'COMMA', 2, 'POINT') + ' MXN'
+                  : 'Total no disponible'}">
+                $0.00 MXN
+              </p>
+            </div>
+          </header>
+
+          <div class="order-card__body">
+            <div class="order-card__products">
+              <div class="order-product-img" aria-hidden="true">🎵</div>
+
+              <div>
+                <p
+                  class="order-card__product-name"
+                  th:text="${orden.resumenProductos}">
+                  Producto principal
+                </p>
+
+                <p class="order-card__product-date">
+                  <span th:text="${orden.cantidadProductos != null ? orden.cantidadProductos : 0}">0</span>
+                  <span th:text="${orden.cantidadProductos != null and orden.cantidadProductos == 1 ? ' producto' : ' productos'}">
+                    productos
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-progress" th:unless="${orden.cancelada}">
+            <div class="progress-steps" aria-label="Progreso de la orden">
+              <span th:classappend="${orden.pasoConfirmada} ? ' progress-step--done'">
+                <span th:if="${orden.pasoConfirmada}">✓</span>
+                Confirmada
+              </span>
+
+              <div
+                class="progress-line"
+                th:classappend="${orden.pasoProcesando} ? ' progress-line--done'">
+              </div>
+
+              <span th:classappend="${orden.pasoProcesando} ? ' progress-step--done'">
+                <span th:if="${orden.pasoProcesando}">✓</span>
+                Procesando
+              </span>
+
+              <div
+                class="progress-line"
+                th:classappend="${orden.pasoEnviado} ? ' progress-line--done'">
+              </div>
+
+              <span th:classappend="${orden.pasoEnviado} ? ' progress-step--done'">
+                <span th:if="${orden.pasoEnviado}">✓</span>
+                Enviada
+              </span>
+
+              <div
+                class="progress-line"
+                th:classappend="${orden.pasoEntregado} ? ' progress-line--done'">
+              </div>
+
+              <span th:classappend="${orden.pasoEntregado} ? ' progress-step--done'">
+                <span th:if="${orden.pasoEntregado}">✓</span>
+                Entregada
+              </span>
+            </div>
+          </div>
+
+          <div class="order-cancelled-message" th:if="${orden.cancelada}">
+            Esta orden fue cancelada.
+          </div>
+        </article>
+      </div>
+
+      <section
+        class="empty-state empty-state--orders"
+        th:if="${ordenes == null or ordenes.isEmpty()}">
+        <div class="empty-state__icon" aria-hidden="true">📦</div>
+        <h2>No encontramos órdenes</h2>
+
+        <p th:if="${estadoSeleccionado == null}">
+          Todavía no has realizado ninguna compra.
+        </p>
+
+        <p th:if="${estadoSeleccionado != null}">
+          No tienes órdenes con el estado seleccionado.
+        </p>
+
+        <div class="empty-state__actions">
+          <a th:href="@{/catalogo}" class="btn-gold">Explorar catálogo</a>
+          <a
+            th:if="${estadoSeleccionado != null}"
+            th:href="@{/ordenes(tamano=${tamanoSeleccionado})}"
+            class="btn-secondary">
+            Ver todas las órdenes
+          </a>
+        </div>
+      </section>
+
+      <nav
+        class="pagination pagination--orders"
+        aria-label="Paginación de órdenes"
+        th:if="${paginaOrdenes != null and paginaOrdenes.totalPaginas > 1}">
+
+        <a
+          class="pag-nav"
+          th:if="${!paginaOrdenes.primera}"
+          th:href="@{/ordenes(
+            estado=${estadoSeleccionado},
+            pagina=${paginaOrdenes.pagina - 1},
+            tamano=${paginaOrdenes.tamano}
+          )}">
+          ← Anterior
+        </a>
+
+        <span class="pagination__info">
+          Página
+          <strong th:text="${paginaOrdenes.pagina + 1}">1</strong>
+          de
+          <strong th:text="${paginaOrdenes.totalPaginas}">1</strong>
+        </span>
+
+        <a
+          class="pag-nav"
+          th:if="${!paginaOrdenes.ultima}"
+          th:href="@{/ordenes(
+            estado=${estadoSeleccionado},
+            pagina=${paginaOrdenes.pagina + 1},
+            tamano=${paginaOrdenes.tamano}
+          )}">
+          Siguiente →
+        </a>
+      </nav>
+    </section>
   </div>
-</div>
+</main>
 
-<!-- ── FOOTER ── -->
-<footer class="footer" style="margin-top:3rem;">
+<footer class="footer">
   <div class="container footer__inner">
     <div>
       <span class="footer__brand">Bemolé</span>
-      <span class="footer__copy">© 2025 · Todos los derechos reservados</span>
+      <span class="footer__copy">© 2026 · Todos los derechos reservados</span>
     </div>
+
     <ul class="footer__links">
       <li><a th:href="@{/}">Inicio</a></li>
       <li><a th:href="@{/catalogo}">Catálogo</a></li>
-      <li><a href="#contacto">Contacto</a></li>
+      <li><a th:href="@{/carrito}">Carrito</a></li>
     </ul>
   </div>
 </footer>

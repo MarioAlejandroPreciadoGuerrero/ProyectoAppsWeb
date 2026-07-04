@@ -5,19 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11b50f85-57ce-4e99-9b62-411176606bb4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/client/OrdenApiClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/CheckoutViewController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/dto/ordenes/ContactoOrdenFormDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/dto/ordenes/CrearOrdenFormDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/dto/ordenes/DireccionOrdenFormDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/dto/ordenes/response/ContactoOrdenResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/dto/ordenes/response/DireccionOrdenResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/dto/ordenes/response/ItemOrdenResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/dto/ordenes/response/OrdenCreadaResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/enums/MetodoEnvio.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/orden-confirmacion.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/OrdenViewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/dto/ordenes/response/OrdenResumenResponseDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/client/OrdenApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/client/OrdenApiClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/config/WebConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/NavController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/NavController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/enums/EstadoOrden.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/enums/EstadoOrden.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/styles/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/styles/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/ordenes.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/ordenes.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,8 +24,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="HTML File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
