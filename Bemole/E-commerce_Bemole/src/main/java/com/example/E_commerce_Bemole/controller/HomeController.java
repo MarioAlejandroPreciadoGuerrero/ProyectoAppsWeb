@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @AllArgsConstructor
-public class NavController {
+public class HomeController {
 
     private final CategoriaApiClient categoriaApiClient;
     private final ProductoApiClient productoApiClient;

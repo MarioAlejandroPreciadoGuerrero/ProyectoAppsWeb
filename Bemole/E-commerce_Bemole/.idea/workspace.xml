@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9df380ec-8fed-497e-bcd0-4c75b1bd014a" name="Changes" comment="" />
+    <list default="true" id="9df380ec-8fed-497e-bcd0-4c75b1bd014a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/NavController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/models/Carrito.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/models/Categoria.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/models/ImagenProducto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/models/ItemCarrito.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/models/ItemOrden.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/models/Orden.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/models/Pago.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/models/Producto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/models/Usuario.java" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,26 +24,48 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3G13T2rxBk96LRdKZgrmxs3i4dJ" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "git-widget-placeholder": "main"
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/jalt2/OneDrive/Documentos/GitHub/ProyectoAppsWeb/Bemole/E-commerce_Bemole"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-37e91769500f-intellij.indexing.shared.core-IU-261.24374.151" />
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-IU-261.24374.151" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9df380ec-8fed-497e-bcd0-4c75b1bd014a" name="Changes" comment="" />
+      <created>1783125251517</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1783125251517</updated>
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
