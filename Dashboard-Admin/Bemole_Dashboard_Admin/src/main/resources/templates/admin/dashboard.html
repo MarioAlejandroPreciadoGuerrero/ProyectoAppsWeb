@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé Admin — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/admin.css}">
+</head>
+<body class="admin-body">
+
+<header class="admin-topbar">
+  <a th:href="@{/admin}" class="admin-topbar__brand" aria-label="Ir al dashboard">
+    <span class="admin-topbar__name">Bemolé</span>
+    <span class="admin-topbar__sub">Panel de administración</span>
+  </a>
+
+  <div class="admin-topbar__right">
+    <a href="http://localhost:8080" class="admin-store-link" target="_blank" rel="noopener">
+      🏪 Ver tienda
+    </a>
+
+    <div class="admin-topbar__user">
+      <div class="admin-topbar__avatar"
+           th:text="${adminSesion != null ? adminSesion.inicial : 'A'}">A</div>
+      <div>
+        <p class="admin-topbar__uname"
+           th:text="${adminSesion != null and !#strings.isEmpty(adminSesion.nombreCompleto) ? adminSesion.nombreCompleto : 'Administrador'}">
+          Administrador
+        </p>
+        <p class="admin-topbar__role"
+           th:text="${adminSesion != null and adminSesion.rol != null ? adminSesion.rol : 'ADMIN'}">
+          ADMIN
+        </p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <span class="admin-sidebar__section-label">Administración</span>
+    <nav class="admin-sidebar__nav">
+      <a th:href="@{/admin}" class="admin-nav-link active"><span class="icon">📊</span>Dashboard</a>
+<a th:href="@{/admin/productos}" class="admin-nav-link"><span class="icon">🎸</span>Productos</a>
+<a th:href="@{/admin/categorias}" class="admin-nav-link"><span class="icon">📂</span>Categorías</a>
+<a th:href="@{/admin/ordenes}" class="admin-nav-link"><span class="icon">📦</span>Órdenes</a>
+<a th:href="@{/admin/usuarios}" class="admin-nav-link"><span class="icon">👥</span>Usuarios</a>
+    </nav>
+
+    <div class="admin-sidebar__logout">
+      <form th:action="@{/logout}" method="post">
+        <button type="submit" class="admin-logout-button">
+          <span class="icon">←</span> Cerrar sesión
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+
+<section class="admin-page-header">
+  <div>
+    <p class="admin-page-header__eyebrow">Resumen general</p>
+    <h1 class="admin-page-header__title">Dashboard</h1>
+    <p class="admin-page-header__subtitle"
+       th:text="${adminSesion != null ? 'Bienvenido, ' + adminSesion.nombreCompleto : 'Bienvenido al panel administrativo'}">
+      Bienvenido al panel administrativo
+    </p>
+  </div>
+  <a th:href="@{/admin/productos}" class="btn btn-primary">Gestionar productos</a>
+</section>
+
+<div class="admin-alert admin-alert--info" th:if="${mensajeDashboard}">
+  <span class="admin-alert__icon">ℹ</span>
+  <span th:text="${mensajeDashboard}">Información del dashboard.</span>
+</div>
+
+<section class="admin-stats">
+  <article class="stat-card">
+    <div class="stat-card__top">
+      <span class="stat-card__label">Productos</span>
+      <span class="stat-card__icon stat-card__icon--gold">🎸</span>
+    </div>
+    <strong class="stat-card__value"
+            th:text="${resumen != null and resumen.totalProductos != null ? resumen.totalProductos : 0}">0</strong>
+    <p class="stat-card__delta">Registrados en el catálogo</p>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-card__top">
+      <span class="stat-card__label">Categorías</span>
+      <span class="stat-card__icon stat-card__icon--info">📂</span>
+    </div>
+    <strong class="stat-card__value"
+            th:text="${resumen != null and resumen.totalCategorias != null ? resumen.totalCategorias : 0}">0</strong>
+    <p class="stat-card__delta">Disponibles para organizar productos</p>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-card__top">
+      <span class="stat-card__label">Usuarios</span>
+      <span class="stat-card__icon stat-card__icon--success">👥</span>
+    </div>
+    <strong class="stat-card__value"
+            th:text="${resumen != null and resumen.totalUsuarios != null ? resumen.totalUsuarios : 0}">0</strong>
+    <p class="stat-card__delta">Cuentas registradas</p>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-card__top">
+      <span class="stat-card__label">Órdenes pendientes</span>
+      <span class="stat-card__icon stat-card__icon--warning">📦</span>
+    </div>
+    <strong class="stat-card__value"
+            th:text="${resumen != null and resumen.ordenesPendientes != null ? resumen.ordenesPendientes : 0}">0</strong>
+    <p class="stat-card__delta">Requieren seguimiento</p>
+  </article>
+</section>
+
+<section class="admin-dashboard-grid">
+  <div class="admin-panel">
+    <div class="admin-panel__header">
+      <h2>Órdenes recientes</h2>
+      <a th:href="@{/admin/ordenes}">Ver todas →</a>
+    </div>
+
+    <div class="admin-table-scroll"
+         th:if="${ordenesRecientes != null and !ordenesRecientes.isEmpty()}">
+      <table class="admin-table">
+        <thead>
+        <tr>
+          <th>Orden</th>
+          <th>Cliente</th>
+          <th>Total</th>
+          <th>Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orden : ${ordenesRecientes}">
+          <td th:text="${orden.numero != null ? '#' + orden.numero : '#' + orden.id}">#0</td>
+          <td th:text="${orden.clienteNombre != null ? orden.clienteNombre : 'Cliente'}">Cliente</td>
+          <td th:text="${orden.total != null ? '$' + #numbers.formatDecimal(orden.total, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+            $0.00
+          </td>
+          <td>
+            <span class="badge badge-info"
+                  th:text="${orden.estado != null ? orden.estado : 'PENDIENTE'}">PENDIENTE</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="admin-empty" th:if="${ordenesRecientes == null or ordenesRecientes.isEmpty()}">
+      <span>📦</span>
+      <p>Aún no hay órdenes recientes para mostrar.</p>
+    </div>
+  </div>
+
+  <div class="admin-panel">
+    <div class="admin-panel__header">
+      <h2>Productos con stock bajo</h2>
+      <a th:href="@{/admin/productos}">Revisar catálogo →</a>
+    </div>
+
+    <div class="activity-list"
+         th:if="${productosStockBajo != null and !productosStockBajo.isEmpty()}">
+      <div class="activity-item" th:each="producto : ${productosStockBajo}">
+        <div class="activity-icon activity-icon--error">⚠</div>
+        <div>
+          <p class="activity-desc" th:text="${producto.nombre}">Producto</p>
+          <p class="activity-time">
+            Stock disponible:
+            <strong th:text="${producto.stock != null ? producto.stock : 0}">0</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-empty" th:if="${productosStockBajo == null or productosStockBajo.isEmpty()}">
+      <span>✅</span>
+      <p>No hay productos con stock bajo.</p>
+    </div>
+  </div>
+</section>
+
+  </main>
+</div>
+
+</body>
+</html>

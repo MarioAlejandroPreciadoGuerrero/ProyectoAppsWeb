@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé Admin — Iniciar sesión</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/admin.css}">
+</head>
+<body class="admin-auth-body">
+
+<main class="admin-auth-shell">
+  <section class="admin-auth-brand">
+    <div>
+      <p class="admin-auth-brand__eyebrow">Bemolé</p>
+      <h1>Panel de administración</h1>
+      <p>Gestiona el catálogo, las categorías, las órdenes y los usuarios desde un proyecto independiente.</p>
+    </div>
+    <a href="http://localhost:8080" target="_blank" rel="noopener">← Volver a la tienda</a>
+  </section>
+
+  <section class="admin-auth-card">
+    <div class="admin-auth-card__header">
+      <div class="admin-auth-icon">♪</div>
+      <h2>Acceso administrativo</h2>
+      <p>Ingresa con una cuenta que tenga el rol ADMIN.</p>
+    </div>
+
+    <div class="admin-alert admin-alert--success" th:if="${param.logout}">
+      <span class="admin-alert__icon">✓</span>
+      <span>La sesión se cerró correctamente.</span>
+    </div>
+
+    <div class="admin-alert admin-alert--error" th:if="${errorLogin}">
+      <span class="admin-alert__icon">⚠</span>
+      <span th:text="${errorLogin}">No fue posible iniciar sesión.</span>
+    </div>
+
+    <form class="admin-auth-form"
+          th:action="@{/login}"
+          method="post"
+          th:object="${credenciales}">
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input id="email"
+               type="email"
+               th:field="*{email}"
+               autocomplete="username"
+               placeholder="admin@bemole.com">
+        <small class="field-error"
+               th:if="${#fields.hasErrors('email')}"
+               th:errors="*{email}"></small>
+      </div>
+
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input id="password"
+               type="password"
+               th:field="*{password}"
+               autocomplete="current-password"
+               placeholder="••••••••">
+        <small class="field-error"
+               th:if="${#fields.hasErrors('password')}"
+               th:errors="*{password}"></small>
+      </div>
+
+      <button class="btn btn-primary admin-auth-submit" type="submit">
+        Iniciar sesión
+      </button>
+    </form>
+
+    <p class="admin-auth-note">
+      El dashboard únicamente permite cuentas con permisos administrativos.
+    </p>
+  </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé Admin — Órdenes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/admin.css}">
+</head>
+<body class="admin-body">
+
+<header class="admin-topbar">
+  <a th:href="@{/admin}" class="admin-topbar__brand" aria-label="Ir al dashboard">
+    <span class="admin-topbar__name">Bemolé</span>
+    <span class="admin-topbar__sub">Panel de administración</span>
+  </a>
+
+  <div class="admin-topbar__right">
+    <a href="http://localhost:8080" class="admin-store-link" target="_blank" rel="noopener">
+      🏪 Ver tienda
+    </a>
+
+    <div class="admin-topbar__user">
+      <div class="admin-topbar__avatar"
+           th:text="${adminSesion != null ? adminSesion.inicial : 'A'}">A</div>
+      <div>
+        <p class="admin-topbar__uname"
+           th:text="${adminSesion != null and !#strings.isEmpty(adminSesion.nombreCompleto) ? adminSesion.nombreCompleto : 'Administrador'}">
+          Administrador
+        </p>
+        <p class="admin-topbar__role"
+           th:text="${adminSesion != null and adminSesion.rol != null ? adminSesion.rol : 'ADMIN'}">
+          ADMIN
+        </p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <span class="admin-sidebar__section-label">Administración</span>
+    <nav class="admin-sidebar__nav">
+      <a th:href="@{/admin}" class="admin-nav-link"><span class="icon">📊</span>Dashboard</a>
+<a th:href="@{/admin/productos}" class="admin-nav-link"><span class="icon">🎸</span>Productos</a>
+<a th:href="@{/admin/categorias}" class="admin-nav-link"><span class="icon">📂</span>Categorías</a>
+<a th:href="@{/admin/ordenes}" class="admin-nav-link active"><span class="icon">📦</span>Órdenes</a>
+<a th:href="@{/admin/usuarios}" class="admin-nav-link"><span class="icon">👥</span>Usuarios</a>
+    </nav>
+
+    <div class="admin-sidebar__logout">
+      <form th:action="@{/logout}" method="post">
+        <button type="submit" class="admin-logout-button">
+          <span class="icon">←</span> Cerrar sesión
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+
+<section class="admin-page-header">
+  <div>
+    <p class="admin-page-header__eyebrow">Operaciones</p>
+    <h1 class="admin-page-header__title">Gestión de órdenes</h1>
+    <p class="admin-page-header__subtitle">Consulta las compras y actualiza su estado.</p>
+  </div>
+</section>
+
+<div class="admin-alert admin-alert--success" th:if="${mensajeExito}">
+  <span class="admin-alert__icon">✓</span>
+  <span th:text="${mensajeExito}">Estado actualizado.</span>
+</div>
+<div class="admin-alert admin-alert--error" th:if="${errorOrdenes}">
+  <span class="admin-alert__icon">⚠</span>
+  <span th:text="${errorOrdenes}">No fue posible cargar las órdenes.</span>
+</div>
+
+<section class="admin-table-wrap">
+  <form class="admin-table-toolbar" th:action="@{/admin/ordenes}" method="get">
+    <div class="admin-table-toolbar__left">
+      <label class="admin-search">
+        <span>🔍</span>
+        <input type="search" name="q" th:value="${q}" placeholder="Buscar número o cliente…">
+      </label>
+
+      <select class="admin-filter-select" name="estado">
+        <option value="">Todos los estados</option>
+        <option value="PENDIENTE" th:selected="${estado == 'PENDIENTE'}">Pendiente</option>
+        <option value="PROCESANDO" th:selected="${estado == 'PROCESANDO'}">Procesando</option>
+        <option value="ENVIADO" th:selected="${estado == 'ENVIADO'}">Enviado</option>
+        <option value="ENTREGADO" th:selected="${estado == 'ENTREGADO'}">Entregado</option>
+        <option value="CANCELADA" th:selected="${estado == 'CANCELADA'}">Cancelada</option>
+      </select>
+
+      <button class="btn btn-secondary btn-sm" type="submit">Filtrar</button>
+      <a class="btn btn-ghost btn-sm" th:href="@{/admin/ordenes}">Limpiar</a>
+    </div>
+
+    <span class="admin-result-count"
+          th:text="${paginaOrdenes != null ? paginaOrdenes.totalElementos + ' órdenes' : '0 órdenes'}">
+      0 órdenes
+    </span>
+  </form>
+
+  <div class="admin-table-scroll"
+       th:if="${ordenes != null and !ordenes.isEmpty()}">
+    <table class="admin-table">
+      <thead>
+      <tr>
+        <th>Orden</th>
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Estado</th>
+        <th>Actualizar</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="orden : ${ordenes}">
+        <td th:text="${orden.numero != null ? '#' + orden.numero : '#' + orden.id}">#0</td>
+        <td>
+          <p class="td-name" th:text="${orden.clienteNombre != null ? orden.clienteNombre : 'Cliente'}">Cliente</p>
+          <p class="td-sub" th:text="${orden.clienteEmail != null ? orden.clienteEmail : ''}"></p>
+        </td>
+        <td class="muted"
+            th:text="${orden.fecha != null ? #temporals.format(orden.fecha, 'dd/MM/yyyy HH:mm') : 'Sin fecha'}">
+          Sin fecha
+        </td>
+        <td th:text="${orden.total != null ? '$' + #numbers.formatDecimal(orden.total, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+          $0.00
+        </td>
+        <td>
+          <span class="badge badge-info"
+                th:text="${orden.estado != null ? orden.estado : 'PENDIENTE'}">PENDIENTE</span>
+        </td>
+        <td>
+          <form class="order-status-form"
+                th:action="@{/admin/ordenes/{id}/estado(id=${orden.id})}"
+                method="post">
+            <select class="admin-filter-select" name="estado" aria-label="Nuevo estado">
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="PROCESANDO">Procesando</option>
+              <option value="ENVIADO">Enviado</option>
+              <option value="ENTREGADO">Entregado</option>
+              <option value="CANCELADA">Cancelada</option>
+            </select>
+            <button type="submit" class="btn btn-secondary btn-sm">Guardar</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="admin-empty" th:if="${ordenes == null or ordenes.isEmpty()}">
+    <span>📦</span>
+    <h2>No hay órdenes</h2>
+    <p>No se encontraron órdenes con los filtros seleccionados.</p>
+  </div>
+
+  <nav class="admin-table-footer"
+       th:if="${paginaOrdenes != null and paginaOrdenes.totalPaginas > 1}">
+    <a class="admin-pag-btn"
+       th:if="${!paginaOrdenes.primera}"
+       th:href="@{/admin/ordenes(q=${q},estado=${estado},pagina=${paginaOrdenes.pagina - 1},tamano=${paginaOrdenes.tamano})}">
+      ‹
+    </a>
+
+    <span>
+      Página <strong th:text="${paginaOrdenes.pagina + 1}">1</strong>
+      de <strong th:text="${paginaOrdenes.totalPaginas}">1</strong>
+    </span>
+
+    <a class="admin-pag-btn"
+       th:if="${!paginaOrdenes.ultima}"
+       th:href="@{/admin/ordenes(q=${q},estado=${estado},pagina=${paginaOrdenes.pagina + 1},tamano=${paginaOrdenes.tamano})}">
+      ›
+    </a>
+  </nav>
+</section>
+
+  </main>
+</div>
+
+</body>
+</html>

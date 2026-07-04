@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé Admin — Categorías</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/admin.css}">
+</head>
+<body class="admin-body">
+
+<header class="admin-topbar">
+  <a th:href="@{/admin}" class="admin-topbar__brand" aria-label="Ir al dashboard">
+    <span class="admin-topbar__name">Bemolé</span>
+    <span class="admin-topbar__sub">Panel de administración</span>
+  </a>
+
+  <div class="admin-topbar__right">
+    <a href="http://localhost:8080" class="admin-store-link" target="_blank" rel="noopener">
+      🏪 Ver tienda
+    </a>
+
+    <div class="admin-topbar__user">
+      <div class="admin-topbar__avatar"
+           th:text="${adminSesion != null ? adminSesion.inicial : 'A'}">A</div>
+      <div>
+        <p class="admin-topbar__uname"
+           th:text="${adminSesion != null and !#strings.isEmpty(adminSesion.nombreCompleto) ? adminSesion.nombreCompleto : 'Administrador'}">
+          Administrador
+        </p>
+        <p class="admin-topbar__role"
+           th:text="${adminSesion != null and adminSesion.rol != null ? adminSesion.rol : 'ADMIN'}">
+          ADMIN
+        </p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <span class="admin-sidebar__section-label">Administración</span>
+    <nav class="admin-sidebar__nav">
+      <a th:href="@{/admin}" class="admin-nav-link"><span class="icon">📊</span>Dashboard</a>
+<a th:href="@{/admin/productos}" class="admin-nav-link"><span class="icon">🎸</span>Productos</a>
+<a th:href="@{/admin/categorias}" class="admin-nav-link active"><span class="icon">📂</span>Categorías</a>
+<a th:href="@{/admin/ordenes}" class="admin-nav-link"><span class="icon">📦</span>Órdenes</a>
+<a th:href="@{/admin/usuarios}" class="admin-nav-link"><span class="icon">👥</span>Usuarios</a>
+    </nav>
+
+    <div class="admin-sidebar__logout">
+      <form th:action="@{/logout}" method="post">
+        <button type="submit" class="admin-logout-button">
+          <span class="icon">←</span> Cerrar sesión
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+
+<section class="admin-page-header">
+  <div>
+    <p class="admin-page-header__eyebrow">Catálogo</p>
+    <h1 class="admin-page-header__title">Gestión de categorías</h1>
+    <p class="admin-page-header__subtitle">Organiza los productos disponibles en la tienda.</p>
+  </div>
+  <a th:href="@{/admin/categorias/nueva}" class="btn btn-primary">+ Nueva categoría</a>
+</section>
+
+<div class="admin-alert admin-alert--success" th:if="${mensajeExito}">
+  <span class="admin-alert__icon">✓</span>
+  <span th:text="${mensajeExito}">Operación completada.</span>
+</div>
+<div class="admin-alert admin-alert--error" th:if="${errorCategorias}">
+  <span class="admin-alert__icon">⚠</span>
+  <span th:text="${errorCategorias}">No fue posible cargar las categorías.</span>
+</div>
+
+<section class="admin-stats admin-stats--compact">
+  <article class="stat-card">
+    <div class="stat-card__top">
+      <span class="stat-card__label">Categorías</span>
+      <span class="stat-card__icon stat-card__icon--gold">📂</span>
+    </div>
+    <strong class="stat-card__value"
+            th:text="${categorias != null ? categorias.size() : 0}">0</strong>
+    <p class="stat-card__delta">Registradas en el sistema</p>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-card__top">
+      <span class="stat-card__label">Productos</span>
+      <span class="stat-card__icon stat-card__icon--info">🎵</span>
+    </div>
+    <strong class="stat-card__value"
+            th:text="${totalProductos != null ? totalProductos : 0}">0</strong>
+    <p class="stat-card__delta">Distribuidos entre categorías</p>
+  </article>
+</section>
+
+<section class="cat-admin-grid"
+         th:if="${categorias != null and !categorias.isEmpty()}">
+  <article class="cat-admin-card" th:each="categoria : ${categorias}">
+    <div class="cat-admin-card__top">
+      <div class="cat-admin-card__emoji">🎵</div>
+      <div>
+        <h2 class="cat-admin-card__name" th:text="${categoria.nombre}">Categoría</h2>
+        <p class="cat-admin-card__slug"
+           th:text="${categoria.descripcion != null ? categoria.descripcion : 'Sin descripción'}">
+          Sin descripción
+        </p>
+      </div>
+    </div>
+
+    <div class="cat-admin-card__stats">
+      <div class="cat-stat">
+        <span class="cat-stat__val"
+              th:text="${categoria.cantidadProductos != null ? categoria.cantidadProductos : 0}">0</span>
+        <span class="cat-stat__label">Productos</span>
+      </div>
+    </div>
+
+    <div class="cat-admin-card__actions">
+      <a class="btn btn-ghost btn-sm"
+         th:href="@{/admin/categorias/{id}/editar(id=${categoria.id})}">
+        ✏️ Editar
+      </a>
+
+      <form th:action="@{/admin/categorias/{id}/eliminar(id=${categoria.id})}" method="post">
+        <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+      </form>
+    </div>
+  </article>
+</section>
+
+<div class="admin-empty" th:if="${categorias == null or categorias.isEmpty()}">
+  <span>📂</span>
+  <h2>No hay categorías</h2>
+  <p>Crea la primera categoría para organizar el catálogo.</p>
+</div>
+
+  </main>
+</div>
+
+</body>
+</html>

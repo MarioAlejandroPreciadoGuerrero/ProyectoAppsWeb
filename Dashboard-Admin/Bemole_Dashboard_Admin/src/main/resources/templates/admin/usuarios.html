@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé Admin — Usuarios</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/admin.css}">
+</head>
+<body class="admin-body">
+
+<header class="admin-topbar">
+  <a th:href="@{/admin}" class="admin-topbar__brand" aria-label="Ir al dashboard">
+    <span class="admin-topbar__name">Bemolé</span>
+    <span class="admin-topbar__sub">Panel de administración</span>
+  </a>
+
+  <div class="admin-topbar__right">
+    <a href="http://localhost:8080" class="admin-store-link" target="_blank" rel="noopener">
+      🏪 Ver tienda
+    </a>
+
+    <div class="admin-topbar__user">
+      <div class="admin-topbar__avatar"
+           th:text="${adminSesion != null ? adminSesion.inicial : 'A'}">A</div>
+      <div>
+        <p class="admin-topbar__uname"
+           th:text="${adminSesion != null and !#strings.isEmpty(adminSesion.nombreCompleto) ? adminSesion.nombreCompleto : 'Administrador'}">
+          Administrador
+        </p>
+        <p class="admin-topbar__role"
+           th:text="${adminSesion != null and adminSesion.rol != null ? adminSesion.rol : 'ADMIN'}">
+          ADMIN
+        </p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <span class="admin-sidebar__section-label">Administración</span>
+    <nav class="admin-sidebar__nav">
+      <a th:href="@{/admin}" class="admin-nav-link"><span class="icon">📊</span>Dashboard</a>
+<a th:href="@{/admin/productos}" class="admin-nav-link"><span class="icon">🎸</span>Productos</a>
+<a th:href="@{/admin/categorias}" class="admin-nav-link"><span class="icon">📂</span>Categorías</a>
+<a th:href="@{/admin/ordenes}" class="admin-nav-link"><span class="icon">📦</span>Órdenes</a>
+<a th:href="@{/admin/usuarios}" class="admin-nav-link active"><span class="icon">👥</span>Usuarios</a>
+    </nav>
+
+    <div class="admin-sidebar__logout">
+      <form th:action="@{/logout}" method="post">
+        <button type="submit" class="admin-logout-button">
+          <span class="icon">←</span> Cerrar sesión
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+
+<section class="admin-page-header">
+  <div>
+    <p class="admin-page-header__eyebrow">Administración</p>
+    <h1 class="admin-page-header__title">Usuarios</h1>
+    <p class="admin-page-header__subtitle">Consulta las cuentas registradas y sus roles.</p>
+  </div>
+</section>
+
+<div class="admin-alert admin-alert--error" th:if="${errorUsuarios}">
+  <span class="admin-alert__icon">⚠</span>
+  <span th:text="${errorUsuarios}">No fue posible cargar los usuarios.</span>
+</div>
+
+<section class="admin-table-wrap">
+  <form class="admin-table-toolbar" th:action="@{/admin/usuarios}" method="get">
+    <div class="admin-table-toolbar__left">
+      <label class="admin-search">
+        <span>🔍</span>
+        <input type="search" name="q" th:value="${q}" placeholder="Buscar por nombre o correo…">
+      </label>
+
+      <select class="admin-filter-select" name="rol">
+        <option value="">Todos los roles</option>
+        <option value="ADMIN" th:selected="${rol == 'ADMIN'}">Administradores</option>
+        <option value="CLIENTE" th:selected="${rol == 'CLIENTE'}">Clientes</option>
+      </select>
+
+      <button class="btn btn-secondary btn-sm" type="submit">Filtrar</button>
+      <a class="btn btn-ghost btn-sm" th:href="@{/admin/usuarios}">Limpiar</a>
+    </div>
+
+    <span class="admin-result-count"
+          th:text="${paginaUsuarios != null ? paginaUsuarios.totalElementos + ' usuarios' : '0 usuarios'}">
+      0 usuarios
+    </span>
+  </form>
+
+  <div class="admin-table-scroll"
+       th:if="${usuarios != null and !usuarios.isEmpty()}">
+    <table class="admin-table">
+      <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>Rol</th>
+        <th>Registro</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="usuario : ${usuarios}">
+        <td>
+          <div class="td-product">
+            <div class="user-avatar"
+                 th:classappend="${usuario.rol != null and usuario.rol.toString() == 'ADMIN'} ? ' user-avatar--admin'"
+                 th:text="${usuario.nombre != null and !usuario.nombre.isBlank() ? #strings.substring(usuario.nombre,0,1).toUpperCase() : 'U'}">
+              U
+            </div>
+            <div>
+              <p class="td-name"
+                 th:text="${(usuario.nombre != null ? usuario.nombre : '') + ' ' + (usuario.apellido != null ? usuario.apellido : '')}">
+                Usuario
+              </p>
+              <p class="td-sub" th:text="${'ID: ' + usuario.id}">ID</p>
+            </div>
+          </div>
+        </td>
+        <td class="muted" th:text="${usuario.email}">correo@ejemplo.com</td>
+        <td class="muted" th:text="${usuario.telefono != null ? usuario.telefono : 'Sin teléfono'}">
+          Sin teléfono
+        </td>
+        <td>
+          <span class="badge"
+                th:classappend="${usuario.rol != null and usuario.rol.toString() == 'ADMIN'} ? ' badge-info' : ' badge-neutral'"
+                th:text="${usuario.rol != null ? usuario.rol : 'CLIENTE'}">
+            CLIENTE
+          </span>
+        </td>
+        <td class="muted"
+            th:text="${usuario.fechaRegistro != null ? #temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy') : 'Sin fecha'}">
+          Sin fecha
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="admin-empty" th:if="${usuarios == null or usuarios.isEmpty()}">
+    <span>👥</span>
+    <h2>No hay usuarios</h2>
+    <p>No se encontraron usuarios con los filtros seleccionados.</p>
+  </div>
+
+  <nav class="admin-table-footer"
+       th:if="${paginaUsuarios != null and paginaUsuarios.totalPaginas > 1}">
+    <a class="admin-pag-btn"
+       th:if="${!paginaUsuarios.primera}"
+       th:href="@{/admin/usuarios(q=${q},rol=${rol},pagina=${paginaUsuarios.pagina - 1},tamano=${paginaUsuarios.tamano})}">
+      ‹
+    </a>
+
+    <span>
+      Página <strong th:text="${paginaUsuarios.pagina + 1}">1</strong>
+      de <strong th:text="${paginaUsuarios.totalPaginas}">1</strong>
+    </span>
+
+    <a class="admin-pag-btn"
+       th:if="${!paginaUsuarios.ultima}"
+       th:href="@{/admin/usuarios(q=${q},rol=${rol},pagina=${paginaUsuarios.pagina + 1},tamano=${paginaUsuarios.tamano})}">
+      ›
+    </a>
+  </nav>
+</section>
+
+  </main>
+</div>
+
+</body>
+</html>
