@@ -2,18 +2,35 @@ package com.example.Bemole_API.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "items_carrito")
+@Table(
+        name = "items_carrito",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_carrito_producto",
+                        columnNames = {
+                                "carrito_id",
+                                "producto_id"
+                        }
+                )
+        }
+)
 public class ItemCarrito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "carrito_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "carrito_id",
+            nullable = false
+    )
     private Carrito carrito;
 
-    @ManyToOne
-    @JoinColumn(name = "producto_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "producto_id",
+            nullable = false
+    )
     private Producto producto;
 
     @Column(nullable = false)

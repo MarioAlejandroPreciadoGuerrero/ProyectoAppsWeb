@@ -3,6 +3,7 @@ package com.example.Bemole_API.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,14 +13,25 @@ public class Carrito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @OneToOne
+    @JoinColumn(
+            name = "usuario_id",
+            nullable = false,
+            unique = true
+    )
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemCarrito> items;
+    @OneToMany(
+            mappedBy = "carrito",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ItemCarrito> items = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Column(
+            name = "fecha_creacion",
+            nullable = false
+    )
     private LocalDateTime fechaCreacion;
 
     public Carrito() {

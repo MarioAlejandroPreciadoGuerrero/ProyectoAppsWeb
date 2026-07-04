@@ -1,8 +1,9 @@
 package com.example.Bemole_API.contoller;
 
-import com.example.Bemole_API.dto.usuarios.AuthResponseDTO;
-import com.example.Bemole_API.dto.usuarios.LoginDTO;
+import com.example.Bemole_API.dto.usuarios.SesionResponseDTO;
+import com.example.Bemole_API.dto.usuarios.InicioSesionRequestDTO;
 import com.example.Bemole_API.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +17,9 @@ public class AuthController {
     @Autowired
     private AuthService service;
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO credenciales){
-        return ResponseEntity.ok(service.login(credenciales));
+    @PostMapping
+    public ResponseEntity<SesionResponseDTO> iniciarSesion(@Valid @RequestBody InicioSesionRequestDTO request) {
+        SesionResponseDTO respuesta = service.iniciarSesion(request);
+        return ResponseEntity.ok(respuesta);
     }
 }

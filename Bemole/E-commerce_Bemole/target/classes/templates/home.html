@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé — Instrumentos para cada nota</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/style.css}">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container navbar__inner">
+    <a class="logo" th:href="@{/}" aria-label="Ir al inicio">
+      <span class="logo__name">Bemolé</span>
+      <span class="logo__tagline">Instrumentos para cada nota</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a th:href="@{/}" class="active">Inicio</a></li>
+      <li><a href="#categorias">Categorías</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <form class="search-box" th:action="@{/catalogo}" method="get" role="search">
+        <input
+          type="search"
+          name="q"
+          placeholder="Buscar instrumentos…"
+          autocomplete="off"
+          aria-label="Buscar productos">
+        <button type="submit" aria-label="Buscar">🔍</button>
+      </form>
+
+      <a th:if="${autenticado}" th:href="@{/carrito}" class="cart-btn" aria-label="Carrito">
+        🛒
+      </a>
+
+      <a th:unless="${autenticado}" th:href="@{/login}" class="login-link">
+        Iniciar sesión
+      </a>
+
+      <a th:if="${autenticado}" th:href="@{/ordenes}" class="profile-btn">
+        👤
+        <span th:text="${usuarioSesion != null ? usuarioSesion.nombre : 'Mi cuenta'}">Mi cuenta</span>
+      </a>
+
+      <form th:if="${autenticado}" th:action="@{/logout}" method="post" style="display:inline">
+        <button type="submit">Cerrar sesión</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="inicio" class="hero">
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <span class="hero__eyebrow">Colección Bemolé</span>
+        <h1 class="hero__heading">
+          Encuentra tu<br>
+          <em>instrumento</em> ideal
+        </h1>
+        <p class="hero__body">
+          Explora nuestro catálogo de instrumentos y encuentra el producto adecuado para comenzar o continuar tu camino musical.
+        </p>
+        <div class="hero__ctas">
+          <a th:href="@{/catalogo}" class="btn-primary">Ver catálogo</a>
+          <a href="#categorias" class="btn-outline">Explorar categorías</a>
+        </div>
+      </div>
+
+      <div class="hero__stats">
+        <div class="stat">
+          <div class="stat__number" th:text="${categorias != null ? categorias.size() : 0}">0</div>
+          <div class="stat__label">Categorías</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number" th:text="${productosDestacados != null ? productosDestacados.size() : 0}">0</div>
+          <div class="stat__label">Productos destacados</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number">México</div>
+          <div class="stat__label">Cobertura</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container" th:if="${errorInicio}">
+    <div class="alert-error" th:text="${errorInicio}">No fue posible cargar los productos.</div>
+  </div>
+
+  <section id="categorias" class="section">
+    <div class="container">
+      <div class="section__header">
+        <div>
+          <p class="section__eyebrow">Explora</p>
+          <h2 class="section__heading">Nuestras categorías</h2>
+        </div>
+        <a th:href="@{/catalogo}">Ver todos los productos</a>
+      </div>
+
+      <div class="categories-grid" th:if="${categorias != null and !categorias.isEmpty()}">
+        <a
+          class="category-card"
+          th:each="categoria : ${categorias}"
+          th:href="@{/catalogo(categoriaId=${categoria.id})}">
+          <div class="category-icon">🎵</div>
+          <h3 th:text="${categoria.nombre}">Categoría</h3>
+          <p th:text="${categoria.descripcion != null and !categoria.descripcion.isBlank() ? categoria.descripcion : 'Explora los productos disponibles en esta categoría.'}">
+            Descripción
+          </p>
+          <span>
+            <span th:text="${categoria.cantidadProductos}">0</span>
+            <span th:text="${categoria.cantidadProductos == 1 ? ' producto' : ' productos'}"> productos</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="empty-state" th:if="${categorias == null or categorias.isEmpty()}">
+        <h3>No hay categorías disponibles</h3>
+        <p>Vuelve a intentarlo más tarde.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="productos" class="section section--white">
+    <div class="container">
+      <div class="section__header">
+        <div>
+          <p class="section__eyebrow">Selección</p>
+          <h2 class="section__heading">Productos destacados</h2>
+        </div>
+        <a th:href="@{/catalogo}">Ver catálogo completo</a>
+      </div>
+
+      <div class="products-grid" th:if="${productosDestacados != null and !productosDestacados.isEmpty()}">
+        <article class="product-card" th:each="producto : ${productosDestacados}">
+          <div class="product-image">
+            <div class="product-placeholder" aria-hidden="true">🎸</div>
+          </div>
+
+          <div class="product-info">
+            <span
+              class="product-category"
+              th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">
+              Categoría
+            </span>
+
+            <h3 th:text="${producto.nombre}">Producto</h3>
+
+            <p th:text="${producto.descripcion != null and !producto.descripcion.isBlank() ? producto.descripcion : 'Sin descripción disponible.'}">
+              Descripción
+            </p>
+
+            <span th:if="${producto.disponible}" class="available">Disponible</span>
+            <span th:unless="${producto.disponible}" class="unavailable">Sin existencias</span>
+
+            <strong
+              th:text="${producto.precio != null ? '$' + #numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT') + ' MXN' : 'Precio no disponible'}">
+              $0.00 MXN
+            </strong>
+
+            <a class="btn-product" th:href="@{/producto/{id}(id=${producto.id})}">
+              Ver producto
+            </a>
+          </div>
+        </article>
+      </div>
+
+      <div class="empty-state" th:if="${productosDestacados == null or productosDestacados.isEmpty()}">
+        <h3>No hay productos disponibles</h3>
+        <p>Consulta nuevamente más tarde.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="nosotros" class="section">
+    <div class="container">
+      <div class="section__header">
+        <p class="section__eyebrow">Nuestro compromiso</p>
+        <h2 class="section__heading">¿Por qué Bemolé?</h2>
+      </div>
+
+      <div class="grid-nosotros">
+        <div class="feature-card">
+          <span class="feature-card__icon">🎓</span>
+          <h3 class="feature-card__title">Asesoría especializada</h3>
+          <p class="feature-card__desc">Te ayudamos a identificar el instrumento que mejor se adapta a tus necesidades.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-card__icon">🚚</span>
+          <h3 class="feature-card__title">Opciones de envío</h3>
+          <p class="feature-card__desc">Elige envío estándar, express o recolección en tienda durante el checkout.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-card__icon">🛡️</span>
+          <h3 class="feature-card__title">Compra segura</h3>
+          <p class="feature-card__desc">Tus pedidos y datos se procesan mediante una API protegida.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-card__icon">📦</span>
+          <h3 class="feature-card__title">Consulta tus órdenes</h3>
+          <p class="feature-card__desc">Accede a tu historial de compras desde tu cuenta.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="contact-section">
+    <div class="contact-inner">
+      <p class="contact-eyebrow">¿Tienes dudas?</p>
+      <h2 class="contact-heading">Contáctanos</h2>
+      <p class="contact-body">Nuestro equipo puede orientarte sobre el catálogo y el proceso de compra.</p>
+      <div class="contact-form">
+        <input type="text" placeholder="Tu nombre" aria-label="Nombre">
+        <input type="email" placeholder="tu@correo.com" aria-label="Correo electrónico">
+        <textarea rows="4" placeholder="¿En qué te ayudamos?" aria-label="Mensaje"></textarea>
+        <button type="button" class="btn-submit">Enviar mensaje</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div>
+      <span class="footer__brand">Bemolé</span>
+      <span class="footer__copy">© 2026 · Todos los derechos reservados</span>
+    </div>
+    <ul class="footer__links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a href="#categorias">Categorías</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+      <li><a href="#inicio">Volver arriba</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>

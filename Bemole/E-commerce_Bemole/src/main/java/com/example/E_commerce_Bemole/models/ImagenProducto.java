@@ -1,5 +1,6 @@
 package com.example.E_commerce_Bemole.modules;
 
+import com.example.E_commerce_Bemole.models.Producto;
 import jakarta.persistence.*;
 
 @Entity

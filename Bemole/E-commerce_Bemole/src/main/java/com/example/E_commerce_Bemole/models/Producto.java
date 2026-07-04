@@ -1,6 +1,7 @@
 package com.example.E_commerce_Bemole.models;
 
 import jakarta.persistence.*;
+import com.example.E_commerce_Bemole.modules.ImagenProducto;
 
 import java.util.List;
 

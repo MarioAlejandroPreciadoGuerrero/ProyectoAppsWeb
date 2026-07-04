@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0">
+
+    <title>Bemolé — Orden confirmada</title>
+
+    <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap"
+            rel="stylesheet">
+
+    <link
+            rel="stylesheet"
+            th:href="@{/styles/style.css}">
+</head>
+<body>
+
+<header class="navbar navbar--minimal">
+    <div class="container navbar__inner">
+        <a th:href="@{/}" class="logo">
+            <span class="logo__name">Bemolé</span>
+            <span class="logo__tagline">
+        Instrumentos para cada nota
+      </span>
+        </a>
+    </div>
+</header>
+
+<main
+        class="container"
+        th:if="${ordenCreada != null}">
+
+    <section class="confirmation-card">
+        <div class="confirmation-icon">✓</div>
+
+        <p class="eyebrow">Compra completada</p>
+
+        <h1>¡Tu orden fue creada!</h1>
+
+        <p>
+            Recibimos correctamente tu solicitud.
+        </p>
+
+        <div class="confirmation-number">
+            <span>Número de orden</span>
+
+            <strong th:text="${ordenCreada.numero}">
+                BMO-0000
+            </strong>
+        </div>
+
+        <div class="summary-rows">
+            <div class="summary-row">
+                <span>Estado</span>
+
+                <strong th:text="${ordenCreada.estado}">
+                    PENDIENTE
+                </strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+
+                <strong
+                        th:text="${'$' + #numbers.formatDecimal(
+              ordenCreada.subtotal,
+              1,
+              'COMMA',
+              2,
+              'POINT'
+          )}">
+                    $0.00
+                </strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Envío</span>
+
+                <strong
+                        th:text="${'$' + #numbers.formatDecimal(
+              ordenCreada.costoEnvio,
+              1,
+              'COMMA',
+              2,
+              'POINT'
+          )}">
+                    $0.00
+                </strong>
+            </div>
+
+            <div class="summary-total">
+                <span>Total</span>
+
+                <strong
+                        th:text="${'$' + #numbers.formatDecimal(
+              ordenCreada.total,
+              1,
+              'COMMA',
+              2,
+              'POINT'
+          ) + ' MXN'}">
+                    $0.00 MXN
+                </strong>
+            </div>
+        </div>
+
+        <div class="confirmation-actions">
+            <a th:href="@{/ordenes}" class="btn-gold">
+                Ver mis órdenes
+            </a>
+
+            <a th:href="@{/catalogo}" class="btn-outline">
+                Seguir comprando
+            </a>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container footer__inner">
+        <span class="footer__brand">Bemolé</span>
+        <span class="footer__copy">
+      © 2026 · Todos los derechos reservados
+    </span>
+    </div>
+</footer>
+
+</body>
+</html>

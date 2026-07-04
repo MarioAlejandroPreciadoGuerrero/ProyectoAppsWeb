@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé — Orden confirmada</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/style.css}">
+</head>
+<body class="confirmation-page">
+
+<header class="navbar navbar--minimal">
+  <div class="container navbar__inner">
+    <a th:href="@{/}" class="logo" aria-label="Ir al inicio">
+      <span class="logo__name">Bemolé</span>
+      <span class="logo__tagline">Instrumentos para cada nota</span>
+    </a>
+
+    <div class="secure-label">
+      <span aria-hidden="true">✓</span>
+      <span>Orden registrada</span>
+    </div>
+  </div>
+</header>
+
+<main class="confirmation-main" th:if="${ordenCreada != null}">
+  <section class="confirmation-card">
+    <div class="confirmation-icon" aria-hidden="true">✓</div>
+
+    <p class="eyebrow">Compra completada</p>
+    <h1>¡Tu orden fue creada!</h1>
+    <p class="confirmation-lead">
+      Guardamos correctamente tu orden. Puedes consultar su estado desde el historial de compras.
+    </p>
+
+    <div class="confirmation-number">
+      <span>Número de orden</span>
+      <strong th:text="${ordenCreada.numero}">BMO-2026-00000000</strong>
+    </div>
+
+    <div class="confirmation-grid">
+      <div class="confirmation-block">
+        <span class="confirmation-label">Estado</span>
+        <strong class="confirmation-value" th:text="${ordenCreada.estado}">PENDIENTE</strong>
+      </div>
+
+      <div class="confirmation-block">
+        <span class="confirmation-label">Método de envío</span>
+        <strong class="confirmation-value" th:text="${ordenCreada.metodoEnvio}">ESTANDAR</strong>
+      </div>
+
+      <div class="confirmation-block confirmation-block--full" th:if="${ordenCreada.contacto != null}">
+        <span class="confirmation-label">Contacto</span>
+        <strong class="confirmation-value">
+          <span th:text="${ordenCreada.contacto.nombre}">Nombre</span>
+          <span th:text="${ordenCreada.contacto.apellido}">Apellido</span>
+        </strong>
+        <small th:text="${ordenCreada.contacto.email}">correo@ejemplo.com</small>
+      </div>
+
+      <div class="confirmation-block confirmation-block--full" th:if="${ordenCreada.direccionEnvio != null}">
+        <span class="confirmation-label">Dirección registrada</span>
+        <strong class="confirmation-value" th:text="${ordenCreada.direccionEnvio.calleNumero}">Calle y número</strong>
+        <small>
+          <span th:text="${ordenCreada.direccionEnvio.colonia}">Colonia</span>,
+          <span th:text="${ordenCreada.direccionEnvio.ciudad}">Ciudad</span>,
+          <span th:text="${ordenCreada.direccionEnvio.estado}">Estado</span>
+          · C.P. <span th:text="${ordenCreada.direccionEnvio.codigoPostal}">00000</span>
+        </small>
+      </div>
+    </div>
+
+    <div class="confirmation-items" th:if="${ordenCreada.items != null and !ordenCreada.items.isEmpty()}">
+      <h2>Productos</h2>
+
+      <div class="confirmation-item" th:each="item : ${ordenCreada.items}">
+        <div class="confirmation-item__icon">🎵</div>
+        <div class="confirmation-item__info">
+          <a
+            th:href="@{/producto/{id}(id=${item.productoId})}"
+            th:text="${item.nombreProducto}">
+            Producto
+          </a>
+          <small>
+            Cantidad: <span th:text="${item.cantidad}">1</span>
+          </small>
+        </div>
+        <strong
+          th:text="${item.subtotal != null ? '$' + #numbers.formatDecimal(item.subtotal, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+          $0.00
+        </strong>
+      </div>
+    </div>
+
+    <div class="confirmation-totals">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <strong
+          th:text="${ordenCreada.subtotal != null ? '$' + #numbers.formatDecimal(ordenCreada.subtotal, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+          $0.00
+        </strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Envío</span>
+        <strong
+          th:text="${ordenCreada.costoEnvio != null ? '$' + #numbers.formatDecimal(ordenCreada.costoEnvio, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+          $0.00
+        </strong>
+      </div>
+
+      <div class="confirmation-total">
+        <span>Total</span>
+        <strong
+          th:text="${ordenCreada.total != null ? '$' + #numbers.formatDecimal(ordenCreada.total, 1, 'COMMA', 2, 'POINT') + ' MXN' : '$0.00 MXN'}">
+          $0.00 MXN
+        </strong>
+      </div>
+    </div>
+
+    <div class="confirmation-actions">
+      <a th:href="@{/ordenes}" class="btn-gold">Ver mis órdenes</a>
+      <a th:href="@{/catalogo}" class="btn-outline">Seguir comprando</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer confirmation-footer">
+  <div class="container footer__inner">
+    <div>
+      <span class="footer__brand">Bemolé</span>
+      <span class="footer__copy">© 2026 · Todos los derechos reservados</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

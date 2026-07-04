@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Bemolé Admin — Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/styles/style.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
+</head>
+<body class="admin-body">
+
+<!-- ── TOPBAR ── -->
+<header class="admin-topbar">
+    <div class="admin-topbar__brand">
+        <span class="admin-topbar__name">Bemolé</span>
+        <span class="admin-topbar__sub">Panel de administración</span>
+    </div>
+
+    <div class="admin-topbar__center">
+        <span>🔍</span>
+        <input type="text" placeholder="Buscar productos, usuarios…"/>
+    </div>
+
+    <div class="admin-topbar__right">
+        <button class="admin-topbar__notif" aria-label="Notificaciones">
+            🔔
+            <span class="admin-topbar__notif-dot"></span>
+        </button>
+        <a th:href="@{/}" class="admin-topbar__notif" title="Ver tienda" style="font-size:.85rem;color:rgba(255,255,255,.45);text-decoration:none;">🏪 Tienda</a>
+        <div class="admin-topbar__user">
+            <div class="admin-topbar__avatar">A</div>
+            <div>
+                <p class="admin-topbar__uname">Admin</p>
+                <p class="admin-topbar__role">Administrador</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="admin-shell">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="admin-sidebar">
+        <span class="admin-sidebar__section-label">Principal</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin}" class="admin-nav-link active">
+                <span class="icon">📊</span> Dashboard
+            </a>
+        </nav>
+
+        <span class="admin-sidebar__section-label">Catálogo</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin/productos}" class="admin-nav-link">
+                <span class="icon">🎸</span> Productos
+                <span class="badge-count">2,400</span>
+            </a>
+            <a th:href="@{/admin/categorias}" class="admin-nav-link">
+                <span class="icon">📂</span> Categorías
+            </a>
+        </nav>
+
+        <span class="admin-sidebar__section-label">Operaciones</span>
+        <nav class="admin-sidebar__nav">
+            <a th:href="@{/admin/ordenes}" class="admin-nav-link">
+                <span class="icon">📦</span> Órdenes
+                <span class="badge-count">12</span>
+            </a>
+            <a th:href="@{/admin/usuarios}" class="admin-nav-link">
+                <span class="icon">👥</span> Usuarios
+            </a>
+        </nav>
+
+        <hr class="admin-sidebar__divider"/>
+
+        <div class="admin-sidebar__logout">
+            <a th:href="@{/logout}"><span class="icon">←</span> Cerrar sesión</a>
+        </div>
+    </aside>
+
+    <!-- ── CONTENIDO ── -->
+    <main class="admin-content">
+
+        <div class="admin-page-header">
+            <div class="admin-page-header__titles">
+                <p class="admin-page-header__eyebrow">Resumen general</p>
+                <h1 class="admin-page-header__title">Dashboard</h1>
+            </div>
+            <div class="admin-page-header__actions">
+                <span style="font-size:.8rem;color:#9ca3af;">Hoy: <strong style="color:var(--texto-oscuro);">25 jun 2025</strong></span>
+                <a th:href="@{/admin/productos/nuevo}" class="btn btn-primary">+ Nuevo producto</a>
+            </div>
+        </div>
+
+        <!-- Alerta de bienvenida -->
+        <div class="admin-alert admin-alert--info">
+            <span class="admin-alert__icon">ℹ</span>
+            <div>Tienes <strong>12 órdenes pendientes</strong> de procesar y <strong>3 productos</strong> con stock bajo.</div>
+        </div>
+
+        <!-- ── STAT CARDS ── -->
+        <div class="admin-stats">
+            <div class="stat-card">
+                <div class="stat-card__top">
+                    <span class="stat-card__label">Productos</span>
+                    <div class="stat-card__icon stat-card__icon--gold">🎸</div>
+                </div>
+                <div class="stat-card__value">2,400</div>
+                <p class="stat-card__delta"><span class="up">↑ 18</span> nuevos este mes</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__top">
+                    <span class="stat-card__label">Ventas del mes</span>
+                    <div class="stat-card__icon stat-card__icon--success">💰</div>
+                </div>
+                <div class="stat-card__value">$486K</div>
+                <p class="stat-card__delta"><span class="up">↑ 12%</span> vs mes anterior</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__top">
+                    <span class="stat-card__label">Usuarios registrados</span>
+                    <div class="stat-card__icon stat-card__icon--info">👥</div>
+                </div>
+                <div class="stat-card__value">1,284</div>
+                <p class="stat-card__delta"><span class="up">↑ 34</span> nuevos esta semana</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__top">
+                    <span class="stat-card__label">Órdenes pendientes</span>
+                    <div class="stat-card__icon stat-card__icon--warning">📦</div>
+                </div>
+                <div class="stat-card__value">12</div>
+                <p class="stat-card__delta"><span class="down">↑ 4</span> respecto a ayer</p>
+            </div>
+        </div>
+
+        <!-- ── TABLAS RECIENTES ── -->
+        <div class="admin-dashboard-grid">
+
+            <!-- Órdenes recientes -->
+            <div class="admin-mini-table">
+                <div class="admin-mini-table__header">
+                    <h2 class="admin-mini-table__title">Órdenes recientes</h2>
+                    <a th:href="@{/admin/ordenes}" class="admin-mini-table__link">Ver todas →</a>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                    <tr>
+                        <th>Orden</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="muted">#0348</td>
+                        <td>Juan García</td>
+                        <td>$28,373</td>
+                        <td><span class="badge badge-info"><span class="badge-dot"></span>En tránsito</span></td>
+                    </tr>
+                    <tr>
+                        <td class="muted">#0347</td>
+                        <td>Laura Méndez</td>
+                        <td>$4,299</td>
+                        <td><span class="badge badge-success"><span class="badge-dot"></span>Entregada</span></td>
+                    </tr>
+                    <tr>
+                        <td class="muted">#0346</td>
+                        <td>Carlos Ruiz</td>
+                        <td>$18,999</td>
+                        <td><span class="badge badge-warning"><span class="badge-dot"></span>Procesando</span></td>
+                    </tr>
+                    <tr>
+                        <td class="muted">#0345</td>
+                        <td>Ana Torres</td>
+                        <td>$32,000</td>
+                        <td><span class="badge badge-success"><span class="badge-dot"></span>Entregada</span></td>
+                    </tr>
+                    <tr>
+                        <td class="muted">#0344</td>
+                        <td>Mario López</td>
+                        <td>$12,499</td>
+                        <td><span class="badge badge-error"><span class="badge-dot"></span>Cancelada</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Actividad reciente -->
+            <div class="admin-mini-table">
+                <div class="admin-mini-table__header">
+                    <h2 class="admin-mini-table__title">Actividad reciente</h2>
+                    <span class="admin-mini-table__link" style="cursor:default;color:#9ca3af;">Hoy</span>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon activity-icon--gold">🎸</div>
+                        <div style="flex:1;">
+                            <p class="activity-desc"><strong>Nuevo producto</strong> — Gibson SG Standard agregado al catálogo.</p>
+                            <p class="activity-time">Hace 12 min</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon activity-icon--success">👤</div>
+                        <div style="flex:1;">
+                            <p class="activity-desc"><strong>Nuevo usuario</strong> — Sandra L. se registró.</p>
+                            <p class="activity-time">Hace 38 min</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon activity-icon--info">📦</div>
+                        <div style="flex:1;">
+                            <p class="activity-desc"><strong>Orden #0348</strong> marcada como enviada.</p>
+                            <p class="activity-time">Hace 1 h</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon activity-icon--error">⚠</div>
+                        <div style="flex:1;">
+                            <p class="activity-desc"><strong>Stock bajo</strong> — Violín Stentor II: solo 2 unidades.</p>
+                            <p class="activity-time">Hace 2 h</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon activity-icon--gold">✏️</div>
+                        <div style="flex:1;">
+                            <p class="activity-desc"><strong>Precio actualizado</strong> — Yamaha P-145 a $12,499.</p>
+                            <p class="activity-time">Hace 3 h</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Productos con stock bajo -->
+        <div class="admin-mini-table" style="margin-top:1.25rem;">
+            <div class="admin-mini-table__header">
+                <h2 class="admin-mini-table__title">⚠ Productos con stock bajo</h2>
+                <a th:href="@{/admin/productos}" class="admin-mini-table__link">Gestionar inventario →</a>
+            </div>
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Stock</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="td-product">
+                            <div class="td-img">🎻</div>
+                            <div>
+                                <p class="td-name">Violín 4/4 Stentor II</p>
+                                <p class="td-sub">SKU: VLN-STEN-44</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">Cuerdas</td>
+                    <td><strong style="color:var(--error);">2</strong></td>
+                    <td><span class="badge badge-error"><span class="badge-dot"></span>Crítico</span></td>
+                    <td>
+                        <div class="td-actions">
+                            <a th:href="@{/admin/productos/editar/1}" class="action-icon-btn" title="Editar">✏️</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="td-product">
+                            <div class="td-img">🎷</div>
+                            <div>
+                                <p class="td-name">Saxofón Alto Yamaha</p>
+                                <p class="td-sub">SKU: SAX-YAM-A</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">Vientos</td>
+                    <td><strong style="color:var(--warning);">5</strong></td>
+                    <td><span class="badge badge-warning"><span class="badge-dot"></span>Bajo</span></td>
+                    <td>
+                        <div class="td-actions">
+                            <a th:href="@{/admin/productos/editar/2}" class="action-icon-btn" title="Editar">✏️</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>
