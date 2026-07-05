@@ -8,20 +8,17 @@
   <link rel="stylesheet" th:href="@{/styles/admin.css}">
 </head>
 <body class="admin-auth-body">
-
-<main class="admin-status-card">
-  <div class="admin-status-card__icon">⛔</div>
-  <p class="admin-page-header__eyebrow">Acceso restringido</p>
-  <h1>No tienes permisos para entrar</h1>
-  <p>La cuenta autenticada no cuenta con el rol administrativo requerido.</p>
-
-  <div class="admin-status-card__actions">
-    <a th:href="@{/admin}" class="btn btn-secondary">Volver al dashboard</a>
-    <form th:action="@{/logout}" method="post">
-      <button type="submit" class="btn btn-primary">Cambiar de cuenta</button>
-    </form>
-  </div>
-</main>
-
+  <main class="admin-status-card">
+    <div class="admin-status-card__icon">🔒</div>
+    <p class="admin-page-header__eyebrow">Seguridad</p>
+    <h1>Acceso denegado</h1>
+    <p>Tu sesión no tiene permisos para acceder a este recurso administrativo.</p>
+    <div class="admin-status-card__actions">
+      <a class="btn btn-primary" th:href="@{/admin}">Volver al panel</a>
+      <form th:action="@{/logout}" method="post">
+        <button class="btn btn-ghost" type="submit">Cerrar sesión</button>
+      </form>
+    </div>
+  </main>
 </body>
 </html>

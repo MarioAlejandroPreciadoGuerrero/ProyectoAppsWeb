@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé Admin — Usuarios</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/admin.css}">
+</head>
+<body class="admin-body">
+  <div th:replace="~{admin/fragments/topbar :: topbar}"></div>
+  <div class="admin-shell">
+    <div th:replace="~{admin/fragments/sidebar :: sidebar('usuarios')}"></div>
+
+    <main class="admin-content">
+      <header class="admin-page-header">
+        <div>
+          <p class="admin-page-header__eyebrow">Cuentas</p>
+          <h1 class="admin-page-header__title">Usuarios</h1>
+          <p class="admin-page-header__subtitle">Consulta las cuentas registradas. Esta pantalla es de solo lectura.</p>
+        </div>
+      </header>
+
+      <div class="admin-alert admin-alert--error" th:if="${errorGlobal}"><span>!</span><span th:text="${errorGlobal}">No fue posible cargar los usuarios.</span></div>
+
+      <section class="admin-table-wrap">
+        <div class="admin-table-toolbar">
+          <span class="admin-result-count" th:text="${paginaUsuarios != null ? paginaUsuarios.totalElements + ' usuarios registrados' : '0 usuarios registrados'}">0 usuarios registrados</span>
+        </div>
+
+        <div class="admin-table-scroll" th:if="${usuarios != null and !usuarios.isEmpty()}">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Fecha de registro</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="usuario : ${usuarios}">
+                <td>
+                  <div class="td-product">
+                    <div class="user-avatar" th:classappend="${usuario.rol == 'ADMINISTRADOR'} ? ' user-avatar--admin' : ''" th:text="${usuario.nombre != null and !usuario.nombre.isBlank() ? #strings.substring(usuario.nombre, 0, 1) : 'U'}">U</div>
+                    <div>
+                      <p class="td-name" th:text="${usuario.nombreCompleto}">Nombre completo</p>
+                      <p class="td-sub" th:text="${'ID: ' + usuario.id}">ID</p>
+                    </div>
+                  </div>
+                </td>
+                <td th:text="${usuario.email}">correo@ejemplo.com</td>
+                <td>
+                  <span class="badge badge-warning" th:if="${usuario.rol == 'ADMINISTRADOR'}">Administrador</span>
+                  <span class="badge badge-neutral" th:unless="${usuario.rol == 'ADMINISTRADOR'}" th:text="${usuario.rol}">Cliente</span>
+                </td>
+                <td th:text="${usuario.fechaRegistro != null ? usuario.fechaRegistro : '—'}">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="admin-empty" th:if="${usuarios == null or usuarios.isEmpty()}">
+          <span>👥</span>
+          <h2>No hay usuarios registrados</h2>
+          <p>Las cuentas aparecerán aquí cuando sean creadas desde la tienda.</p>
+        </div>
+
+        <nav class="admin-table-footer" aria-label="Paginación de usuarios" th:if="${paginaUsuarios != null and paginaUsuarios.totalPages > 1}">
+          <a class="admin-pag-btn" th:if="${!paginaUsuarios.first}" th:href="@{/admin/usuarios(pagina=${paginaUsuarios.number - 1},tamano=${paginaUsuarios.size})}">←</a>
+          <span>Página <strong th:text="${paginaUsuarios.number + 1}">1</strong> de <strong th:text="${paginaUsuarios.totalPages}">1</strong></span>
+          <a class="admin-pag-btn" th:if="${!paginaUsuarios.last}" th:href="@{/admin/usuarios(pagina=${paginaUsuarios.number + 1},tamano=${paginaUsuarios.size})}">→</a>
+        </nav>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

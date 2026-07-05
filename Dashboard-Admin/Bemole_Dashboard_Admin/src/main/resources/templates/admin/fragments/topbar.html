@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="admin-topbar" th:fragment="topbar">
+  <a class="admin-topbar__brand" th:href="@{/admin}">
+    <span class="admin-topbar__name">Bemolé</span>
+    <span class="admin-topbar__sub">Administración</span>
+  </a>
+
+  <div class="admin-topbar__right">
+    <a class="admin-store-link" href="http://localhost:8080">Ver tienda ↗</a>
+
+    <div class="admin-topbar__user" th:if="${adminSesion != null}">
+      <div class="admin-topbar__avatar" th:text="${adminSesion.inicial}">A</div>
+      <div>
+        <p class="admin-topbar__uname" th:text="${adminSesion.nombreCompleto}">Administrador</p>
+        <p class="admin-topbar__role">Administrador</p>
+      </div>
+    </div>
+  </div>
+</header>
+</body>
+</html>

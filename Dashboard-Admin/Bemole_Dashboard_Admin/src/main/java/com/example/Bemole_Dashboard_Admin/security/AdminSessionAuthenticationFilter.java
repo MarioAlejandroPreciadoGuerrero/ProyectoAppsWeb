@@ -32,7 +32,7 @@ public class AdminSessionAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authentication = UsernamePasswordAuthenticationToken.authenticated(admin, null,
                         List.of(
                                 new SimpleGrantedAuthority(
-                                        "ROLE_ADMIN"
+                                        "ROLE_ADMINISTRADOR"
                                 )
                         )
                 );

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside class="admin-sidebar" th:fragment="sidebar(activePage)">
+  <p class="admin-sidebar__section-label">Principal</p>
+  <nav class="admin-sidebar__nav" aria-label="Navegación administrativa">
+    <a class="admin-nav-link" th:classappend="${activePage == 'dashboard'} ? ' active' : ''" th:href="@{/admin}">
+      <span class="icon">⌂</span><span>Dashboard</span>
+    </a>
+    <a class="admin-nav-link" th:classappend="${activePage == 'productos'} ? ' active' : ''" th:href="@{/admin/productos}">
+      <span class="icon">🎵</span><span>Productos</span>
+    </a>
+    <a class="admin-nav-link" th:classappend="${activePage == 'categorias'} ? ' active' : ''" th:href="@{/admin/categorias}">
+      <span class="icon">▦</span><span>Categorías</span>
+    </a>
+    <a class="admin-nav-link" th:classappend="${activePage == 'usuarios'} ? ' active' : ''" th:href="@{/admin/usuarios}">
+      <span class="icon">👥</span><span>Usuarios</span>
+    </a>
+    <a class="admin-nav-link" th:classappend="${activePage == 'ordenes'} ? ' active' : ''" th:href="@{/admin/ordenes}">
+      <span class="icon">📦</span><span>Órdenes</span>
+    </a>
+  </nav>
+
+  <div class="admin-sidebar__logout">
+    <form th:action="@{/logout}" method="post">
+      <button class="admin-logout-button" type="submit">
+        <span class="icon">←</span><span>Cerrar sesión</span>
+      </button>
+    </form>
+  </div>
+</aside>
+</body>
+</html>

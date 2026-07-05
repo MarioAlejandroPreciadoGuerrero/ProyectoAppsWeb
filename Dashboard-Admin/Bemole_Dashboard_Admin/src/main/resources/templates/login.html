@@ -8,72 +8,56 @@
   <link rel="stylesheet" th:href="@{/styles/admin.css}">
 </head>
 <body class="admin-auth-body">
+  <main class="admin-auth-shell">
+    <section class="admin-auth-brand">
+      <div>
+        <span class="admin-auth-brand__eyebrow">Bemolé</span>
+        <h1>Panel administrativo</h1>
+        <p>Gestiona productos, categorías, usuarios y órdenes desde una aplicación independiente y protegida.</p>
+      </div>
+      <a href="http://localhost:8080">← Volver a la tienda</a>
+    </section>
 
-<main class="admin-auth-shell">
-  <section class="admin-auth-brand">
-    <div>
-      <p class="admin-auth-brand__eyebrow">Bemolé</p>
-      <h1>Panel de administración</h1>
-      <p>Gestiona el catálogo, las categorías, las órdenes y los usuarios desde un proyecto independiente.</p>
-    </div>
-    <a href="http://localhost:8080" target="_blank" rel="noopener">← Volver a la tienda</a>
-  </section>
+    <section class="admin-auth-card">
+      <header class="admin-auth-card__header">
+        <div class="admin-auth-icon">B</div>
+        <h2>Acceso administrativo</h2>
+        <p>Ingresa con una cuenta que tenga el rol ADMINISTRADOR.</p>
+      </header>
 
-  <section class="admin-auth-card">
-    <div class="admin-auth-card__header">
-      <div class="admin-auth-icon">♪</div>
-      <h2>Acceso administrativo</h2>
-      <p>Ingresa con una cuenta que tenga el rol ADMIN.</p>
-    </div>
-
-    <div class="admin-alert admin-alert--success" th:if="${param.logout}">
-      <span class="admin-alert__icon">✓</span>
-      <span>La sesión se cerró correctamente.</span>
-    </div>
-
-    <div class="admin-alert admin-alert--error" th:if="${errorLogin}">
-      <span class="admin-alert__icon">⚠</span>
-      <span th:text="${errorLogin}">No fue posible iniciar sesión.</span>
-    </div>
-
-    <form class="admin-auth-form"
-          th:action="@{/login}"
-          method="post"
-          th:object="${credenciales}">
-      <div class="field">
-        <label for="email">Correo electrónico</label>
-        <input id="email"
-               type="email"
-               th:field="*{email}"
-               autocomplete="username"
-               placeholder="admin@bemole.com">
-        <small class="field-error"
-               th:if="${#fields.hasErrors('email')}"
-               th:errors="*{email}"></small>
+      <div class="admin-alert admin-alert--success" th:if="${param.logout}">
+        <span>✓</span>
+        <span>La sesión administrativa se cerró correctamente.</span>
       </div>
 
-      <div class="field">
-        <label for="password">Contraseña</label>
-        <input id="password"
-               type="password"
-               th:field="*{password}"
-               autocomplete="current-password"
-               placeholder="••••••••">
-        <small class="field-error"
-               th:if="${#fields.hasErrors('password')}"
-               th:errors="*{password}"></small>
+      <div class="admin-alert admin-alert--error" th:if="${param.sesionExpirada}">
+        <span>!</span>
+        <span>La sesión administrativa expiró. Inicia sesión nuevamente.</span>
       </div>
 
-      <button class="btn btn-primary admin-auth-submit" type="submit">
-        Iniciar sesión
-      </button>
-    </form>
+      <div class="admin-alert admin-alert--error" th:if="${errorLogin}">
+        <span>!</span>
+        <span th:text="${errorLogin}">No fue posible iniciar sesión.</span>
+      </div>
 
-    <p class="admin-auth-note">
-      El dashboard únicamente permite cuentas con permisos administrativos.
-    </p>
-  </section>
-</main>
+      <form class="admin-auth-form" th:action="@{/login}" method="post" th:object="${credenciales}">
+        <div class="field">
+          <label for="email">Correo electrónico</label>
+          <input id="email" type="email" th:field="*{email}" autocomplete="username" placeholder="admin@bemole.com">
+          <small class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Correo inválido</small>
+        </div>
 
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <input id="password" type="password" th:field="*{password}" autocomplete="current-password" placeholder="••••••••">
+          <small class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Contraseña obligatoria</small>
+        </div>
+
+        <button class="btn btn-primary admin-auth-submit" type="submit">Iniciar sesión</button>
+      </form>
+
+      <p class="admin-auth-note">La API valida las credenciales y el rol antes de permitir el acceso.</p>
+    </section>
+  </main>
 </body>
 </html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé Admin — Categorías</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/admin.css}">
+</head>
+<body class="admin-body">
+  <div th:replace="~{admin/fragments/topbar :: topbar}"></div>
+  <div class="admin-shell">
+    <div th:replace="~{admin/fragments/sidebar :: sidebar('categorias')}"></div>
+
+    <main class="admin-content">
+      <header class="admin-page-header">
+        <div>
+          <p class="admin-page-header__eyebrow">Catálogo</p>
+          <h1 class="admin-page-header__title">Categorías</h1>
+          <p class="admin-page-header__subtitle">Organiza los productos y consulta cuántos pertenecen a cada categoría.</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/admin/categorias/nueva}">＋ Nueva categoría</a>
+      </header>
+
+      <div class="admin-alert admin-alert--success" th:if="${mensaje}"><span>✓</span><span th:text="${mensaje}">Operación completada.</span></div>
+      <div class="admin-alert admin-alert--error" th:if="${error}"><span>!</span><span th:text="${error}">No fue posible completar la operación.</span></div>
+
+      <section class="cat-admin-grid" th:if="${categorias != null and !categorias.isEmpty()}">
+        <article class="cat-admin-card" th:each="categoria : ${categorias}">
+          <div class="cat-admin-card__top">
+            <div class="cat-admin-card__emoji">🎵</div>
+            <div>
+              <h2 class="cat-admin-card__name" th:text="${categoria.nombre}">Categoría</h2>
+              <p class="cat-admin-card__slug" th:text="${categoria.descripcion != null and !categoria.descripcion.isBlank() ? categoria.descripcion : 'Sin descripción'}">Descripción</p>
+            </div>
+          </div>
+
+          <div class="cat-admin-card__stats">
+            <div class="cat-stat">
+              <span class="cat-stat__val" th:text="${categoria.cantidadProductos}">0</span>
+              <span class="cat-stat__label">Productos</span>
+            </div>
+          </div>
+
+          <div class="cat-admin-card__actions">
+            <a class="btn btn-ghost btn-sm" th:href="@{/admin/categorias/{id}/editar(id=${categoria.id})}">Editar</a>
+            <form th:if="${categoria.cantidadProductos == 0}" th:action="@{/admin/categorias/{id}(id=${categoria.id})}" method="post">
+              <input type="hidden" name="_method" value="delete">
+              <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+            </form>
+            <span class="muted small-note" th:if="${categoria.cantidadProductos > 0}">No se puede eliminar mientras contenga productos.</span>
+          </div>
+        </article>
+      </section>
+
+      <div class="admin-empty" th:if="${categorias == null or categorias.isEmpty()}">
+        <span>▦</span>
+        <h2>No hay categorías registradas</h2>
+        <p>Crea la primera categoría para clasificar los productos.</p>
+        <a class="btn btn-primary" th:href="@{/admin/categorias/nueva}">Crear categoría</a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

@@ -86,6 +86,9 @@ public class SecurityConfig {
                                 "/api/ordenes/**"
                         ).hasRole("CLIENTE")
 
+                        .requestMatchers("/api/admin/**")
+                        .hasRole("ADMINISTRADOR")
+
                         // Todo lo demás requiere JWT
                         .anyRequest().authenticated()
                 )

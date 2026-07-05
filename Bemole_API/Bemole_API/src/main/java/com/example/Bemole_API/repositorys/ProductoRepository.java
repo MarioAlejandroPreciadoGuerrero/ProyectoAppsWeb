@@ -22,4 +22,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>, JpaSp
     Optional<Producto> findByIdForUpdate(@Param("id") Long id);
     long countByCategoriaIdAndActivoTrue(Long categoriaId);
     boolean existsByNombreIgnoreCase(String nombre);
+
+    boolean existsByNombreIgnoreCaseAndIdNot(String nombre, Long id);
+
+    boolean existsByCategoriaId(Long categoriaId);
+
+    long countByCategoriaId(Long categoriaId);
 }

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé Admin — Órdenes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/admin.css}">
+</head>
+<body class="admin-body">
+  <div th:replace="~{admin/fragments/topbar :: topbar}"></div>
+  <div class="admin-shell">
+    <div th:replace="~{admin/fragments/sidebar :: sidebar('ordenes')}"></div>
+
+    <main class="admin-content">
+      <header class="admin-page-header">
+        <div>
+          <p class="admin-page-header__eyebrow">Ventas</p>
+          <h1 class="admin-page-header__title">Órdenes</h1>
+          <p class="admin-page-header__subtitle">Filtra órdenes y avanza su estado respetando el flujo permitido.</p>
+        </div>
+      </header>
+
+      <div class="admin-alert admin-alert--success" th:if="${mensaje}"><span>✓</span><span th:text="${mensaje}">Estado actualizado.</span></div>
+      <div class="admin-alert admin-alert--error" th:if="${error}"><span>!</span><span th:text="${error}">No fue posible actualizar la orden.</span></div>
+      <div class="admin-alert admin-alert--error" th:if="${errorGlobal}"><span>!</span><span th:text="${errorGlobal}">No fue posible cargar las órdenes.</span></div>
+
+      <section class="admin-table-wrap">
+        <div class="admin-table-toolbar">
+          <form class="admin-table-toolbar__left" th:action="@{/admin/ordenes}" method="get">
+            <select class="admin-filter-select" name="estado" aria-label="Filtrar por estado">
+              <option value="">Todos los estados</option>
+              <option th:each="estado : ${estados}" th:value="${estado}" th:text="${estado}" th:selected="${estadoSeleccionado == estado}">ESTADO</option>
+            </select>
+            <select class="admin-filter-select" name="tamano" aria-label="Resultados por página">
+              <option value="10" th:selected="${paginaOrdenes != null and paginaOrdenes.size == 10}">10 por página</option>
+              <option value="20" th:selected="${paginaOrdenes != null and paginaOrdenes.size == 20}">20 por página</option>
+              <option value="50" th:selected="${paginaOrdenes != null and paginaOrdenes.size == 50}">50 por página</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" type="submit">Aplicar filtros</button>
+            <a class="btn btn-ghost btn-sm" th:href="@{/admin/ordenes}">Limpiar</a>
+          </form>
+          <span class="admin-result-count" th:text="${paginaOrdenes != null ? paginaOrdenes.totalElements + ' órdenes encontradas' : '0 órdenes encontradas'}">0 órdenes encontradas</span>
+        </div>
+
+        <div class="admin-table-scroll" th:if="${ordenes != null and !ordenes.isEmpty()}">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Orden</th>
+                <th>Fecha</th>
+                <th>Productos</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Siguiente acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="orden : ${ordenes}">
+                <td>
+                  <p class="td-name" th:text="${orden.numero != null ? '#' + orden.numero : 'Orden #' + orden.id}">#ORDEN</p>
+                  <p class="td-sub" th:text="${'ID interno: ' + orden.id}">ID</p>
+                </td>
+                <td th:text="${orden.fecha != null ? orden.fecha : '—'}">—</td>
+                <td>
+                  <p th:text="${orden.productoPrincipal != null ? orden.productoPrincipal : 'Productos de la orden'}">Producto</p>
+                  <p class="td-sub">
+                    <span th:text="${orden.cantidadProductos != null ? orden.cantidadProductos : 0}">0</span>
+                    <span> unidades</span>
+                    <span th:if="${orden.productosAdicionales != null and orden.productosAdicionales > 0}" th:text="${' · +' + orden.productosAdicionales + ' productos'}"></span>
+                  </p>
+                </td>
+                <td th:text="${orden.total != null ? '$' + #numbers.formatDecimal(orden.total, 1, 'COMMA', 2, 'POINT') : '—'}">$0.00</td>
+                <td>
+                  <span class="badge badge-warning" th:if="${orden.estado != null and orden.estado.name() == 'PENDIENTE'}">Pendiente</span>
+                  <span class="badge badge-info" th:if="${orden.estado != null and orden.estado.name() == 'PROCESANDO'}">Procesando</span>
+                  <span class="badge badge-info" th:if="${orden.estado != null and orden.estado.name() == 'ENVIADO'}">Enviada</span>
+                  <span class="badge badge-success" th:if="${orden.estado != null and orden.estado.name() == 'ENTREGADO'}">Entregada</span>
+                  <span class="badge badge-error" th:if="${orden.estado != null and orden.estado.name() == 'CANCELADA'}">Cancelada</span>
+                </td>
+                <td>
+                  <div class="order-actions-stack">
+                    <form class="order-status-form" th:if="${orden.permiteProcesar()}" th:action="@{/admin/ordenes/{id}/estado(id=${orden.id})}" method="post">
+                      <input type="hidden" name="_method" value="patch">
+                      <input type="hidden" name="estado" value="PROCESANDO">
+                      <button class="btn btn-primary btn-sm" type="submit">Marcar procesando</button>
+                    </form>
+                    <form class="order-status-form" th:if="${orden.permiteEnviar()}" th:action="@{/admin/ordenes/{id}/estado(id=${orden.id})}" method="post">
+                      <input type="hidden" name="_method" value="patch">
+                      <input type="hidden" name="estado" value="ENVIADO">
+                      <button class="btn btn-primary btn-sm" type="submit">Marcar enviada</button>
+                    </form>
+                    <form class="order-status-form" th:if="${orden.permiteEntregar()}" th:action="@{/admin/ordenes/{id}/estado(id=${orden.id})}" method="post">
+                      <input type="hidden" name="_method" value="patch">
+                      <input type="hidden" name="estado" value="ENTREGADO">
+                      <button class="btn btn-primary btn-sm" type="submit">Marcar entregada</button>
+                    </form>
+                    <form class="order-status-form" th:if="${orden.permiteCancelar()}" th:action="@{/admin/ordenes/{id}/estado(id=${orden.id})}" method="post">
+                      <input type="hidden" name="_method" value="patch">
+                      <input type="hidden" name="estado" value="CANCELADA">
+                      <button class="btn btn-danger btn-sm" type="submit">Cancelar</button>
+                    </form>
+                    <span class="muted" th:if="${!orden.permiteProcesar() and !orden.permiteEnviar() and !orden.permiteEntregar() and !orden.permiteCancelar()}">Estado final</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="admin-empty" th:if="${ordenes == null or ordenes.isEmpty()}">
+          <span>📦</span>
+          <h2>No hay órdenes para mostrar</h2>
+          <p>No existen órdenes con el filtro seleccionado.</p>
+          <a class="btn btn-ghost" th:href="@{/admin/ordenes}">Limpiar filtros</a>
+        </div>
+
+        <nav class="admin-table-footer" aria-label="Paginación de órdenes" th:if="${paginaOrdenes != null and paginaOrdenes.totalPages > 1}">
+          <a class="admin-pag-btn" th:if="${!paginaOrdenes.first}" th:href="@{/admin/ordenes(estado=${estadoSeleccionado},pagina=${paginaOrdenes.number - 1},tamano=${paginaOrdenes.size})}">←</a>
+          <span>Página <strong th:text="${paginaOrdenes.number + 1}">1</strong> de <strong th:text="${paginaOrdenes.totalPages}">1</strong></span>
+          <a class="admin-pag-btn" th:if="${!paginaOrdenes.last}" th:href="@{/admin/ordenes(estado=${estadoSeleccionado},pagina=${paginaOrdenes.number + 1},tamano=${paginaOrdenes.size})}">→</a>
+        </nav>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -9,47 +9,39 @@ import com.example.Bemole_Dashboard_Admin.exception.ApiClientException;
 import com.example.Bemole_Dashboard_Admin.session.AdminSessionKeys;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
+@AllArgsConstructor
 public class AdminAuthController {
-    @Autowired
-    private final AdminAuthApiClient authApiClient;
 
-    public AdminAuthController(
-            AdminAuthApiClient authApiClient
-    ) {
-        this.authApiClient = authApiClient;
-    }
+    private final AdminAuthApiClient authApiClient;
 
     @GetMapping("/login")
     public String mostrarLogin(
             HttpSession session,
             Model model
     ) {
-        if (session.getAttribute(
-                AdminSessionKeys.ADMIN_SESSION
-        ) != null) {
+        if (session.getAttribute(AdminSessionKeys.ADMIN_SESSION) != null) {
             return "redirect:/admin";
         }
 
         if (!model.containsAttribute("credenciales")) {
-            model.addAttribute(
-                    "credenciales",
-                    new AdminLoginFormDTO()
-            );
+            model.addAttribute("credenciales", new AdminLoginFormDTO());
         }
 
         return "login";
     }
 
     @PostMapping("/login")
-    public String iniciarSesion(@Valid AdminLoginFormDTO credenciales, BindingResult bindingResult, HttpSession session, Model model) {
+    public String iniciarSesion(@Valid @ModelAttribute("credenciales") AdminLoginFormDTO credenciales, BindingResult bindingResult, HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("credenciales", credenciales);
 

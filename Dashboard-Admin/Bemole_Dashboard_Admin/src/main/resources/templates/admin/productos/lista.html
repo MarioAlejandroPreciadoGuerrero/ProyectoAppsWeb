@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé Admin — Productos</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" th:href="@{/styles/admin.css}">
+</head>
+<body class="admin-body">
+
+<div th:replace="~{admin/fragments/topbar :: topbar}"></div>
+
+<div class="admin-shell">
+  <div th:replace="~{admin/fragments/sidebar :: sidebar('productos')}"></div>
+
+  <main class="admin-content">
+    <header class="admin-page-header">
+      <div>
+        <p class="admin-page-header__eyebrow">Catálogo</p>
+        <h1 class="admin-page-header__title">Productos</h1>
+        <p class="admin-page-header__subtitle">
+          Consulta, crea, modifica, activa y desactiva los productos del catálogo.
+        </p>
+      </div>
+
+      <a class="btn btn-primary" th:href="@{/admin/productos/nuevo}">
+        ＋ Nuevo producto
+      </a>
+    </header>
+
+    <div class="admin-alert admin-alert--success" th:if="${mensaje}">
+      <span aria-hidden="true">✓</span>
+      <span th:text="${mensaje}">Operación completada.</span>
+    </div>
+
+    <div class="admin-alert admin-alert--error" th:if="${error}">
+      <span aria-hidden="true">!</span>
+      <span th:text="${error}">No fue posible completar la operación.</span>
+    </div>
+
+    <div class="admin-alert admin-alert--error" th:if="${errorGlobal}">
+      <span aria-hidden="true">!</span>
+      <span th:text="${errorGlobal}">Ocurrió un error inesperado.</span>
+    </div>
+
+    <section class="admin-table-wrap">
+      <div class="admin-table-toolbar">
+        <div class="admin-table-toolbar__left">
+          <span
+            class="admin-result-count"
+            th:text="${paginaProductos != null
+                ? paginaProductos.totalElements + (paginaProductos.totalElements == 1 ? ' producto registrado' : ' productos registrados')
+                : '0 productos registrados'}">
+            0 productos registrados
+          </span>
+        </div>
+      </div>
+
+      <div
+        class="admin-table-scroll"
+        th:if="${productos != null and !productos.isEmpty()}">
+
+        <table class="admin-table">
+          <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr th:each="producto : ${productos}">
+            <td>
+              <div class="td-product">
+                <div class="td-img" aria-hidden="true">🎵</div>
+
+                <div>
+                  <p class="td-name" th:text="${producto.nombre}">
+                    Nombre del producto
+                  </p>
+
+                  <p
+                    class="td-sub"
+                    th:text="${producto.descripcion != null and !producto.descripcion.isBlank()
+                        ? producto.descripcion
+                        : 'Sin descripción'}">
+                    Descripción
+                  </p>
+                </div>
+              </div>
+            </td>
+
+            <td th:text="${producto.categoriaNombre != null
+                ? producto.categoriaNombre
+                : 'Sin categoría'}">
+              Categoría
+            </td>
+
+            <td
+              th:text="${producto.precio != null
+                  ? '$' + #numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT') + ' MXN'
+                  : '—'}">
+              $0.00 MXN
+            </td>
+
+            <td>
+              <span th:text="${producto.stock != null ? producto.stock : 0}">0</span>
+
+              <span
+                class="badge badge-warning"
+                th:if="${producto.stock != null and producto.stock > 0 and producto.stock <= 5}">
+                Stock bajo
+              </span>
+
+              <span
+                class="badge badge-error"
+                th:if="${producto.stock == null or producto.stock == 0}">
+                Sin stock
+              </span>
+            </td>
+
+            <td>
+              <span
+                class="badge badge-success"
+                th:if="${producto.activo != null and producto.activo}">
+                Activo
+              </span>
+
+              <span
+                class="badge badge-neutral"
+                th:unless="${producto.activo != null and producto.activo}">
+                Inactivo
+              </span>
+            </td>
+
+            <td>
+              <div class="td-actions">
+                <a
+                  class="btn btn-ghost btn-sm"
+                  th:href="@{/admin/productos/{id}/editar(id=${producto.id})}">
+                  Editar
+                </a>
+
+                <form
+                  th:if="${producto.activo != null and producto.activo}"
+                  th:action="@{/admin/productos/{id}/activo(id=${producto.id})}"
+                  method="post">
+
+                  <input type="hidden" name="_method" value="patch">
+                  <input type="hidden" name="activo" value="false">
+
+                  <input
+                    type="hidden"
+                    name="pagina"
+                    th:value="${paginaProductos != null ? paginaProductos.number : 0}">
+
+                  <input
+                    type="hidden"
+                    name="tamano"
+                    th:value="${paginaProductos != null ? paginaProductos.size : 10}">
+
+                  <button class="btn btn-danger btn-sm" type="submit">
+                    Desactivar
+                  </button>
+                </form>
+
+                <form
+                  th:unless="${producto.activo != null and producto.activo}"
+                  th:action="@{/admin/productos/{id}/activo(id=${producto.id})}"
+                  method="post">
+
+                  <input type="hidden" name="_method" value="patch">
+                  <input type="hidden" name="activo" value="true">
+
+                  <input
+                    type="hidden"
+                    name="pagina"
+                    th:value="${paginaProductos != null ? paginaProductos.number : 0}">
+
+                  <input
+                    type="hidden"
+                    name="tamano"
+                    th:value="${paginaProductos != null ? paginaProductos.size : 10}">
+
+                  <button class="btn btn-primary btn-sm" type="submit">
+                    Activar
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        class="admin-empty"
+        th:if="${productos == null or productos.isEmpty()}">
+        <span aria-hidden="true">🎵</span>
+        <h2>No hay productos registrados</h2>
+        <p>Crea el primer producto para comenzar a llenar el catálogo.</p>
+
+        <a class="btn btn-primary" th:href="@{/admin/productos/nuevo}">
+          Crear producto
+        </a>
+      </div>
+
+      <nav
+        class="admin-table-footer"
+        aria-label="Paginación de productos"
+        th:if="${paginaProductos != null and paginaProductos.totalPages > 1}">
+
+        <a
+          class="admin-pag-btn"
+          th:if="${!paginaProductos.first}"
+          th:href="@{/admin/productos(
+              pagina=${paginaProductos.number - 1},
+              tamano=${paginaProductos.size}
+          )}"
+          aria-label="Página anterior">
+          ←
+        </a>
+
+        <span>
+          Página
+          <strong th:text="${paginaProductos.number + 1}">1</strong>
+          de
+          <strong th:text="${paginaProductos.totalPages}">1</strong>
+        </span>
+
+        <a
+          class="admin-pag-btn"
+          th:if="${!paginaProductos.last}"
+          th:href="@{/admin/productos(
+              pagina=${paginaProductos.number + 1},
+              tamano=${paginaProductos.size}
+          )}"
+          aria-label="Página siguiente">
+          →
+        </a>
+      </nav>
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

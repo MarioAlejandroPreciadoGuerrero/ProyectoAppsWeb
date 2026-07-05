@@ -15,11 +15,14 @@ public class UsuarioSesionDTO {
     private String rol;
 
     public boolean esAdministrador() {
-        if (rol == null) {
+        if (rol == null || rol.isBlank()) {
             return false;
         }
 
-        return rol.equalsIgnoreCase("ADMIN") || rol.equalsIgnoreCase("ROLE_ADMIN");
+        return rol.equalsIgnoreCase("ADMINISTRADOR")
+                || rol.equalsIgnoreCase("ROLE_ADMINISTRADOR")
+                || rol.equalsIgnoreCase("ADMIN")
+                || rol.equalsIgnoreCase("ROLE_ADMIN");
     }
 
     public String getNombreCompleto() {

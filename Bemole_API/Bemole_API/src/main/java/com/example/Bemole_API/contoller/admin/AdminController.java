@@ -1,4 +1,4 @@
-package com.example.Bemole_API.contoller;
+package com.example.Bemole_API.contoller.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

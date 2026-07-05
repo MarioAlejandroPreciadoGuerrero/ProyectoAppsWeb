@@ -5,36 +5,80 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9df380ec-8fed-497e-bcd0-4c75b1bd014a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/client/AdminAuthApiClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/config/RestClientConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminAuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminDashboardController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/AdminSesionDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/auth/AdminLoginFormDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/auth/UsuarioSesionDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/auth/response/SesionResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/error/ApiErrorDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/exception/ApiClientException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/security/AdminSessionAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/session/AdminSessionKeys.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/session/AdminSessionService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/static/styles/admin.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/acceso-denegado.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/categorias.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/dashboard.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/ordenes.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/productos.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/usuarios.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/admin/AdminCategoriaController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/admin/AdminOrdenController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/admin/AdminProductoController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/admin/AdminResumenController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/admin/AdminUsuarioController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/dto/admin/AdminResumenDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/dto/admin/request/ActualizarActivoProductoDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/dto/admin/request/ActualizarEstadoOrdenDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/dto/admin/request/CategoriaAdminRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/dto/admin/request/ProductoAdminRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/dto/admin/response/CategoriaAdminResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/dto/admin/response/ProductoAdminResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/dto/admin/response/UsuarioAdminResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/admin/AdminCategoriaService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/admin/AdminOrdenesService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/admin/AdminProductoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/admin/AdminResumenService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/admin/AdminUsuariosService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/client/AdminCategoriaApiClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/client/AdminOrdenApiClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/client/AdminProductoApiClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/client/AdminResumenApiClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/client/AdminUsuarioApiClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminCategoriaViewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminModelAdvice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminOrdenViewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminProductoViewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminUsuarioViewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/PaginacionDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/AdminResumenDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/categoria/CategoriaAdminFormDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/categoria/CategoriaAdminResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/orden/ActualizarEstadoOrdenFormDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/orden/OrdenAdminResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/producto/ActualizarActivoProductoDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/producto/ProductoAdminFormDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/producto/ProductoAdminResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/usuario/UsuarioAdminResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/enums/EstadoOrden.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/exception/AdminApiErrorHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/exception/AdminApiExceptionAdvice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/categorias/formulario.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/categorias/lista.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/fragments/sidebar.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/fragments/topbar.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/ordenes/lista.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/productos/formulario.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/productos/lista.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/usuarios/lista.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/error.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/styles/admin.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/categorias.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/dashboard.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/productos.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/usuarios.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/styles/admin.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/categorias.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/productos.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/usuarios.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/registro.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/admin/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/models/Producto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/models/Producto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/repositorys/CategoriaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/repositorys/CategoriaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/repositorys/OrdenRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/repositorys/OrdenRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/repositorys/ProductoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/repositorys/ProductoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminAuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminAuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminDashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminDashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/AdminSesionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/AdminSesionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/auth/UsuarioSesionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/auth/UsuarioSesionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/security/AdminSessionAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/security/AdminSessionAuthenticationFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/static/styles/admin.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/static/styles/admin.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/acceso-denegado.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/acceso-denegado.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/login.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,22 +100,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;admin-project&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/jalt2/OneDrive/Documentos/GitHub/ProyectoAppsWeb/Bemole/E-commerce_Bemole&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.ECommerceBemoleApplication.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "admin-project",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/jalt2/OneDrive/Documentos/GitHub/ProyectoAppsWeb/Bemole/E-commerce_Bemole",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
