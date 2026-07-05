@@ -57,6 +57,4 @@ public class ItemOrden {
             nullable = false
     )
     private Producto producto;
-
-
 }

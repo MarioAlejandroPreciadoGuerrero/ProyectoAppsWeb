@@ -65,18 +65,22 @@
     </div>
 
     <section class="admin-form-card">
-      <form
-        th:object="${producto}"
-        th:action="${edicion}
-            ? @{/admin/productos/{id}(id=${productoId})}
-            : @{/admin/productos}"
-        method="post">
+      <form th:object="${producto}" th:action="${edicion} ? @{/admin/productos/{id}/editar(id=${productoId})} : @{/admin/productos}" method="post" enctype="multipart/form-data">
 
-        <input
-          th:if="${edicion}"
-          type="hidden"
-          name="_method"
-          value="put">
+        <div
+          class="product-image-preview"
+          th:if="${edicion and imagenActualUrl != null and !imagenActualUrl.isBlank()}">
+          <div class="product-image-preview__header">
+            <div>
+              <p>Imagen actual</p>
+              <small>Selecciona un archivo nuevo solamente para reemplazarla.</small>
+            </div>
+          </div>
+
+          <img
+            th:src="${imagenActualUrl}"
+            th:alt="${producto.nombre}">
+        </div>
 
         <div class="admin-form-grid">
           <div class="field field--full">
@@ -114,6 +118,31 @@
               th:if="${#fields.hasErrors('descripcion')}"
               th:errors="*{descripcion}">
               Descripción inválida
+            </small>
+          </div>
+
+          <div class="field field--full">
+            <label for="imagen">
+              Imagen del producto
+              <span th:if="${!edicion}">*</span>
+            </label>
+
+            <input
+                    id="imagen"
+                    type="file"
+              th:field="*{imagen}"
+              accept="image/jpeg,image/png,image/webp"
+              th:required="${!edicion}">
+
+            <small class="muted">
+              Formatos permitidos: JPG, PNG y WEBP. Máximo 5 MB.
+              <span th:if="${edicion}">Si no eliges un archivo, se conservará la imagen actual.</span>
+            </small>
+
+            <small
+                    class="field-error"
+                    th:if="${#fields.hasErrors('imagen')}"
+                    th:errors="*{imagen}">
             </small>
           </div>
 

@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/styles/style.css}">
 </head>
-<body>
+<body class="home-page">
 
 <header class="navbar">
   <div class="container navbar__inner">
@@ -25,7 +25,7 @@
     </ul>
 
     <div class="nav-actions">
-      <form class="search-box" th:action="@{/catalogo}" method="get" role="search">
+      <form class="search-box home-search-box" th:action="@{/catalogo}" method="get" role="search">
         <input
           type="search"
           name="q"
@@ -48,8 +48,8 @@
         <span th:text="${usuarioSesion != null ? usuarioSesion.nombre : 'Mi cuenta'}">Mi cuenta</span>
       </a>
 
-      <form th:if="${autenticado}" th:action="@{/logout}" method="post" style="display:inline">
-        <button type="submit">Cerrar sesión</button>
+      <form class="home-logout-form" th:if="${autenticado}" th:action="@{/logout}" method="post">
+        <button class="home-logout-btn" type="submit">Cerrar sesión</button>
       </form>
     </div>
   </div>
@@ -96,7 +96,7 @@
 
   <section id="categorias" class="section">
     <div class="container">
-      <div class="section__header">
+      <div class="section__header section__header--row home-section-header">
         <div>
           <p class="section__eyebrow">Explora</p>
           <h2 class="section__heading">Nuestras categorías</h2>
@@ -130,7 +130,7 @@
 
   <section id="productos" class="section section--white">
     <div class="container">
-      <div class="section__header">
+      <div class="section__header section__header--row home-section-header">
         <div>
           <p class="section__eyebrow">Selección</p>
           <h2 class="section__heading">Productos destacados</h2>
@@ -141,7 +141,18 @@
       <div class="products-grid" th:if="${productosDestacados != null and !productosDestacados.isEmpty()}">
         <article class="product-card" th:each="producto : ${productosDestacados}">
           <div class="product-image">
-            <div class="product-placeholder" aria-hidden="true">🎸</div>
+
+            <img
+              class="product-image__img"
+              th:if="${producto.imagenUrl != null and !producto.imagenUrl.isBlank()}"
+              th:src="${producto.imagenUrl}"
+              th:alt="${producto.nombre}"
+              loading="lazy">
+
+            <div class="product-placeholder" th:unless="${producto.imagenUrl != null and !producto.imagenUrl.isBlank()}" aria-hidden="true">
+              🎸
+            </div>
+
           </div>
 
           <div class="product-info">

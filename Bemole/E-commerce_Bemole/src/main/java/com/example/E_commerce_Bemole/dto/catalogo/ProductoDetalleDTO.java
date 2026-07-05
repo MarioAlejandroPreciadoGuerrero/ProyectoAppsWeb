@@ -18,4 +18,5 @@ public class ProductoDetalleDTO {
     private boolean activo;
     private boolean disponible;
     private CategoriaProductoDTO categoria;
+    private String imagenUrl;
 }

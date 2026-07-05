@@ -78,10 +78,22 @@
           </thead>
 
           <tbody>
-          <tr th:each="producto : ${productos}">
+          <tr th:each="producto : ${productos}" th:classappend="${producto.activo != null and !producto.activo} ? 'product-row--inactive'">
             <td>
               <div class="td-product">
-                <div class="td-img" aria-hidden="true">🎵</div>
+                <div class="td-img">
+                  <img
+                    th:if="${producto.imagenUrl != null and !producto.imagenUrl.isBlank()}"
+                    th:src="${producto.imagenUrl}"
+                    th:alt="${producto.nombre}"
+                    loading="lazy">
+
+                  <span
+                    th:unless="${producto.imagenUrl != null and !producto.imagenUrl.isBlank()}"
+                    aria-hidden="true">
+                    🎵
+                  </span>
+                </div>
 
                 <div>
                   <p class="td-name" th:text="${producto.nombre}">

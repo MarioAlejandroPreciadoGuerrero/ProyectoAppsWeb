@@ -1,5 +1,6 @@
 package com.example.Bemole_API.service.mappers;
 
+import com.example.Bemole_API.service.ImagenUrlService;
 import org.springframework.stereotype.Component;
 import com.example.Bemole_API.dto.carrito.CarritoResponseDTO;
 import com.example.Bemole_API.dto.carrito.ItemCarritoResponseDTO;
@@ -11,6 +12,12 @@ import java.util.List;
 
 @Component
 public class CarritoMapper {
+    private final ImagenUrlService imagenUrlService;
+
+    public CarritoMapper( ImagenUrlService imagenUrlService){
+        this.imagenUrlService = imagenUrlService;
+    }
+
     public CarritoResponseDTO toResponseDTO(Carrito carrito) {
         List<ItemCarritoResponseDTO> itemsDTO =
                 carrito.getItems()
@@ -43,31 +50,28 @@ public class CarritoMapper {
                 subtotal,
                 descuento,
                 total
+
         );
     }
 
-    private ItemCarritoResponseDTO toItemDTO(
-            ItemCarrito item
-    ) {
-        BigDecimal precio =
-                item.getProducto().getPrecio();
+    private ItemCarritoResponseDTO toItemDTO(ItemCarrito item) {
+        BigDecimal precio = item.getProducto().getPrecio();
 
-        BigDecimal subtotal =
-                precio.multiply(
-                        BigDecimal.valueOf(item.getCantidad())
-                );
+        BigDecimal subtotal = precio.multiply(
+                BigDecimal.valueOf(item.getCantidad()));
 
-        return new ItemCarritoResponseDTO(
-                item.getId(),
-                item.getProducto().getId(),
-                item.getProducto().getNombre(),
-                item.getProducto()
-                        .getCategoria()
-                        .getNombre(),
-                precio,
-                item.getCantidad(),
-                item.getProducto().getStock(),
-                subtotal
-        );
+        ItemCarritoResponseDTO dto = new ItemCarritoResponseDTO();
+
+        dto.setId(item.getId());
+        dto.setProductoId(item.getProducto().getId());
+        dto.setCategoria(item.getProducto().getCategoria().getNombre());
+        dto.setNombreProducto(item.getProducto().getNombre());
+        dto.setStockDisponible(item.getProducto().getStock());
+        dto.setPrecioUnitario(precio);
+        dto.setSubtotal(subtotal);
+        dto.setCantidad(item.getCantidad());
+        dto.setImagenUrl(imagenUrlService.construirUrl(item.getProducto().getImagenUrl()));
+
+        return dto;
     }
 }

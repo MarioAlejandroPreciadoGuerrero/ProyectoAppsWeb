@@ -73,7 +73,20 @@
     <section class="container">
       <div class="product-detail">
         <div class="gallery">
-          <div class="gallery__main" aria-label="Imagen temporal del producto">🎸</div>
+          <div class="gallery__main">
+            <img
+              class="gallery__main-image"
+              th:if="${producto.imagenUrl != null and !producto.imagenUrl.isBlank()}"
+              th:src="${producto.imagenUrl}"
+              th:alt="${producto.nombre}">
+
+            <span
+              class="gallery__placeholder"
+              th:unless="${producto.imagenUrl != null and !producto.imagenUrl.isBlank()}"
+              aria-hidden="true">
+              🎸
+            </span>
+          </div>
         </div>
 
         <div class="product-info">

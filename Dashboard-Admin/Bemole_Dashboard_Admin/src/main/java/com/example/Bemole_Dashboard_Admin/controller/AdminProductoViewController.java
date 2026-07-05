@@ -70,7 +70,11 @@ public class AdminProductoViewController {
         }
 
         try {
-            productoApiClient.crear(token, producto);
+            ProductoAdminResponseDTO creado = productoApiClient.crear(token, producto);
+
+            if (producto.getImagen() != null && !producto.getImagen().isEmpty()) {
+                productoApiClient.actualizarImagen(token, creado.getId(), producto.getImagen());
+            }
 
             redirectAttributes.addFlashAttribute("mensaje", "El producto fue creado correctamente.");
 
@@ -92,13 +96,14 @@ public class AdminProductoViewController {
         ProductoAdminResponseDTO producto = productoApiClient.obtener(token, id);
 
         model.addAttribute("producto", ProductoAdminFormDTO.desde(producto));
+        model.addAttribute("imagenActualUrl", producto.getImagenUrl());
 
         cargarFormulario(token, model, true, id);
 
         return "admin/productos/formulario";
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}/editar")
     public String actualizar(@PathVariable Long id, @Valid @ModelAttribute("producto") ProductoAdminFormDTO producto, BindingResult bindingResult, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         String token = sessionService.obtenerToken(session);
 
@@ -110,6 +115,11 @@ public class AdminProductoViewController {
 
         try {
             productoApiClient.actualizar(token, id, producto);
+
+            if (producto.getImagen() != null && !producto.getImagen().isEmpty()) {
+
+                productoApiClient.actualizarImagen(token, id, producto.getImagen());
+            }
 
             redirectAttributes.addFlashAttribute("mensaje", "El producto fue actualizado correctamente.");
 

@@ -1,6 +1,7 @@
 package com.example.Bemole_API.service;
 
 import com.example.Bemole_API.dto.PaginacionDTO;
+import com.example.Bemole_API.dto.producto.CategoriaProductoDTO;
 import com.example.Bemole_API.dto.producto.enums.OrdenProducto;
 import com.example.Bemole_API.dto.producto.ProductoDetalleDTO;
 import com.example.Bemole_API.dto.producto.ProductoResumenDTO;
@@ -12,6 +13,7 @@ import com.example.Bemole_API.repositorys.ProductoRepository;
 import com.example.Bemole_API.repositorys.specifications.ProductoSpecifications;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +26,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+
 public class ProductoService {
 
     @Autowired
@@ -32,6 +34,15 @@ public class ProductoService {
 
     @Autowired
     private final ProductoMapper productoMapper;
+
+
+    private final ImagenUrlService imagenUrlService;
+
+    public ProductoService(ImagenUrlService imagenUrlService,ProductoMapper productoMapper,ProductoRepository productoRepository, @Value("${bemole.upload.url-publica}") String urlPublica) {
+        this.productoMapper = productoMapper;
+        this.repository = productoRepository;
+        this.imagenUrlService = imagenUrlService;
+    }
 
     public PaginacionDTO<ProductoResumenDTO> listarCatalogo(String q, Long categoriaId, BigDecimal precioMin, BigDecimal precioMax, Boolean soloConStock, OrdenProducto orden, int pagina, int tamano) {
         validarPaginacion(pagina, tamano);
@@ -59,7 +70,7 @@ public class ProductoService {
         List<ProductoResumenDTO> contenido =
                 resultado.getContent()
                         .stream()
-                        .map(productoMapper::toResumenDTO)
+                        .map(this::convertir)
                         .toList();
 
         return new PaginacionDTO<>(contenido, resultado.getNumber(), resultado.getSize(), resultado.getTotalElements(), resultado.getTotalPages(), resultado.isFirst(), resultado.isLast());
@@ -81,7 +92,7 @@ public class ProductoService {
                         )
                 );
 
-        return productoMapper.toDetalleDTO(producto);
+        return convertirDetalle(producto);
     }
 
     public Producto crearProducto(Producto producto) {
@@ -294,5 +305,59 @@ public class ProductoService {
                     "El precio mínimo no puede ser mayor que el máximo."
             );
         }
+    }
+
+    private ProductoResumenDTO convertir(Producto producto) {
+        ProductoResumenDTO dto = new ProductoResumenDTO();
+
+        dto.setId(producto.getId());
+        dto.setNombre(producto.getNombre());
+        dto.setDescripcion(producto.getDescripcion());
+        dto.setPrecio(producto.getPrecio());
+        dto.setStock(producto.getStock());
+
+        dto.setDisponible(Boolean.TRUE.equals(producto.getActivo()) && producto.getStock() != null && producto.getStock() > 0
+        );
+
+        if (producto.getCategoria() != null) {
+            CategoriaProductoDTO categoria = new CategoriaProductoDTO();
+
+            categoria.setId(producto.getCategoria().getId());
+
+            categoria.setNombre(producto.getCategoria().getNombre());
+
+            dto.setCategoria(categoria);
+        }
+
+        dto.setImagenUrl(imagenUrlService.construirUrl(producto.getImagenUrl()));
+
+        return dto;
+    }
+
+    private ProductoDetalleDTO convertirDetalle(Producto producto) {
+        ProductoDetalleDTO dto = new ProductoDetalleDTO();
+
+        dto.setId(producto.getId());
+        dto.setNombre(producto.getNombre());
+        dto.setDescripcion(producto.getDescripcion());
+        dto.setPrecio(producto.getPrecio());
+        dto.setStock(producto.getStock());
+
+        dto.setDisponible(Boolean.TRUE.equals(producto.getActivo()) && producto.getStock() != null && producto.getStock() > 0
+        );
+
+        if (producto.getCategoria() != null) {
+            CategoriaProductoDTO categoria = new CategoriaProductoDTO();
+
+            categoria.setId(producto.getCategoria().getId());
+
+            categoria.setNombre(producto.getCategoria().getNombre());
+
+            dto.setCategoria(categoria);
+        }
+
+        dto.setImagenUrl(imagenUrlService.construirUrl(producto.getImagenUrl()));
+
+        return dto;
     }
 }

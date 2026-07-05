@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/styles/style.css}">
 </head>
-<body>
+<body class="catalog-page">
 
 <header class="navbar">
   <div class="container navbar__inner">
@@ -52,15 +52,15 @@
 
 <main class="container py-10">
   <div
-    class="alert-error"
-    th:if="${param.productoNoEncontrado}">
+          class="alert-error"
+          th:if="${param.productoNoEncontrado}">
     El producto solicitado no existe o ya no está disponible.
   </div>
 
   <div
-    class="alert-error"
-    th:if="${errorCatalogo}"
-    th:text="${errorCatalogo}">
+          class="alert-error"
+          th:if="${errorCatalogo}"
+          th:text="${errorCatalogo}">
     No fue posible cargar el catálogo.
   </div>
 
@@ -70,11 +70,11 @@
         <div class="sidebar__section">
           <label class="sidebar__label" for="q">Buscar</label>
           <input
-            id="q"
-            type="search"
-            class="input"
-            th:field="*{q}"
-            placeholder="Buscar instrumento…">
+                  id="q"
+                  type="search"
+                  class="input"
+                  th:field="*{q}"
+                  placeholder="Buscar instrumento…">
         </div>
 
         <div class="sidebar__section">
@@ -82,9 +82,9 @@
           <select id="categoriaId" class="select" th:field="*{categoriaId}">
             <option value="">Todas las categorías</option>
             <option
-              th:each="categoria : ${categorias}"
-              th:value="${categoria.id}"
-              th:text="${categoria.nombre + ' (' + categoria.cantidadProductos + ')'}">
+                    th:each="categoria : ${categorias}"
+                    th:value="${categoria.id}"
+                    th:text="${categoria.nombre + ' (' + categoria.cantidadProductos + ')'}">
               Categoría
             </option>
           </select>
@@ -94,19 +94,19 @@
           <span class="sidebar__label">Precio (MXN)</span>
           <div class="sidebar__price-row">
             <input
-              type="number"
-              class="input"
-              min="0"
-              step="0.01"
-              th:field="*{precioMin}"
-              placeholder="Mín">
+                    type="number"
+                    class="input"
+                    min="0"
+                    step="0.01"
+                    th:field="*{precioMin}"
+                    placeholder="Mín">
             <input
-              type="number"
-              class="input"
-              min="0"
-              step="0.01"
-              th:field="*{precioMax}"
-              placeholder="Máx">
+                    type="number"
+                    class="input"
+                    min="0"
+                    step="0.01"
+                    th:field="*{precioMax}"
+                    placeholder="Máx">
           </div>
         </div>
 
@@ -131,7 +131,7 @@
         <input type="hidden" th:field="*{tamano}">
 
         <button type="submit" class="btn-gold">Aplicar filtros</button>
-        <a th:href="@{/catalogo}" class="sidebar__more-link" style="display:block;text-align:center;margin-top:.75rem;">
+        <a th:href="@{/catalogo}" class="sidebar__more-link sidebar__clear-link">
           Limpiar filtros
         </a>
       </form>
@@ -162,13 +162,25 @@
       <div class="products-grid" th:if="${productos != null and !productos.isEmpty()}">
         <article class="product-card" th:each="producto : ${productos}">
           <div class="product-image">
-            <span aria-hidden="true">🎵</span>
+            <img
+                    class="product-image__img"
+                    th:if="${producto.imagenUrl != null and !producto.imagenUrl.isBlank()}"
+                    th:src="${producto.imagenUrl}"
+                    th:alt="${producto.nombre}"
+                    loading="lazy">
+
+            <span
+                    class="product-image__placeholder"
+                    th:unless="${producto.imagenUrl != null and !producto.imagenUrl.isBlank()}"
+                    aria-hidden="true">
+              🎵
+            </span>
           </div>
 
           <div class="product-content">
             <span
-              class="category"
-              th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">
+                    class="category"
+                    th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">
               Categoría
             </span>
 
@@ -186,8 +198,8 @@
             </p>
 
             <strong
-              class="price"
-              th:text="${producto.precio != null ? '$' + #numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT') + ' MXN' : 'Precio no disponible'}">
+                    class="price"
+                    th:text="${producto.precio != null ? '$' + #numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT') + ' MXN' : 'Precio no disponible'}">
               $0.00 MXN
             </strong>
 
@@ -204,13 +216,13 @@
       </div>
 
       <nav
-        class="pagination"
-        aria-label="Paginación del catálogo"
-        th:if="${paginaProductos != null and paginaProductos.totalPaginas > 1}">
+              class="pagination"
+              aria-label="Paginación del catálogo"
+              th:if="${paginaProductos != null and paginaProductos.totalPaginas > 1}">
 
         <a
-          th:if="${!paginaProductos.primera}"
-          th:href="@{/catalogo(
+                th:if="${!paginaProductos.primera}"
+                th:href="@{/catalogo(
             q=${filtro.q},
             categoriaId=${filtro.categoriaId},
             precioMin=${filtro.precioMin},
@@ -231,8 +243,8 @@
         </span>
 
         <a
-          th:if="${!paginaProductos.ultima}"
-          th:href="@{/catalogo(
+                th:if="${!paginaProductos.ultima}"
+                th:href="@{/catalogo(
             q=${filtro.q},
             categoriaId=${filtro.categoriaId},
             precioMin=${filtro.precioMin},

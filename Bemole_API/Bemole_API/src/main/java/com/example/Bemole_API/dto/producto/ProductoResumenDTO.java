@@ -17,4 +17,5 @@ public class ProductoResumenDTO {
     private Integer stock;
     private boolean disponible;
     private CategoriaProductoDTO categoria;
+    private String imagenUrl;
 }

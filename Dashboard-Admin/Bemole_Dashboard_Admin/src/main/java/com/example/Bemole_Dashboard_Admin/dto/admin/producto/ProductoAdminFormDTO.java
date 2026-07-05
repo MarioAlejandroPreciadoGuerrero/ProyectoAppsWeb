@@ -1,5 +1,6 @@
 package com.example.Bemole_Dashboard_Admin.dto.admin.producto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
@@ -36,6 +38,9 @@ public class ProductoAdminFormDTO {
 
     @NotNull(message = "Debes indicar si el producto está activo.")
     private Boolean activo = true;
+
+    @JsonIgnore
+    private MultipartFile imagen;
 
     public static ProductoAdminFormDTO desde(ProductoAdminResponseDTO producto) {
         ProductoAdminFormDTO formulario = new ProductoAdminFormDTO();

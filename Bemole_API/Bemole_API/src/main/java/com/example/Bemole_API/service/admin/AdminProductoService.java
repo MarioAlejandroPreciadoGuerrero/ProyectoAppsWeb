@@ -8,18 +8,34 @@ import com.example.Bemole_API.models.Categoria;
 import com.example.Bemole_API.models.Producto;
 import com.example.Bemole_API.repositorys.CategoriaRepository;
 import com.example.Bemole_API.repositorys.ProductoRepository;
+import com.example.Bemole_API.service.ImagenUrlService;
+import com.example.Bemole_API.service.ProductoImagenStorageService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
-@AllArgsConstructor
 public class AdminProductoService {
 
     private final ProductoRepository productoRepository;
     private final CategoriaRepository categoriaRepository;
+    private final ProductoImagenStorageService imagenStorageService;
+
+    private final ImagenUrlService imagenUrlService;
+
+    public AdminProductoService(ImagenUrlService imagenUrlService,ProductoRepository productoRepository, CategoriaRepository categoriaRepository,ProductoImagenStorageService imagenStorageService,@Value("${bemole.upload.url-publica}") String urlPublica) {
+        this.productoRepository = productoRepository;
+
+        this.categoriaRepository = categoriaRepository;
+
+        this.imagenStorageService = imagenStorageService;
+
+        this.imagenUrlService = imagenUrlService;
+    }
 
     public Page<ProductoAdminResponseDTO> listarProductos(Pageable pageable) {
         return productoRepository.findAll(pageable).map(this::convertir);
@@ -96,6 +112,29 @@ public class AdminProductoService {
         return convertir(productoRepository.save(producto));
     }
 
+    @Transactional
+    public ProductoAdminResponseDTO actualizarImagen(Long productoId, MultipartFile imagen) {
+        Producto producto = buscarProducto(productoId);
+
+        String imagenAnterior = producto.getImagenUrl();
+
+        String nuevaImagen = imagenStorageService.guardar(imagen);
+
+        try {
+            producto.setImagenUrl(nuevaImagen);
+
+            Producto actualizado = productoRepository.saveAndFlush(producto);
+
+            imagenStorageService.eliminar(imagenAnterior);
+
+            return convertir(actualizado);
+
+        } catch (RuntimeException exception) {
+            imagenStorageService.eliminar(nuevaImagen);
+            throw exception;
+        }
+    }
+
     private void aplicarDatos(Producto producto, ProductoAdminRequestDTO request, Categoria categoria) {
         producto.setNombre(request.getNombre().trim());
 
@@ -128,6 +167,12 @@ public class AdminProductoService {
     private ProductoAdminResponseDTO convertir(Producto producto) {
         Categoria categoria = producto.getCategoria();
 
+        String imagenCompleta = null;
+
+        if (producto.getImagenUrl() != null && !producto.getImagenUrl().isBlank()) {
+            imagenCompleta = imagenUrlService.getUrlPublica() + producto.getImagenUrl();
+        }
+
         return new ProductoAdminResponseDTO(
                 producto.getId(),
                 producto.getNombre(),
@@ -135,8 +180,12 @@ public class AdminProductoService {
                 producto.getPrecio(),
                 producto.getStock(),
                 producto.getActivo(),
+
                 categoria != null ? categoria.getId() : null,
-                categoria != null ? categoria.getNombre() : null
+
+                categoria != null ? categoria.getNombre() : null,
+
+                imagenCompleta
         );
     }
 }

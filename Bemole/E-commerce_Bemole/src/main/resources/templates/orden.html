@@ -74,7 +74,19 @@
       <h2>Productos</h2>
 
       <div class="confirmation-item" th:each="item : ${ordenCreada.items}">
-        <div class="confirmation-item__icon">🎵</div>
+        <div class="confirmation-item__icon">
+          <img
+            th:if="${item.imagenUrl != null and !item.imagenUrl.isBlank()}"
+            th:src="${item.imagenUrl}"
+            th:alt="${item.nombreProducto}"
+            loading="lazy">
+
+          <span
+            th:unless="${item.imagenUrl != null and !item.imagenUrl.isBlank()}"
+            aria-hidden="true">
+            🎵
+          </span>
+        </div>
         <div class="confirmation-item__info">
           <a
             th:href="@{/producto/{id}(id=${item.productoId})}"

@@ -89,6 +89,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**")
                         .hasRole("ADMINISTRADOR")
 
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/uploads/productos/**"
+                        ).permitAll()
+
                         // Todo lo demás requiere JWT
                         .anyRequest().authenticated()
                 )

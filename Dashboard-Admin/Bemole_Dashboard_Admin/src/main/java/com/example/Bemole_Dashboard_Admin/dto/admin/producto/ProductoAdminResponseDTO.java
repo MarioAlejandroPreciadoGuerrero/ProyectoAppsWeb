@@ -18,6 +18,7 @@ public class ProductoAdminResponseDTO {
     private Boolean activo;
     private Long categoriaId;
     private String categoriaNombre;
+    private String imagenUrl;
 
     public boolean disponible() {
         return Boolean.TRUE.equals(activo)

@@ -10,9 +10,14 @@ import com.example.Bemole_Dashboard_Admin.enums.EstadoOrden;
 import com.example.Bemole_Dashboard_Admin.exception.AdminApiErrorHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @AllArgsConstructor
@@ -83,6 +88,36 @@ public class AdminProductoApiClient {
                 .headers(headers -> headers.setBearerAuth(token))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(request)
+                .retrieve()
+                .onStatus(status -> status.isError(), errorHandler::manejar)
+                .body(ProductoAdminResponseDTO.class);
+    }
+
+    public ProductoAdminResponseDTO actualizarImagen(String token, Long productoId, MultipartFile imagen) {
+        if (imagen == null || imagen.isEmpty()) {
+            throw new IllegalArgumentException("Debes seleccionar una imagen.");
+        }
+
+        HttpHeaders headersArchivo = new HttpHeaders();
+
+        if (imagen.getContentType() != null) {
+            headersArchivo.setContentType(MediaType.parseMediaType(imagen.getContentType()));
+        }
+
+        HttpEntity<?> parteArchivo = new HttpEntity<>(
+                imagen.getResource(),
+                headersArchivo
+        );
+
+        MultiValueMap<String, Object> partes = new LinkedMultiValueMap<>();
+
+        partes.add("imagen", parteArchivo);
+
+        return restClient.put()
+                .uri("/api/admin/productos/{id}/imagen", productoId)
+                .headers(headers -> headers.setBearerAuth(token))
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(partes)
                 .retrieve()
                 .onStatus(status -> status.isError(), errorHandler::manejar)
                 .body(ProductoAdminResponseDTO.class);

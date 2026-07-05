@@ -1,10 +1,15 @@
 package com.example.Bemole_API.models;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "productos")
+@Data
+@AllArgsConstructor
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,86 +34,22 @@ public class Producto {
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
 
+    @Column(name = "imagen_url", length = 500)
+    private String imagenUrl;
+
     public Producto() {
     }
 
-    public Producto(Categoria categoria, String nombre, String descripcion, BigDecimal precio, Integer stock, Boolean activo) {
+    public Producto(Categoria categoria, String nombre, String descripcion, BigDecimal precio, Integer stock, Boolean activo,String imagenUrl) {
         this.categoria = categoria;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.stock = stock;
         this.activo = activo;
+        this.imagenUrl= imagenUrl;
     }
 
-    public Producto(Long id, Categoria categoria, String nombre, String descripcion, BigDecimal precio, Integer stock, Boolean activo) {
-        this.id = id;
-        this.categoria = categoria;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
-        this.stock = stock;
-        this.activo = activo;
-    }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public BigDecimal getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
-    }
-
-    public Integer getStock() {
-        return stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
-    public Boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
-    @Override
-    public String toString() {
-        return "Producto{" + "id=" + id + ", categoria=" + categoria + ", nombre='" + nombre + '\'' + ", descripcion='" + descripcion + '\'' + ", precio=" + precio + ", stock=" + stock + ", activo=" + activo + '}';
-    }
 }

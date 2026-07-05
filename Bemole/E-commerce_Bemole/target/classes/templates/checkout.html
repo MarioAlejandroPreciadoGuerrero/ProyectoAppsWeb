@@ -271,7 +271,19 @@
           <div class="checkout-items">
             <article class="checkout-item" th:each="item : ${carrito.items}">
               <div class="checkout-item__img">
-                🎵
+                <img
+                  th:if="${item.imagenUrl != null and !item.imagenUrl.isBlank()}"
+                  th:src="${item.imagenUrl}"
+                  th:alt="${item.nombreProducto}"
+                  loading="lazy">
+
+                <span
+                  class="checkout-item__placeholder"
+                  th:unless="${item.imagenUrl != null and !item.imagenUrl.isBlank()}"
+                  aria-hidden="true">
+                  🎵
+                </span>
+
                 <span class="checkout-item__qty" th:text="${item.cantidad}">1</span>
               </div>
 

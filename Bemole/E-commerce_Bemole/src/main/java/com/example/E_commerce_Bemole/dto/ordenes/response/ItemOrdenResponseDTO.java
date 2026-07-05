@@ -17,4 +17,5 @@ public class ItemOrdenResponseDTO {
     private BigDecimal precioUnitario;
     private BigDecimal descuento;
     private BigDecimal subtotal;
+    private String imagenUrl;
 }

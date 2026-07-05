@@ -1,5 +1,6 @@
 package com.example.Bemole_API.service.mappers;
 
+import com.example.Bemole_API.dto.categoria.CategoriaResumenDTO;
 import com.example.Bemole_API.dto.producto.CategoriaProductoDTO;
 import com.example.Bemole_API.dto.producto.ProductoDetalleDTO;
 import com.example.Bemole_API.dto.producto.ProductoResumenDTO;
@@ -8,6 +9,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductoMapper {
+
+
+
+
     public ProductoResumenDTO toResumenDTO(Producto producto) {
         if (producto == null) {
             return null;
@@ -26,7 +31,8 @@ public class ProductoMapper {
                 producto.getPrecio(),
                 producto.getStock(),
                 producto.getActivo() && producto.getStock() > 0,
-                categoriaDTO
+                categoriaDTO,
+                producto.getImagenUrl()
         );
     }
 
@@ -49,7 +55,8 @@ public class ProductoMapper {
                 producto.getStock(),
                 producto.getActivo(),
                 producto.getActivo() && producto.getStock() > 0,
-                categoriaDTO
+                categoriaDTO,
+                producto.getImagenUrl()
         );
     }
 }
