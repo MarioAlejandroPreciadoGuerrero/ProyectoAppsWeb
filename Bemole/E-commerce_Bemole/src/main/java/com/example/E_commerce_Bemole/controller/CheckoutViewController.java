@@ -1,5 +1,8 @@
 package com.example.E_commerce_Bemole.controller;
 
+import com.example.E_commerce_Bemole.client.PagoApiClient;
+import com.example.E_commerce_Bemole.dto.pago.CrearPagoRequestDTO;
+import com.example.E_commerce_Bemole.dto.pago.CrearPagoResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import com.example.E_commerce_Bemole.client.CarritoApiClient;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CheckoutViewController {
     private final CarritoApiClient carritoApiClient;
     private final OrdenApiClient ordenApiClient;
+    private final PagoApiClient pagoApiClient;
 
     @GetMapping("/checkout")
     public String mostrarCheckout(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
@@ -64,7 +68,8 @@ public class CheckoutViewController {
         }
     }
 
-    @PostMapping("/checkout")
+    /*
+    * @PostMapping("/checkout")
     public String crearOrden(@Valid @ModelAttribute("checkout") CrearOrdenFormDTO checkout, BindingResult bindingResult, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         String token = obtenerToken(session);
 
@@ -100,6 +105,7 @@ public class CheckoutViewController {
             return "checkout";
         }
     }
+    * */
 
     @GetMapping("/orden-confirmacion")
     public String mostrarConfirmacion(Model model) {
@@ -141,13 +147,55 @@ public class CheckoutViewController {
         return formulario;
     }
 
+    @PostMapping("/checkout/pagar")
+    public String pagarConMercadoPago(@ModelAttribute("checkout") CrearOrdenFormDTO checkout,
+                                      HttpSession session,
+                                      RedirectAttributes redirectAttributes) {
+
+        String token = obtenerToken(session);
+
+        if (token == null || token.isBlank()) {
+            redirectAttributes.addFlashAttribute("errorCheckout", "Debes iniciar sesión para realizar el pago.");
+            return "redirect:/login";
+        }
+
+        try {
+            OrdenCreadaResponseDTO orden = ordenApiClient.crearOrden(token, checkout);
+
+            CrearPagoRequestDTO pagoRequest = new CrearPagoRequestDTO();
+            pagoRequest.setOrdenId(orden.getId());
+
+            CrearPagoResponseDTO pagoResponse = pagoApiClient.crearPago(token, pagoRequest);
+
+            if (pagoResponse == null || pagoResponse.getInitPoint() == null || pagoResponse.getInitPoint().isBlank()) {
+                redirectAttributes.addFlashAttribute("errorCheckout", "No fue posible iniciar el pago con Mercado Pago."
+                );
+                return "redirect:/checkout";
+            }
+
+            return "redirect:" + pagoResponse.getInitPoint();
+
+        } catch (ApiClientException e) {
+            e.printStackTrace();
+
+            redirectAttributes.addFlashAttribute("errorCheckout", e.getMessage());
+
+            return "redirect:/checkout";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            redirectAttributes.addFlashAttribute("errorCheckout", "Ocurrió un error al iniciar el pago.");
+
+            return "redirect:/checkout";
+        }
+    }
+
     private String obtenerToken(HttpSession session) {
         Object token = session.getAttribute(AuthViewController.SESSION_TOKEN);
 
         if (token == null) {
-            throw new IllegalStateException(
-                    "No existe una sesión autenticada."
-            );
+            throw new IllegalStateException("No existe una sesión autenticada.");
         }
 
         return token.toString();

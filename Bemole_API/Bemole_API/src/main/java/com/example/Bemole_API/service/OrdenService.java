@@ -4,16 +4,14 @@ import com.example.Bemole_API.dto.PaginacionDTO;
 import com.example.Bemole_API.dto.ordenes.request.CrearOrdenRequestDTO;
 import com.example.Bemole_API.dto.ordenes.response.OrdenCreadaResponseDTO;
 import com.example.Bemole_API.dto.ordenes.response.OrdenResumenResponseDTO;
+import com.example.Bemole_API.enums.EstadoPago;
 import com.example.Bemole_API.exception.RecursoNoEncontradoException;
 import com.example.Bemole_API.exception.NegocioException;
+import com.example.Bemole_API.repositorys.*;
 import com.example.Bemole_API.service.mappers.OrdenMapper;
 import com.example.Bemole_API.models.*;
 import com.example.Bemole_API.enums.EstadoOrden;
 import com.example.Bemole_API.enums.MetodoEnvio;
-import com.example.Bemole_API.repositorys.CarritoRepository;
-import com.example.Bemole_API.repositorys.ItemCarritoRepository;
-import com.example.Bemole_API.repositorys.OrdenRepository;
-import com.example.Bemole_API.repositorys.ProductoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -46,6 +45,10 @@ public class OrdenService {
     private final ItemCarritoRepository itemCarritoRepository;
     @Autowired
     private final ProductoRepository productoRepository;
+
+    @Autowired
+    private final UsuarioRepository usuarioRepository;
+
     @Autowired
     private final OrdenMapper ordenMapper;
 
@@ -53,7 +56,18 @@ public class OrdenService {
     public OrdenCreadaResponseDTO crearOrden(Usuario usuario, CrearOrdenRequestDTO request) {
         validarUsuarioAutenticado(usuario);
 
-        Carrito carrito = carritoRepository.findDetalleByUsuarioId(usuario.getId()).orElseThrow(() ->
+        Optional<Orden> ordenPendiente = ordenRepository
+                .findFirstByUsuario_IdAndEstadoPagoOrderByFechaDesc(
+                        usuario.getId(),
+                        EstadoPago.PENDIENTE
+                );
+
+        if (ordenPendiente.isPresent()) {
+            return ordenMapper.toCreadaResponseDTO(ordenPendiente.get());
+        }
+
+        Carrito carrito = carritoRepository.findDetalleByUsuarioId(usuario.getId())
+                .orElseThrow(() ->
                         new NegocioException(
                                 "No existe un carrito para el usuario."
                         )
@@ -63,6 +77,8 @@ public class OrdenService {
 
         Orden orden = crearOrdenBase(usuario, request);
 
+        orden.setEstadoPago(EstadoPago.PENDIENTE);
+
         BigDecimal subtotal = BigDecimal.ZERO;
 
         for (ItemCarrito itemCarrito : carrito.getItems()) {
@@ -70,8 +86,7 @@ public class OrdenService {
             Producto producto = productoRepository.findByIdForUpdate(itemCarrito.getProducto().getId())
                     .orElseThrow(() -> new RecursoNoEncontradoException(
                             "Uno de los productos del carrito ya no existe."
-                            )
-                    );
+                    ));
 
             validarProducto(producto, itemCarrito.getCantidad());
 
@@ -85,9 +100,7 @@ public class OrdenService {
             orden.agregarItem(itemOrden);
 
             BigDecimal subtotalItem = producto.getPrecio().multiply(
-                    BigDecimal.valueOf(
-                            itemCarrito.getCantidad()
-                    )
+                    BigDecimal.valueOf(itemCarrito.getCantidad())
             );
 
             subtotal = subtotal.add(subtotalItem);
@@ -111,6 +124,16 @@ public class OrdenService {
         vaciarCarrito(carrito);
 
         return ordenMapper.toCreadaResponseDTO(ordenGuardada);
+    }
+
+    public OrdenCreadaResponseDTO obtenerOrdenPendiente(String usuarioIdTexto) {
+        Long usuarioId = Long.valueOf(usuarioIdTexto);
+
+        Orden orden = ordenRepository
+                .findFirstByUsuario_IdAndEstadoPagoOrderByFechaDesc(usuarioId, EstadoPago.PENDIENTE)
+                .orElseThrow(() -> new RuntimeException("No tienes órdenes pendientes de pago"));
+
+        return ordenMapper.toCreadaResponseDTO(orden);
     }
 
     public PaginacionDTO<OrdenResumenResponseDTO> listarOrdenes(Usuario usuario, EstadoOrden estado, int pagina, int tamano) {

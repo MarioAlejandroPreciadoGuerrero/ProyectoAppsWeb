@@ -1,6 +1,7 @@
 package com.example.Bemole_API.repositorys;
 
 import com.example.Bemole_API.enums.EstadoOrden;
+import com.example.Bemole_API.enums.EstadoPago;
 import com.example.Bemole_API.models.Orden;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,9 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
     @EntityGraph(attributePaths = {"items", "items.producto"})
     Page<Orden> findByEstado(EstadoOrden estado, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"items", "items.producto"})
+    Optional<Orden> findConItemsById(Long id);
+
     Optional<Orden> findByIdAndUsuarioId(Long ordenId, Long usuarioId);
 
     boolean existsByNumero(String numero);
@@ -38,4 +42,9 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
        WHERE o.estado <> :estadoCancelado
        """)
     BigDecimal sumarVentasExceptoEstado(@Param("estadoCancelado") EstadoOrden estadoCancelado);
+    Optional<Orden> findFirstByUsuario_IdAndEstadoPagoOrderByFechaDesc(
+            Long usuarioId,
+            EstadoPago estadoPago
+    );
+    
 }

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bemolé — Pago exitoso</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/style.css}">
+</head>
+<body>
+
+<header class="navbar navbar--minimal">
+  <div class="container navbar__inner">
+    <a th:href="@{/}" class="logo" aria-label="Volver al inicio">
+      <span class="logo__name">Bemolé</span>
+      <span class="logo__tagline">Instrumentos para cada nota</span>
+    </a>
+
+    <div class="secure-label">
+      <span aria-hidden="true">🔒</span>
+      <span>Pago protegido</span>
+    </div>
+  </div>
+</header>
+
+<div class="steps-bar">
+  <div class="steps-bar__inner">
+    <div class="step step__done">
+      <span class="step__num">✓</span>
+      Carrito
+    </div>
+    <span class="steps-divider" aria-hidden="true">——</span>
+    <div class="step step__done">
+      <span class="step__num">✓</span>
+      Envío
+    </div>
+    <span class="steps-divider" aria-hidden="true">——</span>
+    <div class="step step--active">
+      <span class="step__num">3</span>
+      Pago
+    </div>
+  </div>
+</div>
+
+<main class="section">
+  <div class="container">
+    <section class="empty-state--orders">
+      <div class="empty-state__icon" aria-hidden="true">✅</div>
+      <span class="eyebrow">Pago aprobado</span>
+      <h1>¡Pago recibido correctamente!</h1>
+      <p>Gracias por tu compra. Tu orden fue pagada y comenzaremos a prepararla para envío o entrega según el método seleccionado.</p>
+
+      <article class="form-section" style="max-width: 34rem; width: 100%; text-align: left; margin-bottom: 1.25rem;">
+        <h2>
+          <span class="form-num">1</span>
+          Estado del pago
+        </h2>
+        <p class="checkout-note">
+          Mercado Pago confirmó la operación. También puedes revisar el detalle desde tu historial de órdenes.
+        </p>
+        <p class="checkout-note" th:if="${ordenId != null}">
+          Orden: <strong th:text="${ordenId}">0</strong>
+        </p>
+      </article>
+
+      <div class="empty-state__actions">
+          <a th:href="@{/ordenes}" class="btn-gold">Ver mis órdenes</a>
+          <a th:href="@{/catalogo}" class="btn-secondary">Seguir comprando</a>
+        </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer checkout-footer">
+  <div class="container footer__inner">
+    <div>
+      <span class="footer__brand">Bemolé</span>
+      <span class="footer__copy">© 2026 · Todos los derechos reservados</span>
+    </div>
+
+    <div class="footer__legal">
+      <span>🔒 Conexión protegida</span>
+      <span>Pago procesado de forma segura</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

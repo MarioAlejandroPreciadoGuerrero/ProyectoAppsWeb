@@ -41,6 +41,25 @@ public class OrdenApiClient {
                 ).body(OrdenCreadaResponseDTO.class);
     }
 
+    public OrdenCreadaResponseDTO obtenerOrdenPendiente(String token) {
+        return restClient.get()
+                .uri("/api/ordenes/pendiente")
+                .headers(headers -> headers.setBearerAuth(token))
+                .retrieve()
+                .onStatus(
+                        status -> status.is4xxClientError() || status.is5xxServerError(),
+                        (httpRequest, response) -> {
+                            ApiErrorDTO error = objectMapper.readValue(
+                                    response.getBody(),
+                                    ApiErrorDTO.class
+                            );
+
+                            throw new ApiClientException(error);
+                        }
+                )
+                .body(OrdenCreadaResponseDTO.class);
+    }
+
     public PaginacionDTO<OrdenResumenResponseDTO> listarOrdenes(String token, EstadoOrden estado, int pagina, int tamano) {
         return restClient.get().uri(uriBuilder -> {
                     uriBuilder

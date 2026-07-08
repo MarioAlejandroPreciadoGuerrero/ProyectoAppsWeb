@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,5 +32,11 @@ public class OrdenController {
     @GetMapping
     public ResponseEntity<PaginacionDTO<OrdenResumenResponseDTO>> listar(@AuthenticationPrincipal Usuario usuario, @RequestParam(required = false) EstadoOrden estado, @RequestParam(defaultValue = "0") int pagina, @RequestParam(defaultValue = "10") int tamano){
         return ResponseEntity.ok(service.listarOrdenes(usuario, estado, pagina, tamano));
+    }
+
+    @GetMapping("/pendiente")
+    public ResponseEntity<OrdenCreadaResponseDTO> obtenerOrdenPendiente(Authentication authentication) {
+        OrdenCreadaResponseDTO response = service.obtenerOrdenPendiente(authentication.getName());
+        return ResponseEntity.ok(response);
     }
 }

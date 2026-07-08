@@ -18,7 +18,7 @@
 
     <div class="secure-label">
       <span aria-hidden="true">🔒</span>
-      <span>Orden protegida</span>
+      <span>Pago protegido</span>
     </div>
   </div>
 </header>
@@ -41,7 +41,7 @@
 
     <div class="step">
       <span class="step__num">3</span>
-      Confirmación
+      Pago
     </div>
   </div>
 </div>
@@ -52,13 +52,13 @@
       class="alert-error checkout-alert"
       th:if="${errorCheckout}"
       th:text="${errorCheckout}">
-      No fue posible crear la orden.
+      No fue posible iniciar el pago.
     </div>
 
     <form
       id="checkoutForm"
       class="checkout-form-shell"
-      th:action="@{/checkout}"
+      th:action="@{/checkout/pagar}"
       method="post"
       th:object="${checkout}">
 
@@ -354,12 +354,16 @@
           </div>
 
           <p class="checkout-total-note">
-            El total mostrado se actualiza según el método de envío. La API volverá a validarlo al crear la orden.
+            El total mostrado se actualiza según el método de envío. La API volverá a validarlo antes de enviarte a Mercado Pago.
           </p>
 
-          <button id="confirmarOrdenButton" type="submit" class="btn-gold">
-            Confirmar orden
+          <button id="pagarMercadoPagoButton" type="submit" class="btn-gold">
+            Pagar con Mercado Pago
           </button>
+
+          <p class="summary-perks">
+            <span>🔒 Serás redirigido a Mercado Pago para completar la compra.</span>
+          </p>
 
           <a th:href="@{/carrito}" class="checkout-back-link">
             ← Volver al carrito
@@ -379,7 +383,7 @@
 
     <div class="footer__legal">
       <span>🔒 Conexión protegida</span>
-      <span>Los precios finales se validan en el servidor</span>
+      <span>Pago procesado de forma segura por Mercado Pago</span>
     </div>
   </div>
 </footer>
@@ -447,11 +451,11 @@
     actualizarResumenEnvio();
 
     checkoutForm?.addEventListener("submit", function () {
-      const button = document.getElementById("confirmarOrdenButton");
+      const button = document.getElementById("pagarMercadoPagoButton");
 
       if (button) {
         button.disabled = true;
-        button.textContent = "Procesando orden…";
+        button.textContent = "Redirigiendo a Mercado Pago…";
       }
     });
   });

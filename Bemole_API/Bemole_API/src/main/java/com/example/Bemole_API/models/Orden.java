@@ -1,5 +1,6 @@
 package com.example.Bemole_API.models;
 import com.example.Bemole_API.enums.EstadoOrden;
+import com.example.Bemole_API.enums.EstadoPago;
 import com.example.Bemole_API.enums.MetodoEnvio;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -105,6 +106,13 @@ public class Orden {
     )
     private DireccionOrden direccionEnvio;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name= "estado_pago",nullable = false)
+    private EstadoPago estadoPago;
+
+    @OneToOne(mappedBy = "orden", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Pago pago;
+
     public void asignarDireccion(DireccionOrden direccion) {
         this.direccionEnvio = direccion;
 
@@ -122,4 +130,5 @@ public class Orden {
         items.remove(item);
         item.setOrden(null);
     }
+
 }
