@@ -1,6 +1,7 @@
 package com.example.Bemole_Dashboard_Admin.controller;
 
 import com.example.Bemole_Dashboard_Admin.client.AdminOrdenApiClient;
+import com.example.Bemole_Dashboard_Admin.dto.admin.orden.OrdenDetalleResponseDTO;
 import com.example.Bemole_Dashboard_Admin.enums.EstadoOrden;
 import com.example.Bemole_Dashboard_Admin.dto.admin.orden.OrdenAdminResponseDTO;
 import com.example.Bemole_Dashboard_Admin.dto.PaginacionDTO;
@@ -53,5 +54,42 @@ public class AdminOrdenViewController {
         }
 
         return "redirect:/admin/ordenes";
+    }
+
+    @GetMapping("/{id}")
+    public String verDetalleOrden(
+            @PathVariable Long id,
+            HttpSession session,
+            Model model
+    ) {
+        String token = sessionService.obtenerToken(session);
+
+        try {
+            OrdenDetalleResponseDTO orden = ordenApiClient.obtenerDetalleOrden(token, id);
+
+            model.addAttribute(
+                    "orden",
+                    orden
+            );
+
+        } catch (ApiClientException exception) {
+            model.addAttribute(
+                    "error",
+                    exception.getMessage()
+            );
+
+        } catch (Exception exception) {
+            model.addAttribute(
+                    "error",
+                    "No fue posible cargar el detalle de la orden."
+            );
+        }
+
+        model.addAttribute(
+                "estados",
+                EstadoOrden.values()
+        );
+
+        return "admin/ordenes/detalle";
     }
 }

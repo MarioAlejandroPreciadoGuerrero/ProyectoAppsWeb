@@ -4,6 +4,7 @@ import com.example.E_commerce_Bemole.dto.PaginacionDTO;
 import com.example.E_commerce_Bemole.dto.error.ApiErrorDTO;
 import com.example.E_commerce_Bemole.dto.ordenes.CrearOrdenFormDTO;
 import com.example.E_commerce_Bemole.dto.ordenes.response.OrdenCreadaResponseDTO;
+import com.example.E_commerce_Bemole.dto.ordenes.response.OrdenDetalleResponseDTO;
 import com.example.E_commerce_Bemole.dto.ordenes.response.OrdenResumenResponseDTO;
 import com.example.E_commerce_Bemole.enums.EstadoOrden;
 import com.example.E_commerce_Bemole.exception.ApiClientException;
@@ -86,5 +87,23 @@ public class OrdenApiClient {
                         new ParameterizedTypeReference<PaginacionDTO<OrdenResumenResponseDTO>>() {
                         }
                 );
+    }
+
+    public OrdenDetalleResponseDTO obtenerDetalleOrden(String token, Long ordenId) {
+        return restClient.get()
+                .uri("/api/ordenes/{id}", ordenId)
+                .headers(headers -> headers.setBearerAuth(token))
+                .retrieve()
+                .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(), (request, response) -> {
+                            ApiErrorDTO error =
+                                    objectMapper.readValue(
+                                            response.getBody(),
+                                            ApiErrorDTO.class
+                                    );
+
+                            throw new ApiClientException(error);
+                        }
+                )
+                .body(OrdenDetalleResponseDTO.class);
     }
 }

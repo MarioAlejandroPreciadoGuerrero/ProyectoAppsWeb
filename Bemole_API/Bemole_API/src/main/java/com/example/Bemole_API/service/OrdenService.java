@@ -3,6 +3,7 @@ package com.example.Bemole_API.service;
 import com.example.Bemole_API.dto.PaginacionDTO;
 import com.example.Bemole_API.dto.ordenes.request.CrearOrdenRequestDTO;
 import com.example.Bemole_API.dto.ordenes.response.OrdenCreadaResponseDTO;
+import com.example.Bemole_API.dto.ordenes.response.OrdenDetalleResponseDTO;
 import com.example.Bemole_API.dto.ordenes.response.OrdenResumenResponseDTO;
 import com.example.Bemole_API.enums.EstadoPago;
 import com.example.Bemole_API.exception.RecursoNoEncontradoException;
@@ -196,6 +197,30 @@ public class OrdenService {
                         .toList();
 
         return new PaginacionDTO<>(contenido, resultado.getNumber(), resultado.getSize(), resultado.getTotalElements(), resultado.getTotalPages(), resultado.isFirst(), resultado.isLast());
+    }
+
+    @Transactional(readOnly = true)
+    public OrdenDetalleResponseDTO obtenerDetalleOrden(
+            Usuario usuario,
+            Long ordenId
+    ) {
+        validarUsuarioAutenticado(usuario);
+
+        Orden orden =
+                ordenRepository
+                        .findDetalleByIdAndUsuarioId(
+                                ordenId,
+                                usuario.getId()
+                        )
+                        .orElseThrow(() ->
+                                new RecursoNoEncontradoException(
+                                        "Orden no encontrada."
+                                )
+                        );
+
+        return ordenMapper.toDetalleResponseDTO(
+                orden
+        );
     }
 
     private void validarPaginacion(int pagina, int tamano) {

@@ -1,6 +1,7 @@
 package com.example.Bemole_API.contoller.admin;
 
 import com.example.Bemole_API.dto.admin.request.ActualizarEstadoOrdenDTO;
+import com.example.Bemole_API.dto.ordenes.response.OrdenDetalleResponseDTO;
 import com.example.Bemole_API.dto.ordenes.response.OrdenResumenResponseDTO;
 import com.example.Bemole_API.enums.EstadoOrden;
 import com.example.Bemole_API.service.admin.AdminOrdenesService;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,6 +33,13 @@ public class AdminOrdenController {
             Pageable pageable
     ) {
         return service.listarOrdenes(estado, pageable);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrdenDetalleResponseDTO> obtenerDetalle(@PathVariable Long id) {
+        OrdenDetalleResponseDTO response = service.obtenerDetalleOrden(id);
+
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/estado")

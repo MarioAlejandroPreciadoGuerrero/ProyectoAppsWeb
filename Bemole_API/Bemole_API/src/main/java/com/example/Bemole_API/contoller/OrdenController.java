@@ -3,6 +3,7 @@ package com.example.Bemole_API.contoller;
 import com.example.Bemole_API.dto.PaginacionDTO;
 import com.example.Bemole_API.dto.ordenes.request.CrearOrdenRequestDTO;
 import com.example.Bemole_API.dto.ordenes.response.OrdenCreadaResponseDTO;
+import com.example.Bemole_API.dto.ordenes.response.OrdenDetalleResponseDTO;
 import com.example.Bemole_API.dto.ordenes.response.OrdenResumenResponseDTO;
 import com.example.Bemole_API.enums.EstadoOrden;
 import com.example.Bemole_API.models.Usuario;
@@ -47,6 +48,16 @@ public class OrdenController {
                 service.obtenerOrdenPendiente(
                         usuario.getId()
                 );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrdenDetalleResponseDTO> obtenerDetalle(
+            @AuthenticationPrincipal Usuario usuario,
+            @PathVariable Long id
+    ) {
+        OrdenDetalleResponseDTO response = service.obtenerDetalleOrden(usuario, id);
 
         return ResponseEntity.ok(response);
     }

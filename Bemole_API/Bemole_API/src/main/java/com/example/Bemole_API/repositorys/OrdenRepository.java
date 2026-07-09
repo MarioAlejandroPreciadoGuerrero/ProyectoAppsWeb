@@ -37,7 +37,8 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
 
     //Suma las ventas menos de las que tienen estado cancelado
     @Query("""
-       SELECT COALESCE(SUM(o.total), 0)
+
+            SELECT COALESCE(SUM(o.total), 0)
        FROM Orden o
        WHERE o.estado <> :estadoCancelado
        """)
@@ -46,5 +47,32 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             Long usuarioId,
             EstadoPago estadoPago
     );
-    
+
+    @Query("""
+        select distinct o
+        from Orden o
+        left join fetch o.items i
+        left join fetch i.producto p
+        left join fetch p.categoria
+        left join fetch o.direccionEnvio d
+        left join fetch o.pago
+        where o.id = :ordenId
+          and o.usuario.id = :usuarioId
+        """)
+    Optional<Orden> findDetalleByIdAndUsuarioId(@Param("ordenId") Long ordenId, @Param("usuarioId") Long usuarioId);
+
+    @Query("""
+        select distinct o
+        from Orden o
+        left join fetch o.usuario u
+        left join fetch o.items i
+        left join fetch i.producto p
+        left join fetch p.categoria c
+        left join fetch o.direccionEnvio d
+        where o.id = :ordenId
+        """)
+    Optional<Orden> findDetalleAdminById(
+            @Param("ordenId") Long ordenId
+    );
+
 }

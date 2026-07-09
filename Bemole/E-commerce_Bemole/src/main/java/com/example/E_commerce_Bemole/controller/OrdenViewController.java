@@ -1,5 +1,6 @@
 package com.example.E_commerce_Bemole.controller;
 
+import com.example.E_commerce_Bemole.dto.ordenes.response.OrdenDetalleResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import com.example.E_commerce_Bemole.client.OrdenApiClient;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -84,6 +86,37 @@ public class OrdenViewController {
             cargarUsuario(session, model);
 
             return "ordenes";
+        }
+    }
+
+    @GetMapping("/ordenes/{id}")
+    public String verDetalleOrden(@PathVariable Long id, HttpSession session, Model model) {
+        Object token = session.getAttribute(AuthViewController.SESSION_TOKEN);
+
+        String tokenString = token.toString();
+
+        try {
+            OrdenDetalleResponseDTO orden = ordenApiClient.obtenerDetalleOrden(tokenString, id);
+
+            model.addAttribute("orden", orden);
+
+            cargarUsuario(session, model);
+
+            return "ordenes/detalle";
+
+        } catch (ApiClientException exception) {
+            model.addAttribute("errorOrdenDetalle", exception.getMessage());
+
+            cargarUsuario(session, model);
+
+            return "ordenes/detalle";
+
+        } catch (Exception exception) {
+            model.addAttribute("errorOrdenDetalle", "No fue posible cargar el detalle de la orden.");
+
+            cargarUsuario(session, model);
+
+            return "ordenes/detalle";
         }
     }
 

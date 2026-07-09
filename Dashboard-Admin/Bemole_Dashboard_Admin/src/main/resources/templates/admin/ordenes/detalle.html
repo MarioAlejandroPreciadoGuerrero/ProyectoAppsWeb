@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${orden != null ? 'Bemolé Admin — Orden ' + orden.id : 'Bemolé Admin — Detalle de orden'}">Bemolé Admin — Detalle de orden</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/admin.css}">
+</head>
+<body class="admin-body">
+  <div th:replace="~{admin/fragments/topbar :: topbar}"></div>
+
+  <div class="admin-shell">
+    <div th:replace="~{admin/fragments/sidebar :: sidebar('ordenes')}"></div>
+
+    <main class="admin-content">
+      <header class="admin-page-header">
+        <div>
+          <p class="admin-page-header__eyebrow">Ventas</p>
+          <h1 class="admin-page-header__title">
+            Detalle de orden
+            <span th:text="${orden != null and orden.numero != null ? '#' + orden.numero : '#' + orden.id}">
+              #ORDEN
+            </span>
+          </h1>
+          <p class="admin-page-header__subtitle">
+            Revisa productos, cliente, pago, dirección de envío y avance del pedido.
+          </p>
+        </div>
+
+        <div class="admin-page-header__actions">
+          <a class="btn btn-ghost" th:href="@{/admin/ordenes}">← Volver</a>
+        </div>
+      </header>
+
+      <div class="admin-alert admin-alert--success" th:if="${mensaje}">
+        <span>✓</span>
+        <span th:text="${mensaje}">Estado actualizado.</span>
+      </div>
+
+      <div class="admin-alert admin-alert--error" th:if="${error}">
+        <span>!</span>
+        <span th:text="${error}">No fue posible cargar la orden.</span>
+      </div>
+
+      <section class="admin-detail-grid" th:if="${orden != null}">
+
+        <article class="admin-card admin-order-summary-card">
+          <div class="admin-card__header">
+            <div>
+              <p class="admin-page-header__eyebrow">Resumen</p>
+              <h2>Orden</h2>
+            </div>
+
+            <span class="badge badge-warning" th:if="${orden.estado != null and orden.estado.name() == 'PENDIENTE'}">Pendiente</span>
+            <span class="badge badge-info" th:if="${orden.estado != null and orden.estado.name() == 'PROCESANDO'}">Procesando</span>
+            <span class="badge badge-info" th:if="${orden.estado != null and orden.estado.name() == 'ENVIADO'}">Enviada</span>
+            <span class="badge badge-success" th:if="${orden.estado != null and orden.estado.name() == 'ENTREGADO'}">Entregada</span>
+            <span class="badge badge-error" th:if="${orden.estado != null and orden.estado.name() == 'CANCELADA'}">Cancelada</span>
+          </div>
+
+          <div class="admin-detail-list">
+            <div>
+              <span>Número</span>
+              <strong th:text="${orden.numero != null ? orden.numero : 'Orden #' + orden.id}">BMO-0000</strong>
+            </div>
+
+            <div>
+              <span>ID interno</span>
+              <strong th:text="${orden.id}">1</strong>
+            </div>
+
+            <div>
+              <span>Fecha</span>
+              <strong th:text="${orden.fecha != null ? orden.fecha : '—'}">—</strong>
+            </div>
+
+            <div>
+              <span>Estado de pago</span>
+              <strong th:text="${orden.estadoPago != null ? orden.estadoPago : 'PENDIENTE'}">APROBADO</strong>
+            </div>
+
+            <div>
+              <span>Método de envío</span>
+              <strong th:text="${orden.metodoEnvio != null ? orden.metodoEnvio : '—'}">ESTANDAR</strong>
+            </div>
+
+            <div>
+              <span>Total</span>
+              <strong th:text="${orden.total != null ? '$' + #numbers.formatDecimal(orden.total, 1, 'COMMA', 2, 'POINT') : '—'}">$0.00</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="admin-card">
+          <div class="admin-card__header">
+            <div>
+              <p class="admin-page-header__eyebrow">Avance</p>
+              <h2>Actualizar estado</h2>
+            </div>
+          </div>
+
+          <div class="order-actions-stack">
+            <form class="order-status-form" th:if="${orden.permiteProcesar()}" th:action="@{/admin/ordenes/{id}/estado(id=${orden.id})}" method="post">
+              <input type="hidden" name="_method" value="patch">
+              <input type="hidden" name="estado" value="PROCESANDO">
+              <button class="btn btn-primary btn-sm" type="submit">Marcar procesando</button>
+            </form>
+
+            <form class="order-status-form" th:if="${orden.permiteEnviar()}" th:action="@{/admin/ordenes/{id}/estado(id=${orden.id})}" method="post">
+              <input type="hidden" name="_method" value="patch">
+              <input type="hidden" name="estado" value="ENVIADO">
+              <button class="btn btn-primary btn-sm" type="submit">Marcar enviada</button>
+            </form>
+
+            <form class="order-status-form" th:if="${orden.permiteEntregar()}" th:action="@{/admin/ordenes/{id}/estado(id=${orden.id})}" method="post">
+              <input type="hidden" name="_method" value="patch">
+              <input type="hidden" name="estado" value="ENTREGADO">
+              <button class="btn btn-primary btn-sm" type="submit">Marcar entregada</button>
+            </form>
+
+            <form class="order-status-form" th:if="${orden.permiteCancelar()}" th:action="@{/admin/ordenes/{id}/estado(id=${orden.id})}" method="post">
+              <input type="hidden" name="_method" value="patch">
+              <input type="hidden" name="estado" value="CANCELADA">
+              <button class="btn btn-danger btn-sm" type="submit">Cancelar orden</button>
+            </form>
+
+            <span class="muted" th:if="${!orden.permiteProcesar() and !orden.permiteEnviar() and !orden.permiteEntregar() and !orden.permiteCancelar()}">
+              Esta orden ya está en un estado final.
+            </span>
+          </div>
+        </article>
+      </section>
+
+      <section class="admin-table-wrap" th:if="${orden != null}">
+        <div class="admin-table-toolbar">
+          <div>
+            <p class="admin-page-header__eyebrow">Productos</p>
+            <h2>Artículos comprados</h2>
+          </div>
+
+          <span class="admin-result-count">
+            <span th:text="${orden.cantidadProductos != null ? orden.cantidadProductos : 0}">0</span>
+            unidades
+          </span>
+        </div>
+
+        <div class="admin-table-scroll" th:if="${orden.items != null and !orden.items.isEmpty()}">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Precio unitario</th>
+                <th>Cantidad</th>
+                <th>Descuento</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="item : ${orden.items}">
+                <td>
+                  <div class="admin-product-cell">
+                    <div class="admin-product-thumb">
+                      <img
+                        th:if="${item.imagenUrl != null and !item.imagenUrl.isBlank()}"
+                        th:src="${item.imagenUrl}"
+                        th:alt="${item.nombreProducto}"
+                        loading="lazy">
+                      <span th:unless="${item.imagenUrl != null and !item.imagenUrl.isBlank()}" aria-hidden="true">🎵</span>
+                    </div>
+
+                    <div>
+                      <p class="td-name" th:text="${item.nombreProducto}">Producto</p>
+                      <p class="td-sub" th:text="${'ID producto: ' + item.productoId}">ID producto</p>
+                    </div>
+                  </div>
+                </td>
+
+                <td th:text="${item.categoria != null ? item.categoria : '—'}">Categoría</td>
+
+                <td th:text="${item.precioUnitario != null ? '$' + #numbers.formatDecimal(item.precioUnitario, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                  $0.00
+                </td>
+
+                <td th:text="${item.cantidad}">1</td>
+
+                <td th:text="${item.descuento != null ? '$' + #numbers.formatDecimal(item.descuento, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                  $0.00
+                </td>
+
+                <td th:text="${item.subtotal != null ? '$' + #numbers.formatDecimal(item.subtotal, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                  $0.00
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="admin-empty" th:if="${orden.items == null or orden.items.isEmpty()}">
+          <span>🎵</span>
+          <h2>No hay productos asociados</h2>
+          <p>No se encontraron artículos para esta orden.</p>
+        </div>
+      </section>
+
+      <section class="admin-detail-grid" th:if="${orden != null}">
+        <article class="admin-card">
+          <div class="admin-card__header">
+            <div>
+              <p class="admin-page-header__eyebrow">Cliente</p>
+              <h2>Datos de contacto</h2>
+            </div>
+          </div>
+
+          <div class="admin-detail-list">
+            <div>
+              <span>Nombre</span>
+              <strong th:text="${orden.contactoNombre + ' ' + orden.contactoApellido}">Cliente</strong>
+            </div>
+
+            <div>
+              <span>Correo</span>
+              <strong th:text="${orden.contactoEmail}">correo@ejemplo.com</strong>
+            </div>
+
+            <div>
+              <span>Teléfono</span>
+              <strong th:text="${orden.contactoTelefono}">Teléfono</strong>
+            </div>
+
+            <div th:if="${orden.usuarioEmail != null}">
+              <span>Cuenta</span>
+              <strong th:text="${orden.usuarioEmail}">usuario@correo.com</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="admin-card">
+          <div class="admin-card__header">
+            <div>
+              <p class="admin-page-header__eyebrow">Envío</p>
+              <h2>Dirección</h2>
+            </div>
+          </div>
+
+          <div class="admin-detail-list">
+            <div>
+              <span>Calle y número</span>
+              <strong th:text="${orden.direccionEnvio.calleNumero}">Calle</strong>
+            </div>
+
+            <div>
+              <span>Colonia</span>
+              <strong th:text="${orden.direccionEnvio.colonia}">Colonia</strong>
+            </div>
+
+            <div>
+              <span>Código postal</span>
+              <strong th:text="${orden.direccionEnvio.codigoPostal}">00000</strong>
+            </div>
+
+            <div>
+              <span>Ciudad</span>
+              <strong th:text="${orden.direccionEnvio.ciudad}">Ciudad</strong>
+            </div>
+
+            <div>
+              <span>Estado</span>
+              <strong th:text="${orden.direccionEnvio.estado}">Estado</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="admin-card">
+          <div class="admin-card__header">
+            <div>
+              <p class="admin-page-header__eyebrow">Pago</p>
+              <h2>Mercado Pago</h2>
+            </div>
+          </div>
+
+          <div class="admin-detail-list">
+            <div>
+              <span>Estado</span>
+              <strong th:text="${orden.estadoPago != null ? orden.estadoPago : 'PENDIENTE'}">APROBADO</strong>
+            </div>
+
+            <div th:if="${orden.metodoPago != null}">
+              <span>Método</span>
+              <strong th:text="${orden.metodoPago}">Mercado Pago</strong>
+            </div>
+
+            <div th:if="${orden.preferenceId != null}">
+              <span>Preference ID</span>
+              <strong th:text="${orden.preferenceId}">preference</strong>
+            </div>
+
+            <div th:if="${orden.mercadoPagoPaymentId != null}">
+              <span>Payment ID</span>
+              <strong th:text="${orden.mercadoPagoPaymentId}">payment</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="admin-card">
+          <div class="admin-card__header">
+            <div>
+              <p class="admin-page-header__eyebrow">Totales</p>
+              <h2>Resumen</h2>
+            </div>
+          </div>
+
+          <div class="admin-detail-list">
+            <div>
+              <span>Subtotal</span>
+              <strong th:text="${orden.subtotal != null ? '$' + #numbers.formatDecimal(orden.subtotal, 1, 'COMMA', 2, 'POINT') : '$0.00'}">$0.00</strong>
+            </div>
+
+            <div>
+              <span>Descuento</span>
+              <strong th:text="${orden.descuento != null ? '$' + #numbers.formatDecimal(orden.descuento, 1, 'COMMA', 2, 'POINT') : '$0.00'}">$0.00</strong>
+            </div>
+
+            <div>
+              <span>Envío</span>
+              <strong th:text="${orden.costoEnvio != null ? '$' + #numbers.formatDecimal(orden.costoEnvio, 1, 'COMMA', 2, 'POINT') : '$0.00'}">$0.00</strong>
+            </div>
+
+            <div>
+              <span>Total</span>
+              <strong th:text="${orden.total != null ? '$' + #numbers.formatDecimal(orden.total, 1, 'COMMA', 2, 'POINT') : '$0.00'}">$0.00</strong>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

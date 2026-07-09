@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${orden != null ? 'Bemolé — Orden #' + orden.numero : 'Bemolé — Detalle de orden'}">Bemolé — Detalle de orden</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles/style.css}">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container navbar__inner">
+    <a class="logo" th:href="@{/}" aria-label="Ir al inicio">
+      <span class="logo__name">Bemolé</span>
+      <span class="logo__tagline">Instrumentos para cada nota</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a th:href="@{/ordenes}">Mis órdenes</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a th:href="@{/carrito}" class="cart-btn" aria-label="Ir al carrito">🛒</a>
+      <a th:href="@{/ordenes}" class="profile-btn" aria-label="Ver mis órdenes">
+        👤
+        <span>Mi cuenta</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="account-layout">
+
+    <aside class="account-sidebar">
+      <div class="account-profile">
+        <div class="account-avatar" th:text="${inicialUsuario != null ? inicialUsuario : 'U'}">U</div>
+        <p
+          class="account-profile__name"
+          th:text="${usuarioOrdenes != null ? usuarioOrdenes.nombre + ' ' + usuarioOrdenes.apellido : 'Mi cuenta'}">
+          Mi cuenta
+        </p>
+        <p
+          class="account-profile__email"
+          th:text="${usuarioOrdenes != null ? usuarioOrdenes.email : ''}">
+          usuario@correo.com
+        </p>
+      </div>
+
+      <nav class="account-nav" aria-label="Navegación de la cuenta">
+        <a th:href="@{/ordenes}" class="active">📦 Mis órdenes</a>
+        <a th:href="@{/carrito}">🛒 Mi carrito</a>
+
+        <hr>
+
+        <form th:action="@{/logout}" method="post">
+          <button type="submit" class="account-logout">← Cerrar sesión</button>
+        </form>
+      </nav>
+    </aside>
+
+    <section class="orders-content">
+
+      <div class="orders-heading">
+        <div>
+          <p class="eyebrow">Detalle de orden</p>
+          <h1 class="display">
+            Orden
+            <span th:text="${orden != null and orden.numero != null ? '#' + orden.numero : '#' + orden.id}">
+              #BMO-0000
+            </span>
+          </h1>
+        </div>
+
+        <a th:href="@{/ordenes}" class="orders-heading__link">← Volver a mis órdenes</a>
+      </div>
+
+      <div
+        class="alert-error"
+        role="alert"
+        th:if="${errorOrdenDetalle}"
+        th:text="${errorOrdenDetalle}">
+        No fue posible cargar el detalle de la orden.
+      </div>
+
+      <section class="order-card order-detail-card" th:if="${orden != null}">
+        <header class="order-card__header">
+          <div>
+            <p class="order-card__id">
+              Orden
+              <strong th:text="${orden.numero != null ? '#' + orden.numero : 'ID ' + orden.id}">
+                #BMO-0000
+              </strong>
+            </p>
+            <p
+              class="order-card__date"
+              th:text="${orden.fechaTexto != null ? 'Realizada el ' + orden.fechaTexto : orden.fecha}">
+              Fecha de la orden
+            </p>
+          </div>
+
+          <div class="order-card__right">
+            <span
+              class="status-badge"
+              th:classappend="${orden.estadoCss != null ? ' ' + orden.estadoCss : ''}"
+              th:text="${orden.estadoTexto != null ? orden.estadoTexto : orden.estado}">
+              Estado
+            </span>
+
+            <p
+              class="order-card__total"
+              th:text="${orden.total != null ? '$' + #numbers.formatDecimal(orden.total, 1, 'COMMA', 2, 'POINT') + ' MXN' : 'Total no disponible'}">
+              $0.00 MXN
+            </p>
+          </div>
+        </header>
+
+        <div class="order-progress" th:unless="${orden.cancelada}">
+          <div class="progress-steps" aria-label="Progreso de la orden">
+            <span th:classappend="${orden.pasoConfirmada} ? ' progress-step--done'">
+              <span th:if="${orden.pasoConfirmada}">✓</span>
+              Confirmada
+            </span>
+
+            <div class="progress-line" th:classappend="${orden.pasoProcesando} ? ' progress-line--done'"></div>
+
+            <span th:classappend="${orden.pasoProcesando} ? ' progress-step--done'">
+              <span th:if="${orden.pasoProcesando}">✓</span>
+              Procesando
+            </span>
+
+            <div class="progress-line" th:classappend="${orden.pasoEnviado} ? ' progress-line--done'"></div>
+
+            <span th:classappend="${orden.pasoEnviado} ? ' progress-step--done'">
+              <span th:if="${orden.pasoEnviado}">✓</span>
+              Enviada
+            </span>
+
+            <div class="progress-line" th:classappend="${orden.pasoEntregado} ? ' progress-line--done'"></div>
+
+            <span th:classappend="${orden.pasoEntregado} ? ' progress-step--done'">
+              <span th:if="${orden.pasoEntregado}">✓</span>
+              Entregada
+            </span>
+          </div>
+        </div>
+
+        <div class="order-cancelled-message" th:if="${orden.cancelada}">
+          Esta orden fue cancelada.
+        </div>
+      </section>
+
+      <div class="checkout-layout order-detail-layout" th:if="${orden != null}">
+        <section class="checkout-forms">
+
+          <section class="form-section">
+            <h2>
+              <span class="form-num">1</span>
+              Productos comprados
+            </h2>
+
+            <div class="checkout-items" th:if="${orden.items != null and !orden.items.isEmpty()}">
+              <article class="checkout-item order-detail-item" th:each="item : ${orden.items}">
+                <div class="checkout-item__img">
+                  <img
+                    th:if="${item.imagenUrl != null and !item.imagenUrl.isBlank()}"
+                    th:src="${item.imagenUrl}"
+                    th:alt="${item.nombreProducto}"
+                    loading="lazy">
+
+                  <span
+                    class="checkout-item__placeholder"
+                    th:unless="${item.imagenUrl != null and !item.imagenUrl.isBlank()}"
+                    aria-hidden="true">
+                    🎵
+                  </span>
+
+                  <span class="checkout-item__qty" th:text="${item.cantidad}">1</span>
+                </div>
+
+                <div class="checkout-item__content">
+                  <a
+                    class="checkout-item__name"
+                    th:href="@{/producto/{id}(id=${item.productoId})}"
+                    th:text="${item.nombreProducto}">
+                    Producto
+                  </a>
+
+                  <p class="checkout-item__variant" th:text="${item.categoria != null ? item.categoria : 'Producto'}">
+                    Categoría
+                  </p>
+
+                  <p class="checkout-note">
+                    Precio unitario:
+                    <strong
+                      th:text="${item.precioUnitario != null ? '$' + #numbers.formatDecimal(item.precioUnitario, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                      $0.00
+                    </strong>
+                    <span> · Cantidad: </span>
+                    <strong th:text="${item.cantidad}">1</strong>
+                  </p>
+                </div>
+
+                <span
+                  class="checkout-item__price"
+                  th:text="${item.subtotal != null ? '$' + #numbers.formatDecimal(item.subtotal, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                  $0.00
+                </span>
+              </article>
+            </div>
+
+            <div class="empty-state empty-state--orders" th:if="${orden.items == null or orden.items.isEmpty()}">
+              <div class="empty-state__icon" aria-hidden="true">🎵</div>
+              <h2>No hay productos para mostrar</h2>
+              <p>No se encontraron artículos asociados a esta orden.</p>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <h2>
+              <span class="form-num">2</span>
+              Envío y contacto
+            </h2>
+
+            <div class="form-grid">
+              <div>
+                <span class="label">Nombre</span>
+                <p class="checkout-note" th:text="${orden.contactoNombre + ' ' + orden.contactoApellido}">
+                  Nombre del cliente
+                </p>
+              </div>
+
+              <div>
+                <span class="label">Teléfono</span>
+                <p class="checkout-note" th:text="${orden.contactoTelefono}">
+                  Teléfono
+                </p>
+              </div>
+
+              <div class="form-grid--full">
+                <span class="label">Correo</span>
+                <p class="checkout-note" th:text="${orden.contactoEmail}">
+                  correo@ejemplo.com
+                </p>
+              </div>
+
+              <div class="form-grid--full">
+                <span class="label">Dirección</span>
+                <p class="checkout-note">
+                  <span th:text="${orden.direccionEnvio.calleNumero}">Calle y número</span>,
+                  <span th:text="${orden.direccionEnvio.colonia}">Colonia</span>,
+                  <span th:text="${orden.direccionEnvio.ciudad}">Ciudad</span>,
+                  <span th:text="${orden.direccionEnvio.estado}">Estado</span>,
+                  C.P.
+                  <span th:text="${orden.direccionEnvio.codigoPostal}">00000</span>
+                </p>
+              </div>
+
+              <div>
+                <span class="label">Método de envío</span>
+                <p class="checkout-note" th:text="${orden.metodoEnvio}">
+                  ESTANDAR
+                </p>
+              </div>
+
+              <div>
+                <span class="label">Estado del envío</span>
+                <p class="checkout-note" th:text="${orden.estadoTexto != null ? orden.estadoTexto : orden.estado}">
+                  Procesando
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <h2>
+              <span class="form-num">3</span>
+              Pago
+            </h2>
+
+            <div class="summary-rows">
+              <div class="summary-row">
+                <span>Estado de pago</span>
+                <strong th:text="${orden.estadoPago != null ? orden.estadoPago : 'PENDIENTE'}">APROBADO</strong>
+              </div>
+
+              <div class="summary-row" th:if="${orden.metodoPago != null}">
+                <span>Método de pago</span>
+                <strong th:text="${orden.metodoPago}">Mercado Pago</strong>
+              </div>
+
+              <div class="summary-row" th:if="${orden.mercadoPagoPaymentId != null and !orden.mercadoPagoPaymentId.isBlank()}">
+                <span>ID de Mercado Pago</span>
+                <strong th:text="${orden.mercadoPagoPaymentId}">000000</strong>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <aside class="checkout-summary">
+          <p class="summary-title">Resumen de pago</p>
+
+          <div class="summary-rows">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span
+                class="val"
+                th:text="${orden.subtotal != null ? '$' + #numbers.formatDecimal(orden.subtotal, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                $0.00
+              </span>
+            </div>
+
+            <div class="summary-row">
+              <span>Descuento</span>
+              <span
+                class="val"
+                th:text="${orden.descuento != null ? '$' + #numbers.formatDecimal(orden.descuento, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                $0.00
+              </span>
+            </div>
+
+            <div class="summary-row">
+              <span>Envío</span>
+              <span
+                class="val"
+                th:text="${orden.costoEnvio != null ? '$' + #numbers.formatDecimal(orden.costoEnvio, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                $0.00
+              </span>
+            </div>
+          </div>
+
+          <div class="summary-total">
+            <span class="summary-total__label">Total pagado</span>
+            <div class="summary-total__amount">
+              <p
+                class="big"
+                th:text="${orden.total != null ? '$' + #numbers.formatDecimal(orden.total, 1, 'COMMA', 2, 'POINT') : '$0.00'}">
+                $0.00
+              </p>
+              <p class="sub">MXN</p>
+            </div>
+          </div>
+
+          <a th:href="@{/ordenes}" class="btn-secondary">Volver a mis órdenes</a>
+        </aside>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div>
+      <span class="footer__brand">Bemolé</span>
+      <span class="footer__copy">© 2026 · Todos los derechos reservados</span>
+    </div>
+
+    <ul class="footer__links">
+      <li><a th:href="@{/}">Inicio</a></li>
+      <li><a th:href="@{/catalogo}">Catálogo</a></li>
+      <li><a th:href="@{/ordenes}">Órdenes</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>

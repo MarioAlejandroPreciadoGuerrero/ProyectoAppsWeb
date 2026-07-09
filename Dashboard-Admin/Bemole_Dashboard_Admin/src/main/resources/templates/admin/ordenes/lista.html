@@ -52,13 +52,19 @@
                 <th>Productos</th>
                 <th>Total</th>
                 <th>Estado</th>
+                <th>Acciones</th>
                 <th>Siguiente acción</th>
               </tr>
             </thead>
             <tbody>
               <tr th:each="orden : ${ordenes}">
                 <td>
-                  <p class="td-name" th:text="${orden.numero != null ? '#' + orden.numero : 'Orden #' + orden.id}">#ORDEN</p>
+                  <a
+                    class="td-name admin-order-link"
+                    th:href="@{/admin/ordenes/{id}(id=${orden.id})}"
+                    th:text="${orden.numero != null ? '#' + orden.numero : 'Orden #' + orden.id}">
+                    #ORDEN
+                  </a>
                   <p class="td-sub" th:text="${'ID interno: ' + orden.id}">ID</p>
                 </td>
                 <td th:text="${orden.fecha != null ? orden.fecha : '—'}">—</td>
@@ -77,6 +83,13 @@
                   <span class="badge badge-info" th:if="${orden.estado != null and orden.estado.name() == 'ENVIADO'}">Enviada</span>
                   <span class="badge badge-success" th:if="${orden.estado != null and orden.estado.name() == 'ENTREGADO'}">Entregada</span>
                   <span class="badge badge-error" th:if="${orden.estado != null and orden.estado.name() == 'CANCELADA'}">Cancelada</span>
+                </td>
+                <td>
+                  <a
+                    class="btn btn-ghost btn-sm"
+                    th:href="@{/admin/ordenes/{id}(id=${orden.id})}">
+                    Ver detalle
+                  </a>
                 </td>
                 <td>
                   <div class="order-actions-stack">

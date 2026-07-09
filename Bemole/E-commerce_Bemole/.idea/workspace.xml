@@ -5,22 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9df380ec-8fed-497e-bcd0-4c75b1bd014a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/dto/pago/MercadoPagoRetornoDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/dto/pago/MercadoPagoRetornoDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/dto/ordenes/response/ItemOrdenDetalleResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/dto/ordenes/response/OrdenDetalleResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/ordenes/detalle.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/dto/ordenes/response/ItemOrdenDetalleResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/dto/ordenes/response/OrdenDetalleResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/orden/DireccionOrdenResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/orden/ItemOrdenDetalleResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/dto/admin/orden/OrdenDetalleResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/enums/EstadoPago.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/enums/MetodoEnvio.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/ordenes/detalle.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/client/PagoApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/client/PagoApiClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/CheckoutViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/CheckoutViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/PagoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/PagoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/ResultadoPagoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/ResultadoPagoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/styles/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/styles/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/static/styles/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/styles/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/client/OrdenApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/client/OrdenApiClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/OrdenViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/E_commerce_Bemole/controller/OrdenViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/ordenes.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/ordenes.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/OrdenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/OrdenController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/PagoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/PagoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/repositorys/PagoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/repositorys/PagoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/admin/AdminOrdenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/contoller/admin/AdminOrdenController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/repositorys/OrdenRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/repositorys/OrdenRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/OrdenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/OrdenService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/PagoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/PagoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/admin/AdminOrdenesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/admin/AdminOrdenesService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/mappers/OrdenMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/java/com/example/Bemole_API/service/mappers/OrdenMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../../Bemole_API/Bemole_API/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/client/AdminOrdenApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/client/AdminOrdenApiClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminOrdenViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/java/com/example/Bemole_Dashboard_Admin/controller/AdminOrdenViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/ordenes/lista.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Dashboard-Admin/Bemole_Dashboard_Admin/src/main/resources/templates/admin/ordenes/lista.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,9 +39,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="HTML File" />
         <option value="Record" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -51,24 +60,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;Spring Boot.ECommerceBemoleApplication.executor&quot;: &quot;Run&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;admin-project&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/jalt2/OneDrive/Documentos/GitHub/ProyectoAppsWeb/Bemole/E-commerce_Bemole&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.ECommerceBemoleApplication.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "admin-project",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/jalt2/OneDrive/Documentos/GitHub/ProyectoAppsWeb/Bemole/E-commerce_Bemole/src/main/resources/templates/ordenes",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\jalt2\OneDrive\Documentos\GitHub\ProyectoAppsWeb\Bemole\E-commerce_Bemole\src\main\resources\templates\ordenes" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
