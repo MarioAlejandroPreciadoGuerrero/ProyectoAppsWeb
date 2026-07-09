@@ -24,8 +24,13 @@ public class OrdenController {
     private final OrdenService service;
 
     @PostMapping
-    public ResponseEntity<OrdenCreadaResponseDTO> crear(@AuthenticationPrincipal Usuario usuario, @Valid @RequestBody CrearOrdenRequestDTO request) {
-        OrdenCreadaResponseDTO orden = service.crearOrden(usuario, request);
+    public ResponseEntity<OrdenCreadaResponseDTO> crear(
+            @AuthenticationPrincipal Usuario usuario,
+            @Valid @RequestBody CrearOrdenRequestDTO request
+    ) {
+        OrdenCreadaResponseDTO orden =
+                service.crearOrden(usuario, request);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(orden);
     }
 
@@ -35,8 +40,14 @@ public class OrdenController {
     }
 
     @GetMapping("/pendiente")
-    public ResponseEntity<OrdenCreadaResponseDTO> obtenerOrdenPendiente(Authentication authentication) {
-        OrdenCreadaResponseDTO response = service.obtenerOrdenPendiente(authentication.getName());
+    public ResponseEntity<OrdenCreadaResponseDTO> obtenerOrdenPendiente(
+            @AuthenticationPrincipal Usuario usuario
+    ) {
+        OrdenCreadaResponseDTO response =
+                service.obtenerOrdenPendiente(
+                        usuario.getId()
+                );
+
         return ResponseEntity.ok(response);
     }
 }

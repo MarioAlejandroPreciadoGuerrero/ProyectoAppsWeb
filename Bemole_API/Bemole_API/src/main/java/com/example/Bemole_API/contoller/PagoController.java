@@ -2,14 +2,17 @@ package com.example.Bemole_API.contoller;
 
 import com.example.Bemole_API.dto.pago.CrearPagoRequestDTO;
 import com.example.Bemole_API.dto.pago.CrearPagoResponseDTO;
+import com.example.Bemole_API.dto.pago.MercadoPagoRetornoDTO;
 import com.example.Bemole_API.service.PagoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("api/pagos")
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/pagos")
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class PagoController {
@@ -19,6 +22,17 @@ public class PagoController {
     public ResponseEntity<CrearPagoResponseDTO> crearPago(@RequestBody CrearPagoRequestDTO request) throws Exception {
         CrearPagoResponseDTO response = service.crearPago(request.getOrdenId());
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/mercado-pago/retorno")
+    public ResponseEntity<Void> procesarRetorno(@RequestBody MercadoPagoRetornoDTO request) {
+        service.procesarPagoMercadoPago(
+                request.paymentId(),
+                request.preferenceId(),
+                request.externalReference()
+        );
+
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/webhook")

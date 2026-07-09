@@ -11,4 +11,5 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
     Optional<Pago> findByMercadoPagoPaymentId(String mercadoPagoPaymentId);
 
     Optional<Pago> findByPreferenceId(String preferenceId);
+
 }

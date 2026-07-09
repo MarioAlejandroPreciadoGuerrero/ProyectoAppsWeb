@@ -56,16 +56,6 @@ public class OrdenService {
     public OrdenCreadaResponseDTO crearOrden(Usuario usuario, CrearOrdenRequestDTO request) {
         validarUsuarioAutenticado(usuario);
 
-        Optional<Orden> ordenPendiente = ordenRepository
-                .findFirstByUsuario_IdAndEstadoPagoOrderByFechaDesc(
-                        usuario.getId(),
-                        EstadoPago.PENDIENTE
-                );
-
-        if (ordenPendiente.isPresent()) {
-            return ordenMapper.toCreadaResponseDTO(ordenPendiente.get());
-        }
-
         Carrito carrito = carritoRepository.findDetalleByUsuarioId(usuario.getId())
                 .orElseThrow(() ->
                         new NegocioException(
@@ -83,12 +73,19 @@ public class OrdenService {
 
         for (ItemCarrito itemCarrito : carrito.getItems()) {
 
-            Producto producto = productoRepository.findByIdForUpdate(itemCarrito.getProducto().getId())
-                    .orElseThrow(() -> new RecursoNoEncontradoException(
-                            "Uno de los productos del carrito ya no existe."
-                    ));
+            Producto producto = productoRepository.findByIdForUpdate(
+                            itemCarrito.getProducto().getId()
+                    )
+                    .orElseThrow(() ->
+                            new RecursoNoEncontradoException(
+                                    "Uno de los productos del carrito ya no existe."
+                            )
+                    );
 
-            validarProducto(producto, itemCarrito.getCantidad());
+            validarProducto(
+                    producto,
+                    itemCarrito.getCantidad()
+            );
 
             ItemOrden itemOrden = new ItemOrden();
 
@@ -99,39 +96,63 @@ public class OrdenService {
 
             orden.agregarItem(itemOrden);
 
-            BigDecimal subtotalItem = producto.getPrecio().multiply(
-                    BigDecimal.valueOf(itemCarrito.getCantidad())
-            );
+            BigDecimal subtotalItem =
+                    producto.getPrecio().multiply(
+                            BigDecimal.valueOf(
+                                    itemCarrito.getCantidad()
+                            )
+                    );
 
             subtotal = subtotal.add(subtotalItem);
 
-            descontarStock(producto, itemCarrito.getCantidad());
+            descontarStock(
+                    producto,
+                    itemCarrito.getCantidad()
+            );
         }
 
-        BigDecimal costoEnvio = calcularCostoEnvio(request.getMetodoEnvio());
+        BigDecimal costoEnvio =
+                calcularCostoEnvio(
+                        request.getMetodoEnvio()
+                );
 
-        BigDecimal total = subtotal.add(costoEnvio);
+        BigDecimal total =
+                subtotal.add(costoEnvio);
 
         orden.setCostoEnvio(costoEnvio);
         orden.setTotal(total);
 
-        DireccionOrden direccion = crearDireccion(request, orden);
+        DireccionOrden direccion =
+                crearDireccion(
+                        request,
+                        orden
+                );
 
         orden.asignarDireccion(direccion);
 
-        Orden ordenGuardada = ordenRepository.save(orden);
+        Orden ordenGuardada =
+                ordenRepository.save(orden);
 
         vaciarCarrito(carrito);
 
-        return ordenMapper.toCreadaResponseDTO(ordenGuardada);
+        return ordenMapper.toCreadaResponseDTO(
+                ordenGuardada
+        );
     }
 
-    public OrdenCreadaResponseDTO obtenerOrdenPendiente(String usuarioIdTexto) {
-        Long usuarioId = Long.valueOf(usuarioIdTexto);
-
+    public OrdenCreadaResponseDTO obtenerOrdenPendiente(
+            Long usuarioId
+    ) {
         Orden orden = ordenRepository
-                .findFirstByUsuario_IdAndEstadoPagoOrderByFechaDesc(usuarioId, EstadoPago.PENDIENTE)
-                .orElseThrow(() -> new RuntimeException("No tienes órdenes pendientes de pago"));
+                .findFirstByUsuario_IdAndEstadoPagoOrderByFechaDesc(
+                        usuarioId,
+                        EstadoPago.PENDIENTE
+                )
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "No tienes órdenes pendientes de pago"
+                        )
+                );
 
         return ordenMapper.toCreadaResponseDTO(orden);
     }

@@ -94,6 +94,11 @@ public class SecurityConfig {
                                 "/uploads/productos/**"
                         ).permitAll()
 
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/pagos/mercado-pago/webhook"
+                        ).permitAll()
+
                         // Todo lo demás requiere JWT
                         .anyRequest().authenticated()
                 )

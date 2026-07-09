@@ -1216,17 +1216,36 @@ input[type="checkbox"] { accent-color: var(--gold-cta); }
 .cart-item__price .amount { font-weight: 700; font-size: 1rem; }
 .cart-item__price .currency { font-size: .75rem; color: #9ca3af; }
 .cart-item__price .old { font-size: .75rem; color: #9ca3af; text-decoration: line-through; }
-.cart-item__remove {
+
+.cart-item__remove-form {
   flex-shrink: 0;
-  font-size: 1.1rem;
-  color: #d1d5db;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color var(--trans);
-  margin-top: .1rem;
 }
-.cart-item__remove:hover { color: #f87171; }
+
+.cart-item__remove {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid #fecaca;
+  border-radius: 50%;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: .95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+          background var(--trans),
+          color var(--trans),
+          border-color var(--trans),
+          transform var(--trans);
+}
+
+.cart-item__remove:hover {
+  border-color: #dc2626;
+  background: #dc2626;
+  color: #fff;
+  transform: scale(1.05);
+}
 
 /* Cupón */
 .coupon-box {

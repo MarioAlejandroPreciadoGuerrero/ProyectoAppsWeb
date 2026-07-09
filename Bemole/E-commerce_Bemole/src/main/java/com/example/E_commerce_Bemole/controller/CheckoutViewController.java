@@ -116,17 +116,14 @@ public class CheckoutViewController {
         return "orden-confirmacion";
     }
 
-    private void cargarDatosCheckout(String token, Model model) {
-        try {
-            CarritoResponseDTO carrito = carritoApiClient.obtenerCarrito(token);
-
-            model.addAttribute("carrito", carrito);
-
-        } catch (Exception exception) {
-            model.addAttribute("carrito", new CarritoResponseDTO());
-        }
-
-        model.addAttribute("metodosEnvio", MetodoEnvio.values());
+    private void cargarDatosCheckout(
+            String token,
+            Model model
+    ) {
+        model.addAttribute(
+                "carrito",
+                carritoApiClient.obtenerCarrito(token)
+        );
     }
 
     private CrearOrdenFormDTO crearFormularioInicial(HttpSession session) {
@@ -148,46 +145,73 @@ public class CheckoutViewController {
     }
 
     @PostMapping("/checkout/pagar")
-    public String pagarConMercadoPago(@ModelAttribute("checkout") CrearOrdenFormDTO checkout,
-                                      HttpSession session,
-                                      RedirectAttributes redirectAttributes) {
-
+    public String pagarConMercadoPago(
+            @Valid @ModelAttribute("checkout") CrearOrdenFormDTO checkout,
+            BindingResult bindingResult,
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
         String token = obtenerToken(session);
 
-        if (token == null || token.isBlank()) {
-            redirectAttributes.addFlashAttribute("errorCheckout", "Debes iniciar sesión para realizar el pago.");
-            return "redirect:/login";
+        if (bindingResult.hasErrors()) {
+            cargarDatosCheckout(token, model);
+            return "checkout";
         }
 
         try {
-            OrdenCreadaResponseDTO orden = ordenApiClient.crearOrden(token, checkout);
+            OrdenCreadaResponseDTO ordenCreada =
+                    ordenApiClient.crearOrden(
+                            token,
+                            checkout
+                    );
 
-            CrearPagoRequestDTO pagoRequest = new CrearPagoRequestDTO();
-            pagoRequest.setOrdenId(orden.getId());
+            CrearPagoRequestDTO request =
+                    new CrearPagoRequestDTO();
 
-            CrearPagoResponseDTO pagoResponse = pagoApiClient.crearPago(token, pagoRequest);
+            request.setOrdenId(
+                    ordenCreada.getId()
+            );
 
-            if (pagoResponse == null || pagoResponse.getInitPoint() == null || pagoResponse.getInitPoint().isBlank()) {
-                redirectAttributes.addFlashAttribute("errorCheckout", "No fue posible iniciar el pago con Mercado Pago."
+            CrearPagoResponseDTO pago =
+                    pagoApiClient.crearPago(
+                            token,
+                            request
+                    );
+
+            if (pago == null
+                    || pago.getInitPoint() == null
+                    || pago.getInitPoint().isBlank()) {
+
+                redirectAttributes.addFlashAttribute(
+                        "errorCheckout",
+                        "La orden fue creada, pero no fue posible iniciar Mercado Pago."
                 );
+
                 return "redirect:/checkout";
             }
 
-            return "redirect:" + pagoResponse.getInitPoint();
+            return "redirect:" + pago.getInitPoint();
 
-        } catch (ApiClientException e) {
-            e.printStackTrace();
+        } catch (ApiClientException exception) {
+            model.addAttribute(
+                    "errorCheckout",
+                    exception.getMessage()
+            );
 
-            redirectAttributes.addFlashAttribute("errorCheckout", e.getMessage());
+            cargarDatosCheckout(token, model);
 
-            return "redirect:/checkout";
+            return "checkout";
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            model.addAttribute(
+                    "errorCheckout",
+                    "No fue posible crear la orden o iniciar el pago."
+            );
 
-            redirectAttributes.addFlashAttribute("errorCheckout", "Ocurrió un error al iniciar el pago.");
+            cargarDatosCheckout(token, model);
 
-            return "redirect:/checkout";
+            return "checkout";
         }
     }
 
