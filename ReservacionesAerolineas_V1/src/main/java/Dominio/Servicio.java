@@ -39,6 +39,10 @@ public class Servicio {
     @Column
     private double costo;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idAeropuerto", nullable = false)
+    private Aeropuerto idAeropuerto;
+    
     @OneToMany (mappedBy = "idServicio", cascade = CascadeType.ALL)
     private List<HorarioDeServicio> horarioDeServicio;
     
