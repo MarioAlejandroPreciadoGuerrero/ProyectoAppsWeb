@@ -1,0 +1,1347 @@
+/* Spa Sewa Ta'a — solo HTML y CSS */
+/* Modo claro: primario #9BCCC8, secundario #628B8C, fondo #FEFEFE, highlight #42B6BE */
+/* Titulos: Belgrano | Subtitulos y parrafos: Bellota */
+/* Base: movil. Ajustes en Media Queries (movil <=375px y tablet <=768px) */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primario: #9BCCC8;
+  --primario-suave: #c9e6e3;
+  --secundario: #628B8C;
+  --fondo: #FEFEFE;
+  --fondo-tarjetas: #F9F9F9;
+  --highlight: #42B6BE;
+  --texto: #2f3e3e;
+  --gris-borde: #d9d9d9;
+
+  /*colores para modo oscuro para despues*/
+  --primario-oscuro: #3A5A5C;
+  --primario-suave-oscuro: #2A4D4F;
+  --secundario-oscuro: #1D3536;
+  --fondo-oscuro: #121212;
+  --highlight-oscuro: #4DD0E1;
+  --fondo-tarjetas-oscuro: #242424;
+  --texto-principal-oscuro: #e0e0e0;
+  --texto-secundario-oscuro: #9E9E9E;
+  --gris-borde-oscuro: #333333;
+}
+
+html {
+  background: var(--fondo);
+}
+
+body {
+  font-family: 'Bellota', cursive;
+  background: var(--fondo);
+  color: var(--texto);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: clip;
+  min-height: 100vh;
+  /* footer al pie: columna flexible y el main absorbe el espacio libre */
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+/* contenedor reutilizable para centrar contenido.
+   en movil ocupa todo el ancho y en tablet/escritorio limita el ancho.
+   Preparado para la futura version de escritorio. */
+.contenedor {
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+h1, h2, h3 {
+  font-family: 'Belgrano', serif;
+  font-weight: 400;
+  color: var(--secundario);
+}
+
+/* toggle del menu desplegable */
+.menu-toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* cabecera */
+.topbar {
+  background: var(--primario);
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.menu-button {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px 4px;
+  /* queda por encima del panel abierto (z-index 60) para poder cerrarlo */
+  position: relative;
+  z-index: 70;
+}
+
+.menu-button span {
+  display: block;
+  width: 30px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--secundario);
+  transition: transform .3s ease, opacity .3s ease;
+}
+
+.logo img {
+  height: 46px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.topbar-spacer {
+  width: 38px;
+}
+
+/* menu desplegable superior */
+.menu-desplegable {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--primario);
+  z-index: 60;
+  padding: 16px 14px 28px;
+  transform: translateY(-110%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .3s ease-in, opacity .3s ease-in;
+  box-shadow: 0 4px 16px rgba(0,0,0,.18);
+}
+
+.menu-toggle:checked ~ .menu-desplegable {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.menu-logo img {
+  height: 84px;
+  width: auto;
+  display: block;
+}
+
+.menu-desplegable ul {
+  display: none;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-desplegable li a {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  font-family: 'Belgrano', serif;
+  font-size: 18px;
+  padding: 14px 10px;
+  margin: 0 4px 18px;
+  border-radius: 12px;
+  border: 2px solid var(--highlight);
+  background: rgba(255,255,255,.04);
+  transition: background-color .3s ease-in, transform .3s ease-in;
+}
+
+.menu-desplegable li:last-child a {
+  margin-bottom: 6px;
+}
+
+.menu-desplegable li a:active {
+  background: var(--highlight);
+  transform: scale(.99);
+}
+
+/* pieza AGENTS.md: nuevo menú hamburguesa animado.
+   El ul se muestra al activar el checkbox y las rayas del boton forman una X.
+   (El `ul` vive dentro de `.menu-desplegable`, por eso el selector lo incluye.) */
+#menu-toggle:checked ~ .menu-desplegable ul {
+  display: flex;
+}
+
+#menu-toggle:checked ~ .menu-button span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+#menu-toggle:checked ~ .menu-button span:nth-child(2) {
+  opacity: 0;
+}
+
+#menu-toggle:checked ~ .menu-button span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -7px);
+}
+
+/* banner index */
+.banner {
+  position: relative;
+  height: 230px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.banner-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center right;
+}
+
+.banner-text {
+  position: relative;
+  z-index: 1;
+  width: 58%;
+  padding: 26px 0 0 16px;
+}
+
+.banner-text h1 {
+  font-size: 19px;
+  line-height: 1.25;
+  color: var(--secundario);
+  margin-bottom: 10px;
+}
+
+.banner-text p {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #4a5d5d;
+}
+
+.banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(254,254,254,.95) 32%, rgba(254,254,254,.55) 52%, transparent 75%);
+  pointer-events: none;
+}
+
+/* bienvenida en el index con imagen de fondo del local al 30% */
+.bienvenida {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 20px 22px;
+  text-align: center;
+}
+
+.bienvenida::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("img/img_bienvenida_movil.png");
+  background-size: cover;
+  background-position: center;
+  opacity: .3;
+  pointer-events: none;
+}
+
+.bienvenida-contenido {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.bienvenida p {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #415555;
+  margin-bottom: 10px;
+}
+
+.bienvenida p:last-child {
+  margin-bottom: 0;
+}
+
+/* articulos de tratamiento: rejilla con flexbox y box model */
+.servicios {
+  padding: 20px 16px 8px;
+}
+
+.rejilla-servicios {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.tratamiento {
+  background: var(--primario);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(98,139,140,.25);
+  transition: box-shadow .3s ease-in, border-color .3s ease-in, background-color .3s ease-in;
+  border: 2px solid transparent;
+}
+
+.tratamiento-titulo {
+  text-align: center;
+  font-size: 15px;
+  color: #1e2f2f;
+  padding: 12px 10px 4px;
+}
+
+.tratamiento-img {
+  width: 100%;
+  height: 165px;
+  object-fit: cover;
+  display: block;
+  border-radius: 14px;
+  padding: 8px;
+  background: var(--primario);
+}
+
+.tratamiento-body {
+  padding: 4px 16px 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 76px;
+}
+
+.tratamiento-desc {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #243636;
+}
+
+.btn {
+  background: var(--highlight);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 9px 22px;
+  border-radius: 8px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* imagen superior de paginas y cinta de titulo */
+.portada {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  display: block;
+}
+
+.cinta {
+  background: var(--secundario);
+  color: #fff;
+  text-align: center;
+  padding: 14px 12px;
+  font-family: 'Belgrano', serif;
+  font-size: 18px;
+  letter-spacing: .3px;
+}
+
+/* textos de pasos de reservacion */
+.paso {
+  padding: 16px 14px 4px;
+}
+
+.paso-titulo {
+  font-family: 'Bellota', cursive;
+  font-weight: 400;
+  font-size: 14.5px;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.paso-centrado {
+  text-align: center;
+}
+
+/* oculta los inputs de seleccion (todo funciona solo con CSS) */
+.radio-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* tarjetas de tratamiento para elegir: contenedor flex */
+.grupo-opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1.5px solid var(--gris-borde);
+  border-radius: 20px;
+  padding: 14px 14px;
+  background: #fff;
+  cursor: pointer;
+  transition: background-color .3s ease-in, border-color .3s ease-in, transform .3s ease-in, box-shadow .3s ease-in;
+}
+
+.opcion .punto {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border-radius: 50%;
+  border: 2px solid #cfcfcf;
+  background: #eee;
+  position: relative;
+  transition: background-color .3s ease-in, border-color .3s ease-in;
+}
+
+.opcion-nombre {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 700;
+  color: #222;
+  line-height: 1.3;
+}
+
+.opcion-meta {
+  text-align: right;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #7a8a8a;
+  transition: color .3s ease-in;
+}
+
+/* animaciones de seleccion */
+.radio-input:checked + .opcion {
+  background: var(--primario);
+  border-color: var(--secundario);
+  box-shadow: 0 2px 8px rgba(98,139,140,.35);
+  transform: scale(1.01);
+}
+
+.radio-input:checked + .opcion .punto {
+  background: var(--highlight);
+  border-color: var(--highlight);
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+.radio-input:checked + .opcion .opcion-meta {
+  color: #4a6a6b;
+}
+
+/* seleccionar dias */
+.dias {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.dia {
+  flex: 1;
+  text-align: center;
+  background: var(--primario-suave);
+  border: 1.5px solid transparent;
+  border-radius: 20px;
+  padding: 20px 6px;
+  cursor: pointer;
+  font-family: 'Belgrano', serif;
+  color: #7a9a9b;
+  font-size: 16px;
+  line-height: 1.4;
+  transition: background-color .3s ease-in, color .3s ease-in, border-color .3s ease-in, transform .3s ease-in;
+  display: block;
+}
+
+.radio-input:checked + .dia {
+  background: var(--highlight);
+  color: #fff;
+  border-color: var(--secundario);
+  transform: scale(1.03);
+}
+
+.turno-titulo {
+  text-align: center;
+  font-size: 14px;
+  margin: 14px 0 10px;
+  color: #333;
+}
+
+/* seleccionar horarios */
+.horarios {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 14px;
+  margin-bottom: 6px;
+}
+
+.slot {
+  display: block;
+  text-align: center;
+  border: 1.5px solid var(--gris-borde);
+  border-radius: 18px;
+  padding: 10px 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 12.5px;
+  color: #222;
+  line-height: 1.35;
+  transition: background-color .3s ease-in, border-color .3s ease-in, transform .3s ease-in;
+}
+
+.slot small {
+  display: block;
+  color: #b5b5b5;
+  font-size: 12px;
+  transition: color .3s ease-in;
+}
+
+.radio-input:checked + .slot {
+  background: var(--primario);
+  border-color: var(--secundario);
+  transform: scale(1.02);
+}
+
+.radio-input:checked + .slot small {
+  color: #3d5a5b;
+  font-weight: 700;
+}
+
+/* boton de pagar */
+.cta-wrap {
+  text-align: center;
+  padding: 16px 14px 26px;
+}
+
+.btn-grande {
+  background: var(--primario);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 30px;
+  font-family: 'Bellota', cursive;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.3;
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  transition: background-color .3s ease-in, transform .3s ease-in;
+}
+
+.btn-grande:active {
+  background: var(--highlight);
+  transform: scale(.98);
+}
+
+.btn-confirmar {
+  background: var(--highlight);
+  min-width: 150px;
+}
+
+/* para la pagina de pago: resumen */
+.subtitulo {
+  text-align: center;
+  font-size: 15px;
+  color: #222;
+  margin: 14px 0 10px;
+}
+
+.subtitulo-izq {
+  text-align: left;
+  margin-left: 14px;
+}
+
+.resumen-card {
+  display: flex;
+  align-items: stretch;
+  background: var(--primario);
+  border: 1.5px solid var(--secundario);
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 0 14px 14px;
+}
+
+.fecha-badge {
+  background: var(--highlight);
+  color: #fff;
+  font-family: 'Belgrano', serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  padding: 16px 10px;
+  font-size: 17px;
+  line-height: 1.4;
+  border-right: 1.5px solid var(--secundario);
+}
+
+.resumen-tipo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #1e2f2f;
+  flex: 1;
+}
+
+.resumen-tipo strong {
+  font-family: 'Belgrano', serif;
+  font-weight: 400;
+  font-size: 14.5px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.resumen-info {
+  padding: 12px 14px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #1e2f2f;
+}
+
+.dato-card {
+  background: var(--primario);
+  border: 1.5px solid var(--secundario);
+  border-radius: 20px;
+  margin: 0 14px 8px;
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1e2f2f;
+}
+
+/* columnas de pago: en movil apiladas, en tablet lado a lado */
+.pago-columnas {
+  display: flex;
+  flex-direction: column;
+}
+
+.pago-col {
+  flex: 1;
+}
+
+.paypal-btn {
+  display: block;
+  margin: 10px 14px 12px;
+  background: #fff;
+  border: 1.5px solid var(--gris-borde);
+  border-radius: 22px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: box-shadow .3s ease-in, transform .3s ease-in;
+}
+
+.paypal-btn img {
+  height: 38px;
+  width: auto;
+}
+
+.paypal-btn:active {
+  box-shadow: 0 2px 10px rgba(66,182,190,.4);
+  transform: scale(.99);
+}
+
+.pago-btn {
+  display: block;
+  margin: 0 14px 10px;
+  background: #fff;
+  border: 1.5px solid var(--gris-borde);
+  border-radius: 22px;
+  padding: 14px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--texto);
+  font-size: 15px;
+  cursor: pointer;
+  transition: box-shadow .3s ease-in, transform .3s ease-in;
+}
+
+.pago-btn:active {
+  box-shadow: 0 2px 10px rgba(66,182,190,.4);
+  transform: scale(.99);
+}
+
+/* para la pagina de mis reservaciones */
+.reserva-card {
+  display: flex;
+  align-items: stretch;
+  background: var(--primario);
+  border: 1.5px solid var(--secundario);
+  border-radius: 22px;
+  overflow: hidden;
+  margin: 0 14px 16px;
+}
+
+.reserva-tipo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px 8px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #1e2f2f;
+  flex: 1;
+}
+
+.reserva-tipo strong {
+  font-family: 'Belgrano', serif;
+  font-weight: 400;
+  font-size: 14.5px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.reserva-info {
+  padding: 12px 10px 12px 14px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #1e2f2f;
+}
+
+.reserva-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+}
+
+.estado {
+  font-size: 14px;
+  text-align: right;
+  line-height: 1.35;
+  color: #1e2f2f;
+}
+
+.btn-cancelar {
+  background: var(--highlight);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 26px;
+  font-family: 'Bellota', cursive;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform .3s ease-in, background-color .3s ease-in;
+}
+
+.btn-cancelar:active {
+  transform: scale(.97);
+}
+
+/* linea divisoria entre bloques porque css no me deja editar el color graaacias por tanto me lastimas*/
+.divisor {
+  border: none;
+  border-top: 1.5px solid var(--gris-borde);
+  margin: 14px;
+}
+
+/* para desplegables */
+.desplegable {
+  margin: 0 14px 12px;
+  border: 1.5px solid var(--gris-borde);
+  border-radius: 20px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.desplegable summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.desplegable summary::-webkit-details-marker {
+  display: none;
+}
+
+.desplegable summary::after {
+  content: "›";
+  font-size: 22px;
+  color: #222;
+  transition: transform .3s ease-in;
+}
+
+.desplegable[open] summary::after {
+  transform: rotate(90deg);
+}
+
+.desplegable .contenido {
+  padding: 0 16px 14px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #415555;
+}
+
+/* footer */
+.footer {
+  background: var(--secundario);
+  color: #fff;
+  text-align: center;
+  padding: 20px 16px 26px;
+  margin-top: 14px;
+}
+
+.footer img {
+  height: 52px;
+  width: auto;
+  margin-bottom: 8px;
+  opacity: .95;
+}
+
+.footer p {
+  font-family: 'Belgrano', serif;
+  font-size: 15px;
+}
+
+.footer small {
+  font-size: 12px;
+  opacity: .85;
+}
+
+/* media query para telefonos pequeños (width <= 375px) */
+@media (max-width: 375px) {
+  .topbar {
+    height: 64px;
+    padding: 0 12px;
+  }
+
+  .logo img {
+    height: 40px;
+  }
+
+  .menu-logo img {
+    height: 72px;
+  }
+
+  .menu-desplegable li a {
+    font-size: 16px;
+    padding: 12px 8px;
+  }
+
+  .banner {
+    height: 200px;
+  }
+
+  .banner-text {
+    width: 60%;
+    padding: 20px 0 0 12px;
+  }
+
+  .banner-text h1 {
+    font-size: 17px;
+  }
+
+  .banner-text p {
+    font-size: 13px;
+  }
+
+  .bienvenida {
+    padding: 18px 14px 18px;
+  }
+
+  .servicios {
+    padding: 16px 12px 6px;
+  }
+
+  .tratamiento-img {
+    height: 150px;
+  }
+
+  .portada {
+    height: 165px;
+  }
+
+  .cinta {
+    font-size: 16px;
+    padding: 12px 10px;
+  }
+
+  .paso {
+    padding: 14px 10px 2px;
+  }
+
+  .dias {
+    gap: 8px;
+  }
+
+  .dia {
+    padding: 16px 4px;
+    font-size: 15px;
+  }
+
+  .horarios {
+    gap: 10px 8px;
+  }
+
+  .slot {
+    font-size: 11.5px;
+  }
+
+  .resumen-card,
+  .dato-card,
+  .reserva-card,
+  .desplegable {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .fecha-badge {
+    min-width: 82px;
+    font-size: 15px;
+  }
+
+  .paypal-btn,
+  .pago-btn {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .divisor {
+    margin: 12px 10px;
+  }
+}
+
+/* media query para tablet (376px <= width <= 768px) */
+@media (376px <= width <= 768px) {
+
+  .contenedor {
+    padding: 0 24px;
+  }
+
+  .topbar {
+    height: 84px;
+    padding: 0 24px;
+  }
+
+  .logo img {
+    height: 56px;
+  }
+
+  .menu-desplegable {
+    padding: 20px 32px 34px;
+  }
+
+  .banner {
+    height: 300px;
+  }
+
+  .banner-text {
+    width: 44%;
+    padding: 56px 0 0 32px;
+  }
+
+  .banner-text h1 {
+    font-size: 24px;
+  }
+
+  .banner-text p {
+    font-size: 16px;
+  }
+
+  .cinta {
+    font-size: 20px;
+    padding: 16px 12px;
+  }
+
+  /* bienvenida tablet: imagen panoramica del local al 30% */
+  .bienvenida {
+    padding: 30px 32px 30px;
+  }
+
+  .bienvenida::before {
+    background-image: url("img/img_bienvenida.png");
+  }
+
+  .bienvenida p {
+    font-size: 15px;
+  }
+
+  /* servicios tablet: rejilla 2x2 con flexbox */
+  .servicios {
+    padding: 24px 24px 12px;
+  }
+
+  .rejilla-servicios {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .rejilla-servicios .tratamiento {
+    flex: 1 1 calc(50% - 10px);
+    min-width: 0;
+  }
+
+  .tratamiento-img {
+    height: 180px;
+  }
+
+  /* reserva tablet */
+  .portada {
+    height: 280px;
+  }
+
+  .paso {
+    padding: 20px 24px 6px;
+  }
+
+  .paso-titulo {
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .grupo-opciones {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .grupo-opciones .opcion {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 0;
+  }
+
+  .dias {
+    max-width: 560px;
+    margin: 0 auto 14px;
+  }
+
+  .horarios {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  /* pago tablet: resumen ancho completo y columnas lado a lado con divisor */
+  .resumen-card {
+    margin: 0 24px 14px;
+  }
+
+  .pago-columnas {
+    flex-direction: row;
+    align-items: stretch;
+    margin: 0 24px;
+  }
+
+  .pago-col:first-child {
+    border-right: 1.5px solid var(--gris-borde);
+    padding-right: 20px;
+  }
+
+  .pago-col:last-child {
+    padding-left: 20px;
+  }
+
+  .pago-col .dato-card,
+  .pago-col .paypal-btn,
+  .pago-col .pago-btn {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* mis reservaciones tablet */
+  .reserva-card {
+    margin: 0 24px 16px;
+  }
+
+  .subtitulo-izq {
+    text-align: center;
+    margin-left: 0;
+  }
+
+  .desplegable {
+    margin: 0 24px 14px;
+  }
+
+  .divisor {
+    margin: 16px 24px;
+  }
+
+  .footer {
+    padding: 26px 24px 32px;
+  }
+}
+
+/* Media Query para escritorio (769px en adelante, cubre el ancho de 1280px) */
+@media (769px <= width) {
+  .contenedor {
+    padding: 0 32px;
+  }
+
+  .topbar {
+    height: 96px;
+    padding: 0 32px;
+  }
+
+  .logo img {
+    height: 64px;
+  }
+
+  /* la barra superior pasa a ser barra lateral izquierda con los mismos botones */
+  .menu-desplegable {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: auto;
+    width: 250px;
+    padding: 20px 18px 30px;
+    transform: translateX(-110%);
+    box-shadow: 4px 0 16px rgba(0,0,0,.18);
+  }
+
+  .menu-toggle:checked ~ .menu-desplegable {
+    transform: translateX(0);
+  }
+
+  .menu-logo img {
+    height: 90px;
+  }
+
+  .banner {
+    height: 380px;
+  }
+
+  .banner-text {
+    width: 38%;
+    padding: 90px 0 0 48px;
+  }
+
+  .banner-text h1 {
+    font-size: 30px;
+  }
+
+  .banner-text p {
+    font-size: 18px;
+  }
+
+  .cinta {
+    font-size: 22px;
+    padding: 18px 12px;
+  }
+
+  /* bienvenida escritorio: imagen del local a la izquierda, texto a la derecha */
+  .bienvenida {
+    padding: 0;
+  }
+
+  .bienvenida::before {
+    background-image: url("img/img_bienvenida.png");
+    opacity: 1;
+    right: 50%;
+  }
+
+  .bienvenida-contenido {
+    margin-left: auto;
+    margin-right: 0;
+    max-width: 50%;
+    padding: 48px;
+    text-align: left;
+  }
+
+  .bienvenida p {
+    font-size: 16px;
+  }
+
+  /* servicios escritorio: rejilla 2x2 amplia con flexbox */
+  .servicios {
+    padding: 32px;
+  }
+
+  .rejilla-servicios {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 28px;
+  }
+
+  .rejilla-servicios .tratamiento {
+    flex: 1 1 calc(50% - 14px);
+    min-width: 0;
+  }
+
+  .tratamiento-img {
+    height: 220px;
+  }
+
+  /* reserva escritorio: pasos 1 y 2 lado a lado con divisor vertical */
+  .portada {
+    height: 340px;
+  }
+
+  .pasos-columnas {
+    display: flex;
+    align-items: stretch;
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+
+  .pasos-columnas .paso {
+    flex: 1;
+    min-width: 0;
+    padding: 24px 32px 10px;
+  }
+
+  .pasos-columnas .paso .contenedor {
+    padding: 0;
+  }
+
+  .pasos-columnas .paso:first-child {
+    border-right: 1.5px solid var(--gris-borde);
+  }
+
+  .paso-titulo {
+    text-align: center;
+    font-size: 17px;
+  }
+
+  .grupo-opciones {
+    flex-direction: column;
+  }
+
+  .grupo-opciones .opcion {
+    flex: none;
+  }
+
+  .dias {
+    max-width: 420px;
+    margin: 0 auto 14px;
+  }
+
+  .horarios {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .reserva .divisor {
+    max-width: 960px;
+    margin: 18px auto;
+  }
+
+  /* pago escritorio: resumen+datos a la izquierda, formas+confirmar a la derecha.
+     las columnas se "disuelven" (display: contents) y la rejilla del contenedor
+     coloca cada bloque en su zona; asi queda igual que en tablet. */
+  .pago .contenedor {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .pago-columnas {
+    display: contents;
+  }
+
+  /* en escritorio el divisor vertical reemplaza al horizontal */
+  .pago .contenedor > hr.divisor {
+    display: none;
+  }
+
+  .pago .contenedor > h2.subtitulo {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .pago .contenedor > .resumen-card {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0 0 14px;
+  }
+
+  .pago-col:first-child {
+    grid-column: 1;
+    grid-row: 3;
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .pago-col:last-child {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    border-left: 1.5px solid var(--gris-borde);
+    padding-left: 28px;
+  }
+
+  .pago .contenedor > .cta-wrap {
+    grid-column: 2;
+    grid-row: 4;
+    border-left: 1.5px solid var(--gris-borde);
+    padding: 6px 0 10px 28px;
+  }
+
+  .pago-col .dato-card,
+  .pago-col .paypal-btn,
+  .pago-col .pago-btn {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* mis reservaciones escritorio: contenido centrado */
+  .reservaciones .contenedor {
+    max-width: 720px;
+  }
+
+  .reservaciones .reserva-card {
+    margin: 0 0 16px;
+  }
+
+  .subtitulo-izq {
+    text-align: center;
+    margin-left: 0;
+  }
+
+  .reservaciones .desplegable {
+    margin: 0 0 14px;
+  }
+
+  .reservaciones .divisor {
+    margin: 18px 0;
+  }
+
+  .footer {
+    padding: 30px 32px 36px;
+  }
+}
+
+/*me estoy vlviendo loco*/

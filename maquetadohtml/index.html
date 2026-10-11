@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Spa Sewa Ta'a - Bienvenido">
+  <meta name="keywords" content="spa, tratamiento, reserva, servicio">
+  <meta name="author" content="Equipo Azul">
+  <meta name="robots" content="index, follow">
+  <title>Spa Sewa Ta'a - Bienvenido</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Belgrano&family=Bellota:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="topbar">
+    <!-- menu hamburguesa animado (pieza AGENTS.md): el checkbox controla el boton y el ul -->
+    <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">
+    <label for="menu-toggle" class="menu-button" aria-label="Menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+    <a href="#" class="logo">
+      <img src="img/logo_dark.png" alt="Logo Spa Sewa Ta'a">
+    </a>
+    <span class="topbar-spacer"></span>
+
+    <!-- menu desplegable -->
+    <nav class="menu-desplegable" aria-label="Menú principal">
+      <div class="menu-top">
+        <a href="#" class="menu-logo">
+          <img src="img/logo_dark.png" alt="Logo Spa Sewa Ta'a">
+        </a>
+      </div>
+      <ul>
+        <li><a href="#">Reservaciones</a></li>
+        <li><a href="#">Mi perfil</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- banner -->
+  <section class="banner">
+    <img src="img/banner.png" alt="Mujer relajandose en el spa" class="banner-bg">
+    <div class="banner-text">
+      <h1>Relájate, tu bienestar es primero</h1>
+      <p>Descubre nuestros tratamientos diseñados para cuidar de ti</p>
+    </div>
+  </section>
+
+  <main>
+    <div class="cinta">Bienvenido a Spa Sewa Ta'a</div>
+
+    <!-- bienvenida con imagen de fondo del local -->
+    <section class="bienvenida">
+      <div class="bienvenida-contenido">
+        <p>
+          En <i><strong>Sewa Ta'a</strong></i>, que significa "florecer" en armonía,
+          creemos que el descanso es esencial. Te invitamos a desconectar del
+          estrés y reconectar contigo mismo entre aromas suaves, música tranquila
+          y manos expertas.
+        </p>
+        <p>
+          Nuestro pequeño refugio de calma está pensado para ti: ven a respirar,
+          renovar tu energía y regalarte un momento solo para ti.
+        </p>
+      </div>
+    </section>
+
+    <div class="cinta">Conoce nuestros servicios</div>
+
+    <!-- servicios -->
+    <section class="servicios">
+      <div class="contenedor">
+        <div class="rejilla-servicios">
+          <!-- tiene un flexbox, aqui iria tambien lo del thymeleaf si acaso quieren agregar otro tratamiento, sino lo dejamos asi-->
+
+          <!-- articulo tratamiento facial -->
+          <article class="tratamiento">
+            <h3 class="tratamiento-titulo">Tratamientos Faciales</h3>
+            <img src="img/img_servicio_trat_facial.png" alt="Tratamiento facial" class="tratamiento-img">
+            <div class="tratamiento-body">
+              <p class="tratamiento-desc">Limpieza e hidratación profunda para una piel luminosa.</p>
+              <a href="#" class="btn">Ver Más</a>
+            </div>
+          </article>
+
+          <!-- articulo peluqueria -->
+          <article class="tratamiento">
+            <h3 class="tratamiento-titulo">Peluquería</h3>
+            <img src="img/img_servicio_peluqueria.png" alt="Servicio de peluquería" class="tratamiento-img">
+            <div class="tratamiento-body">
+              <p class="tratamiento-desc">Lavado, corte y peinado con un momento de relax.</p>
+              <a href="#" class="btn">Ver Más</a>
+            </div>
+          </article>
+
+          <!-- articulo masaje -->
+          <article class="tratamiento">
+            <h3 class="tratamiento-titulo">Masaje</h3>
+            <img src="img/img_servicio_masaje.png" alt="Masaje corporal" class="tratamiento-img">
+            <div class="tratamiento-body">
+              <p class="tratamiento-desc">Masaje relajante para liberar tensión y estrés.</p>
+              <a href="#" class="btn">Ver Más</a>
+            </div>
+          </article>
+
+          <!-- articulo sauna -->
+          <article class="tratamiento">
+            <h3 class="tratamiento-titulo">Sauna</h3>
+            <img src="img/img_servicio_sauna.png" alt="Sauna del spa" class="tratamiento-img">
+            <div class="tratamiento-body">
+              <p class="tratamiento-desc">Sesión de sauna para renovar cuerpo y mente.</p>
+              <a href="#" class="btn">Ver Más</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <img src="img/logo_light.png" alt="Logo Spa Sewa Ta'a">
+    <p>Spa Sewa Ta'a</p>
+    <small>© Equipo Azul</small>
+  </footer>
+</body>
+</html>

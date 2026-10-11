@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Spa Sewa Ta'a - Reservar servicio">
+  <meta name="keywords" content="spa, tratamiento, reserva, servicio">
+  <meta name="author" content="Equipo Azul">
+  <meta name="robots" content="index, follow">
+  <title>Spa Sewa Ta'a - Reservar servicio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Belgrano&family=Bellota:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="topbar">
+    <!-- menu hamburguesa animado del profe -->
+    <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">
+    <label for="menu-toggle" class="menu-button" aria-label="Menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+    <a href="#" class="logo">
+      <img src="img/logo_dark.png" alt="Logo Spa Sewa Ta'a">
+    </a>
+    <span class="topbar-spacer"></span>
+
+    <!-- menu desplegable -->
+    <nav class="menu-desplegable" aria-label="Menú principal">
+      <div class="menu-top">
+        <a href="#" class="menu-logo">
+          <img src="img/logo_dark.png" alt="Logo Spa Sewa Ta'a">
+        </a>
+      </div>
+      <ul>
+        <li><a href="#">Reservaciones</a></li>
+        <li><a href="#">Mi perfil</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="reserva">
+    <img src="img/img_servicio_trat_facial.png" alt="Tratamiento facial" class="portada">
+    <div class="cinta">Tratamientos faciales</div>
+
+    <!-- pasos 1 y 2 lado a lado en escritorio -->
+    <div class="pasos-columnas">
+    <!-- paso 1 -->
+    <section class="paso">
+      <div class="contenedor">
+        <h2 class="paso-titulo">Paso 1. Seleccione su tratamiento</h2>
+
+        <!-- aqui iria la parte de los fragmentos y el th:each pero aun no tenemos el proeycto en thymeleaf-->
+
+        <div class="grupo-opciones">
+          <input type="radio" name="tratamiento" id="t1" class="radio-input" checked>
+          <label for="t1" class="opcion">
+            <span class="punto"></span>
+            <span class="opcion-nombre">Mascarilla</span>
+            <span class="opcion-meta">$100 mxn<br>60 min</span>
+          </label>
+
+          <input type="radio" name="tratamiento" id="t2" class="radio-input">
+          <label for="t2" class="opcion">
+            <span class="punto"></span>
+            <span class="opcion-nombre">Limpieza profunda</span>
+            <span class="opcion-meta">$100 mxn<br>60 min</span>
+          </label>
+
+          <input type="radio" name="tratamiento" id="t3" class="radio-input">
+          <label for="t3" class="opcion">
+            <span class="punto"></span>
+            <span class="opcion-nombre">Tratamiento toallas calientes</span>
+            <span class="opcion-meta">$100 mxn<br>60 min</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- paso 2 -->
+    <section class="paso">
+      <div class="contenedor">
+        <h2 class="paso-titulo">Paso 2. Seleccione la fecha y hora de su cita</h2>
+
+        <div class="dias">
+          <input type="radio" name="dia" id="d1" class="radio-input">
+          <label for="d1" class="dia">MIE<br>07</label>
+
+          <input type="radio" name="dia" id="d2" class="radio-input" checked>
+          <label for="d2" class="dia">JUE<br>08</label>
+
+          <input type="radio" name="dia" id="d3" class="radio-input">
+          <label for="d3" class="dia">VIE<br>09</label>
+        </div>
+
+        <h3 class="turno-titulo">Matutino</h3>
+        <div class="horarios">
+          <input type="radio" name="hora" id="h1" class="radio-input">
+          <label for="h1" class="slot">9:00am - 10:30am<small>cuarto 1</small></label>
+
+          <input type="radio" name="hora" id="h2" class="radio-input">
+          <label for="h2" class="slot">9:00am - 10:30am<small>cuarto 2</small></label>
+
+          <input type="radio" name="hora" id="h3" class="radio-input">
+          <label for="h3" class="slot">9:00am - 10:30am<small>cuarto 3</small></label>
+
+          <input type="radio" name="hora" id="h4" class="radio-input">
+          <label for="h4" class="slot">12:00pm - 1:30pm<small>cuarto 1</small></label>
+        </div>
+
+        <h3 class="turno-titulo">Vespertino</h3>
+        <div class="horarios">
+          <input type="radio" name="hora" id="h5" class="radio-input" checked>
+          <label for="h5" class="slot">9:00am - 10:30am<small>cuarto 3</small></label>
+
+          <input type="radio" name="hora" id="h6" class="radio-input">
+          <label for="h6" class="slot">9:00am - 10:30am<small>cuarto 3</small></label>
+
+          <input type="radio" name="hora" id="h7" class="radio-input">
+          <label for="h7" class="slot">9:00am - 10:30am<small>cuarto 2</small></label>
+
+          <input type="radio" name="hora" id="h8" class="radio-input">
+          <label for="h8" class="slot">12:00pm - 1:30pm<small>cuarto 2</small></label>
+        </div>
+      </div>
+    </section>
+    </div><!-- /pasos-columnas -->
+
+    <hr class="divisor">
+
+    <!-- paso 3 -->
+    <section class="paso">
+      <div class="contenedor">
+        <h2 class="paso-titulo paso-centrado">Paso 3. Pagar y confirmar tu reservación</h2>
+      </div>
+    </section>
+    <div class="cta-wrap">
+      <a href="#" class="btn-grande">Pagar y reservar</a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <img src="img/logo_light.png" alt="Logo Spa Sewa Ta'a">
+    <p>Spa Sewa Ta'a</p>
+    <small>© Equipo Azul</small>
+  </footer>
+</body>
+</html>
