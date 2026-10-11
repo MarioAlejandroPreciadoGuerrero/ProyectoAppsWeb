@@ -1105,7 +1105,7 @@ h1, h2, h3 {
   }
 }
 
-/* Media Query para escritorio (769px en adelante, cubre el ancho de 1280px) */
+/* media query para escritorio (769px en adelante, espero qeu cubra 1280 en adelante) */
 @media (769px <= width) {
   .contenedor {
     padding: 0 32px;
@@ -1170,7 +1170,7 @@ h1, h2, h3 {
 
   .bienvenida::before {
     background-image: url("img/img_bienvenida.png");
-    opacity: 1;
+    opacity: 0.3;
     right: 50%;
   }
 
