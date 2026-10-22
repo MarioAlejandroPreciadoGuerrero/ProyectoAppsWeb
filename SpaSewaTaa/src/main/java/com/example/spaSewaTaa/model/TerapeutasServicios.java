@@ -16,6 +16,12 @@ public class TerapeutasServicios {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_terapeutas_servicios;
 
-    //agregar llaves foraneas de terapeuta y servicios para definir que servicios da un terapeuta
+    @ManyToOne
+    @JoinColumn(name = "id_terapeuta", nullable = false)
+    private Terapeuta terapeuta;
+
+    @ManyToOne
+    @JoinColumn(name = "id_servicio", nullable = false)
+    private Servicio servicio;
 
 }

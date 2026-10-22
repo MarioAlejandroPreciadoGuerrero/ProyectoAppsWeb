@@ -22,9 +22,9 @@ public class Terapeuta {
     @Column(nullable = false)
     private String nombre;
 
-//    @OneToOne
-//    @ForeignKey()
-//    private Long id_sucursal;
+    @ManyToOne
+    @JoinColumn(name = "id_sucursal")
+    private Sucursal sucursal;
 
     @Column
     private LocalDate fecha_contratacion;
