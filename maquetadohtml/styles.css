@@ -1345,3 +1345,136 @@ h1, h2, h3 {
 }
 
 /*me estoy vlviendo loco*/
+
+/*login y register*/
+.autenticacion-principal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 16px;
+  min-height: calc(100vh - 160px);
+}
+
+.tarjeta-autenticacion {
+  background: var(--fondo);
+  border: 1.5px solid var(--gris-borde);
+  border-radius: 28px;
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.encabezado-autenticacion {
+  background: var(--primario);
+  padding: 24px 16px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.encabezado-autenticacion img {
+  height: 60px;
+  width: auto;
+}
+
+.cuerpo-autenticacion {
+  padding: 24px 20px;
+}
+
+/* Selector de pestañas */
+.pestanias-autenticacion {
+  background: #E8F3F2;
+  border-radius: 14px;
+  padding: 4px;
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+
+.pestania-autenticacion {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  font-family: 'Bellota', cursive;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--secundario);
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background-color .3s ease, color .3s ease;
+}
+
+.pestania-autenticacion.activa {
+  background: var(--primario);
+  color: #fff;
+}
+
+.titulo-autenticacion {
+  font-family: 'Belgrano', serif;
+  text-align: center;
+  font-size: 20px;
+  color: var(--secundario);
+  margin-bottom: 6px;
+}
+
+.subtitulo-autenticacion {
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+/* Campos de Formulario */
+.grupo-formulario {
+  margin-bottom: 14px;
+}
+
+.etiqueta-formulario {
+  display: block;
+  font-size: 12.5px;
+  color: var(--texto);
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.campo-formulario {
+  width: 100%;
+  padding: 12px 16px;
+  background: #EFEFEF;
+  border: 1.5px solid transparent;
+  border-radius: 20px;
+  font-family: 'Bellota', cursive;
+  font-size: 13.5px;
+  color: var(--texto);
+  outline: none;
+  transition: border-color .3s ease, background-color .3s ease;
+}
+
+.campo-formulario:focus {
+  border-color: var(--secundario);
+  background: #fff;
+}
+
+/* Botón principal */
+.boton-autenticacion {
+  width: 100%;
+  background: var(--secundario);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 12px;
+  font-family: 'Bellota', cursive;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color .3s ease, transform .2s ease;
+}
+
+.boton-autenticacion:active {
+  background: var(--highlight);
+  transform: scale(0.98);
+}
