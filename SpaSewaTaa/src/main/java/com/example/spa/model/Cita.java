@@ -2,15 +2,18 @@ package com.example.spa.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "citas")
 public class Cita {
     @Id
@@ -46,6 +49,6 @@ public class Cita {
     @Column
     private LocalDateTime fecha_creada;
 
-    @Column
-    private Double precio_total;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal precio_total;
 }

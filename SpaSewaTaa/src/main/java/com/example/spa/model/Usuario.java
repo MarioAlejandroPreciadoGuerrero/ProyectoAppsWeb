@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 @Table(name = "usuarios")
 public class Usuario {
 
@@ -21,7 +22,7 @@ public class Usuario {
     private String email;
 
     @Column(nullable = false)
-    private String password;
+    private String contrasenia;
 
     @Column(nullable = false)
     private String nombre;
@@ -32,7 +33,7 @@ public class Usuario {
     @Column
     private boolean activo = true;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_rol")
     private Rol rol;
 
