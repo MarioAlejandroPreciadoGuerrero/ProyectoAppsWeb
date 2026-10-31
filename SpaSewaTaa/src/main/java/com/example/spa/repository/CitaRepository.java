@@ -9,6 +9,5 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CitaRepository extends JpaRepository<Cita, Long> {
-    @Query("SELECT c FROM Cita c WHERE c.cliente.usuario.id_usuario = :idUsuario AND c.estado = :estado")
-    List<Cita> findByUsuarioIdAndEstado(@Param("idUsuario") Long idUsuario, @Param("estado") EstadoCita estado);
+    List<Cita> findByUsuarioIdAndEstado(Long idUsuario, EstadoCita estado);
 }

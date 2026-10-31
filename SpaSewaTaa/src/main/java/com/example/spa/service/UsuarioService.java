@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ public class UsuarioService {
 
     @Autowired
     private HttpSession session;
+
 
     public Usuario registrarUsuario(Usuario user) {
         user.setContrasenia(passwordEncoder.encode(user.getContrasenia()));
@@ -47,4 +49,5 @@ public class UsuarioService {
         }
         return null;
     }
+
 }
