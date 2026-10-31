@@ -31,8 +31,7 @@ public class Usuario {
 
     @Column
     private boolean activo = true;
-
-
+    
     @OneToOne
     @JoinColumn(name = "id_rol")
     private Rol rol;
