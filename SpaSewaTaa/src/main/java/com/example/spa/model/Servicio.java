@@ -6,14 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
 @Table(name = "servicios")
 public class Servicio {
 
@@ -33,8 +31,8 @@ public class Servicio {
     @Column(nullable = false)
     private String categoria;
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal precio;
+    @Column(nullable = false)
+    private Double precio;
 
     @Column
     private String url_imagen;

@@ -18,14 +18,11 @@ public class CitaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-
-
-
     public List<Cita> obtenerCitasPendientesDeUsuario(Long idUsuario) {
         if (!usuarioRepository.existsById(idUsuario)) {
             throw new RuntimeException("El usuario no existe");
         }
-
         return citaRepository.findByUsuarioIdAndEstado(idUsuario, EstadoCita.PENDIENTE);
     }
+
 }

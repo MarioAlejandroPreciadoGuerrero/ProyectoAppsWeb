@@ -5,15 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
 @Table(name = "pagos")
 public class Pago {
     @Id
@@ -28,8 +25,8 @@ public class Pago {
     @JoinColumn(name = "id_metodo_pago", nullable = false)
     private MetodoPago metodoPago;
 
-    @Column(precision = 10, scale = 2)
-    private BigDecimal monto;
+    @Column
+    private Double monto;
 
     @Column
     private LocalDateTime fecha_pago;

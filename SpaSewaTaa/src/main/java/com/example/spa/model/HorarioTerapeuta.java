@@ -33,8 +33,6 @@ public class HorarioTerapeuta {
     @Column
     private LocalTime hora_fin;
 
-    @PrePersist
-    @PreUpdate
     private void validarHorarioDentroDeSucursal() {
         if (terapeuta == null || terapeuta.getSucursal() == null) {
             throw new IllegalStateException("El horario debe pertenecer a un terapeuta asignado a una sucursal");
