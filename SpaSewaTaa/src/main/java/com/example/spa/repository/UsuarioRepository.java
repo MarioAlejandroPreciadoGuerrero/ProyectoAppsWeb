@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findUsuarioByEmail(String email);
-    void desactivarUsuario(Long idUsuario);
 }

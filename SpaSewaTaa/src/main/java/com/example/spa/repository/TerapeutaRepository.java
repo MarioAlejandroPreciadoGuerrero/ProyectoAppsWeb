@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TerapeutaRepository extends JpaRepository<Terapeuta, Long> {
-    List<Terapeuta> findByNombreServicio(String servicio);
+    List<Terapeuta> findDistinctByServicios_NombreIgnoreCase(String servicio);
 }
