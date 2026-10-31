@@ -1,4 +1,4 @@
-package com.example.spa_backend.model;
+package com.example.spa.model;
 
 public enum EstadoPago {
     PENDIENTE, PAGADO

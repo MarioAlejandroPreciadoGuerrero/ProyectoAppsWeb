@@ -1,6 +1,6 @@
-package com.example.spa_backend.repository;
+package com.example.spa.repository;
 
-import com.example.spa_backend.model.Terapeuta;
+import com.example.spa.model.Terapeuta;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

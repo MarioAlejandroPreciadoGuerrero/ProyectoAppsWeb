@@ -1,6 +1,6 @@
-package com.example.spa_backend.repository;
+package com.example.spa.repository;
 
-import com.example.spa_backend.model.Cliente;
+import com.example.spa.model.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

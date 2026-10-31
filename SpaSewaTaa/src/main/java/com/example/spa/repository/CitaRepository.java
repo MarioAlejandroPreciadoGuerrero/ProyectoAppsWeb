@@ -1,6 +1,6 @@
-package com.example.spa_backend.repository;
+package com.example.spa.repository;
 
-import com.example.spa_backend.model.Cita;
+import com.example.spa.model.Cita;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CitaRepository extends JpaRepository<Cita, Long> {

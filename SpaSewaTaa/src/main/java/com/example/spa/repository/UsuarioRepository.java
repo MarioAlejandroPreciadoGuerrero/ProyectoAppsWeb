@@ -1,8 +1,8 @@
-package com.example.spa_backend.repository;
+package com.example.spa.repository;
 
-import com.example.spa_backend.model.Usuario;
+import com.example.spa.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    
+
 }

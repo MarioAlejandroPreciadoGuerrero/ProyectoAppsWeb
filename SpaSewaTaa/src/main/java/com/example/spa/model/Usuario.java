@@ -1,4 +1,4 @@
-package com.example.spa_backend.model;
+package com.example.spa.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +31,7 @@ public class Usuario {
 
     @Column
     private boolean activo = true;
-    
+
     @OneToOne
     @JoinColumn(name = "id_rol")
     private Rol rol;
