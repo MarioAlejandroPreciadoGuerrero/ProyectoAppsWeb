@@ -7,7 +7,6 @@ import com.example.spa.repository.CitaRepository;
 import com.example.spa.repository.MetodoPagoRepository;
 import com.example.spa.repository.PagoRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +16,18 @@ import java.util.List;
 @Service
 public class PagoService {
 
-    private PagoRepository pagoRepository;
+    private final PagoRepository pagoRepository;
 
-    private CitaRepository citaRepository;
+    private final CitaRepository citaRepository;
 
-    private MetodoPagoRepository metodoPagoRepository;
+    private final MetodoPagoRepository metodoPagoRepository;
+
+    public PagoService(PagoRepository pagoRepository, CitaRepository citaRepository,
+                       MetodoPagoRepository metodoPagoRepository) {
+        this.pagoRepository = pagoRepository;
+        this.citaRepository = citaRepository;
+        this.metodoPagoRepository = metodoPagoRepository;
+    }
 
     @Transactional(readOnly = true)
     public List<Pago> obtenerPagos() {

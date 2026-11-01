@@ -26,6 +26,7 @@ public class CitaService {
     private static final List<EstadoCita> ESTADOS_QUE_RESERVAN_HORARIO =
             List.of(EstadoCita.PENDIENTE, EstadoCita.CONFIRMADA);
 
+
     private CitaRepository citaRepository;
 
     private ClienteRepository clienteRepository;
@@ -35,6 +36,7 @@ public class CitaService {
     private TerapeutaRepository terapeutaRepository;
 
     private SalaRepository salaRepository;
+
 
     @Transactional(readOnly = true)
     public List<Cita> obtenerCitas() {

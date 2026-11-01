@@ -3,7 +3,6 @@ package com.example.spa.service;
 import com.example.spa.model.Servicio;
 import com.example.spa.repository.ServicioRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +11,11 @@ import java.util.List;
 @Service
 public class ServicioService {
 
-    private ServicioRepository servicioRepository;
+    private final ServicioRepository servicioRepository;
+
+    public ServicioService(ServicioRepository servicioRepository) {
+        this.servicioRepository = servicioRepository;
+    }
 
     @Transactional(readOnly = true)
     public List<Servicio> obtenerServicios() {

@@ -3,7 +3,6 @@ package com.example.spa.service;
 import com.example.spa.model.Usuario;
 import com.example.spa.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
@@ -14,13 +13,17 @@ import java.util.Optional;
 @Service
 public class UsuarioService {
 
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private HttpSession session;
+    private final HttpSession session;
+
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, HttpSession session) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.session = session;
+    }
 
     @Transactional
     public Usuario registrarUsuario(Usuario user) {

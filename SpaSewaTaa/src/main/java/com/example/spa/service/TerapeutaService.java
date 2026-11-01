@@ -7,7 +7,6 @@ import com.example.spa.repository.ServicioRepository;
 import com.example.spa.repository.TerapeutaRepository;
 import com.example.spa.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +15,21 @@ import java.util.List;
 @Service
 public class TerapeutaService {
 
-    private TerapeutaRepository terapeutaRepository;
+    private final TerapeutaRepository terapeutaRepository;
 
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    private ServicioRepository servicioRepository;
+    private final ServicioRepository servicioRepository;
 
-    private SucursalRepository sucursalRepository;
+    private final SucursalRepository sucursalRepository;
+
+    public TerapeutaService(TerapeutaRepository terapeutaRepository, UsuarioRepository usuarioRepository,
+                            ServicioRepository servicioRepository, SucursalRepository sucursalRepository) {
+        this.terapeutaRepository = terapeutaRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.servicioRepository = servicioRepository;
+        this.sucursalRepository = sucursalRepository;
+    }
 
     @Transactional(readOnly = true)
     public List<Terapeuta> obtenerTerapeutas() {
