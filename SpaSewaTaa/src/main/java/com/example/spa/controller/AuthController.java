@@ -3,7 +3,7 @@ package com.example.spa.controller;
 import com.example.spa.model.NombreRol;
 import com.example.spa.model.Rol;
 import com.example.spa.model.Usuario;
-import com.example.spa.repository.RolRepository;
+import com.example.spa.service.RolService;
 import com.example.spa.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,29 @@ public class AuthController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private RolService  rolService;
+
     @GetMapping("/")
-    public String inicio() {
-        return "redirect:/servicios";
+    public String inicio(HttpSession session) {
+        /**
+         *
+         */
+        String rol = (String) session.getAttribute("rol_usuario");
+        if (rol == null) {
+            return "redirect:/login";
+        }
+        switch (rol){
+            case "ADMIN":
+                return "redirect:/admin";
+            case "TERAPEUTA":
+                return "redirect:/terapeuta";
+            case "CLIENTE":
+                return "redirect:/cliente";
+            default:
+                return "redirect:/servicios";
+
+        }
     }
 
     @GetMapping({"/login", "/auth/login"})
@@ -41,6 +61,8 @@ public class AuthController {
             return "redirect:/login";
         }
         session.setAttribute("id_usuario", usuario.getId_usuario());
+        //Guarda el rol como String en la sesion
+        session.setAttribute("rol_usuario", usuario.getRol().getNombre().name());
         return "redirect:/";
     }
 
@@ -75,8 +97,7 @@ public class AuthController {
                 }
             }
 
-            Rol rolUsuario = new Rol();
-            rolUsuario.setNombre(rol);
+            Rol rolUsuario = rolService.buscarPorNombre(rol);
 
             Usuario usuario = new Usuario();
             usuario.setNombre(nombre);
