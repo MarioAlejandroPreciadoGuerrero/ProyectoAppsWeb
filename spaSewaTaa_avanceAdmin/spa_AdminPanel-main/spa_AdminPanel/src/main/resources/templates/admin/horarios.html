@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Horarios y Terapeutas - Spa Sewa Ta'a</title>
+</head>
+<body>
+<section class="admin-view">
+    <div class="section-banner">
+        <h2>Configuración de Terapeutas y Servicios</h2>
+    </div>
+
+    <div class="grid-2-cols">
+        <!-- Formulario para registrar / configurar un Terapeuta -->
+        <div class="card">
+            <h3 class="card-title">Registrar Terapeuta</h3>
+            <form th:action="@{/terapeutas}" th:object="${terapeuta}" method="post" class="form-stack">
+
+                <div class="form-group">
+                    <label for="usuarioId">ID de Usuario</label>
+                    <input type="number" id="usuarioId" th:field="*{usuario.id_usuario}" placeholder="ID del usuario registrado" required min="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="sucursalId">ID de Sucursal</label>
+                    <input type="number" id="sucursalId" th:field="*{sucursal.id_sucursal}" placeholder="ID de la sucursal" required min="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="fechaContratacion">Fecha de Contratación</label>
+                    <input type="date" id="fechaContratacion" th:field="*{fecha_contratacion}" required>
+                </div>
+
+                <button type="submit" class="btn-primary">Guardar Terapeuta</button>
+            </form>
+        </div>
+
+        <!-- Consulta de Terapeutas por Servicio -->
+        <div class="card">
+            <h3 class="card-title">Buscar Terapeutas por Servicio</h3>
+            <form method="get" th:action="@{/terapeutas/por-servicio}" class="form-stack">
+                <div class="form-group">
+                    <label for="nombreServicio">Nombre del Servicio</label>
+                    <input type="text" id="nombreServicio" name="nombre" placeholder="Ej. Masaje Relajante" required>
+                </div>
+                <button type="submit" class="btn-outline">Buscar Disponibles</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lista de Terapeutas Registrados -->
+    <div class="card" style="margin-top: 1.5rem;" th:if="${terapeutas != null}">
+        <h3 class="card-title">Terapeutas Registrados</h3>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Sucursal</th>
+                    <th>Fecha Contratación</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ter : ${terapeutas}">
+                    <td th:text="${ter.id_terapeuta}">1</td>
+                    <td th:text="${ter.usuario?.nombre}">Juan Pérez</td>
+                    <td th:text="${ter.sucursal?.nombre} ?: ${ter.sucursal?.id_sucursal}">Sucursal Centro</td>
+                    <td th:text="${ter.fecha_contratacion}">2026-01-15</td>
+                    <td class="action-buttons">
+                        <a th:href="@{/terapeutas/{id}(id=${ter.id_terapeuta})}" class="btn-primary" style="text-decoration: none; padding: 0.4rem 0.85rem; font-size: 0.85rem;">Detalle</a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(terapeutas)}">
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+                        No hay terapeutas registrados actualmente.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>

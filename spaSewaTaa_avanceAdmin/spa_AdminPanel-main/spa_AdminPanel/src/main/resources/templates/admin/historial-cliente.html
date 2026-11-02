@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Historial de Clientes - Spa Sewa Ta'a</title>
+</head>
+<body>
+<section class="admin-view">
+    <div class="section-banner">
+        <h2>Historial por Cliente</h2>
+    </div>
+
+    <div class="card">
+        <!-- Desplegable con la lista de clientes real del backend -->
+        <form method="get" th:action="@{/clientes}" class="filter-bar">
+            <div class="form-group filter-grow">
+                <label for="clienteSelect">Seleccionar Cliente</label>
+                <select id="clienteSelect" name="id" class="form-control" onchange="if(this.value) window.location.href='/clientes/' + this.value;">
+                    <option value="" disabled th:selected="${cliente == null}">-- Seleccione un cliente para ver su historial --</option>
+                    <option th:each="cli : ${clientes}"
+                            th:value="${cli.id_cliente}"
+                            th:text="|${cli.usuario?.nombre} (${cli.usuario?.telefono})|"
+                            th:selected="${cliente != null and cliente.id_cliente == cli.id_cliente}">Cliente</option>
+                </select>
+            </div>
+        </form>
+
+        <!-- Se muestra cuando seleccionan a un cliente -->
+        <div th:if="${cliente != null}" style="margin-top: 1.5rem;">
+            <h3 class="card-title" th:text="|Reservaciones de: ${cliente.usuario?.nombre}|">Reservaciones</h3>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Fecha y Hora</th>
+                        <th>Servicio</th>
+                        <th>Costo</th>
+                        <th>Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cita : ${cliente.citas}">
+                        <td th:text="${#temporals.format(cita.fecha_hora_inicio, 'dd/MM/yyyy HH:mm')} ?: ${cita.fecha_hora_inicio}">12/09/2026 11:00</td>
+                        <td th:text="${cita.servicio?.nombre}">Masaje Relajante</td>
+                        <td th:text="|$${cita.precio_total}|">$500.00</td>
+                        <td><span class="badge" th:text="${cita.estado}">COMPLETADA</span></td>
+                    </tr>
+                    <tr th:if="${cliente.citas == null or #lists.isEmpty(cliente.citas)}">
+                        <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+                            Este cliente no cuenta con reservaciones registradas en el historial.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

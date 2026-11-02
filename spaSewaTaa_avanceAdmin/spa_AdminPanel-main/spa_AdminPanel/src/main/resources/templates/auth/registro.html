@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Registro - Spa Sewa Ta'a</title>
+</head>
+<body>
+<section class="auth-wrapper">
+    <div class="card auth-card">
+        <div class="section-banner">
+            <h2>Crear Cuenta</h2>
+        </div>
+        <form th:action="@{/registro}" method="post" class="form-stack">
+
+            <!-- Mensaje de error si el registro falla (ej. correo duplicado) -->
+            <div th:if="${param.error}" style="color: red; font-size: 0.9em; margin-bottom: 15px;">
+                Error al registrar. El correo ya podría estar en uso.
+            </div>
+
+            <div class="form-group">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <!-- CAMBIO: Se cambió el name a "contrasenia" para coincidir con el controlador -->
+            <div class="form-group">
+                <label for="contrasenia">Contraseña</label>
+                <input type="password" id="contrasenia" name="contrasenia" required>
+            </div>
+
+            <!-- CAMBIO: Campo oculto para enviar el rol por defecto del usuario -->
+            <input type="hidden" name="nombreRol" value="CLIENTE">
+
+            <button type="submit" class="btn-primary">Registrarse</button>
+        </form>
+        <p class="auth-footer">
+            ¿Ya tienes cuenta? <a th:href="@{/login}" class="link-accent">Inicia sesión</a>
+        </p>
+    </div>
+</section>
+</body>
+</html>

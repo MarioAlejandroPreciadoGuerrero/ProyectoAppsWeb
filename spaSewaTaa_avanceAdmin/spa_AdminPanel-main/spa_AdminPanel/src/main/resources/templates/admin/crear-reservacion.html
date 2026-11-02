@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Nueva Reservación Manual - Spa Sewa Ta'a</title>
+</head>
+<body>
+<section class="admin-view">
+    <div class="section-banner">
+        <h2>Crear Reservación Manual</h2>
+    </div>
+
+    <div class="card">
+        <!-- Envía por POST a /citas mapeado al objeto 'cita' -->
+        <form th:action="@{/citas}" th:object="${cita}" method="post" class="form-stack">
+
+            <!-- Selector de Cliente -->
+            <div class="form-group">
+                <label for="cliente">Cliente</label>
+                <select id="cliente" th:field="*{cliente.id_cliente}" required>
+                    <option value="" disabled selected>-- Seleccione un cliente --</option>
+                    <option th:each="cli : ${clientes}"
+                            th:value="${cli.id_cliente}"
+                            th:text="|${cli.usuario?.nombre} - ${cli.usuario?.telefono}|">Cliente</option>
+                </select>
+            </div>
+
+            <!-- Selector de Servicio -->
+            <div class="form-group">
+                <label for="servicio">Servicio o Espacio</label>
+                <select id="servicio" th:field="*{servicio.id_servicio}" required>
+                    <option value="" disabled selected>-- Seleccione un servicio --</option>
+                    <option th:each="serv : ${servicios}"
+                            th:value="${serv.id_servicio}"
+                            th:text="|${serv.nombre} ($${serv.precio})|">Servicio</option>
+                </select>
+            </div>
+
+            <!-- Selector de Terapeuta -->
+            <div class="form-group">
+                <label for="terapeuta">Terapeuta</label>
+                <select id="terapeuta" th:field="*{terapeuta.id_terapeuta}" required>
+                    <option value="" disabled selected>-- Seleccione un terapeuta --</option>
+                    <option th:each="ter : ${terapeutas}"
+                            th:value="${ter.id_terapeuta}"
+                            th:text="${ter.usuario?.nombre}">Terapeuta</option>
+                </select>
+            </div>
+
+            <!-- Fecha y Hora de Inicio -->
+            <div class="grid-2-cols">
+                <div class="form-group">
+                    <label for="fechaInicio">Fecha y Hora de inicio</label>
+                    <input type="datetime-local" id="fechaInicio" th:field="*{fecha_hora_inicio}" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">Confirmar y Agendar</button>
+        </form>
+    </div>
+</section>
+</body>
+</html>

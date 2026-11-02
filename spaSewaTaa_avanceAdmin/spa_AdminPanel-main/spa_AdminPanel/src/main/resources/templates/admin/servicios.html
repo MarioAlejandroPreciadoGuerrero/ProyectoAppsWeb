@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Gestión de Servicios - Spa Sewa Ta'a</title>
+</head>
+<body>
+<section class="admin-view">
+    <div class="section-banner">
+        <h2>Crear Servicio o Espacio</h2>
+    </div>
+
+    <div class="card">
+        <form th:action="@{/servicios}" th:object="${servicio}" method="post" class="form-stack">
+
+            <div class="form-group">
+                <label for="nombre">Nombre del servicio o espacio</label>
+                <input type="text" id="nombre" th:field="*{nombre}" placeholder="Ej. Masaje relajante, Consulta médica" required>
+            </div>
+
+            <!-- Campo necesario para pasar la validación del ServicioService -->
+            <div class="form-group">
+                <label for="categoria">Categoría</label>
+                <input type="text" id="categoria" th:field="*{categoria}" placeholder="Ej. Masajes, Faciales" required>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" th:field="*{descripcion}" rows="3" required></textarea>
+            </div>
+
+            <div class="grid-2-cols">
+                <div class="form-group">
+                    <label for="minutos_duracion">Duración estimada (minutos)</label>
+                    <input type="number" id="minutos_duracion" th:field="*{minutos_duracion}" placeholder="60" required min="1">
+                </div>
+                <div class="form-group">
+                    <label for="precio">Costo ($ MXN)</label>
+                    <input type="number" step="0.01" id="precio" th:field="*{precio}" placeholder="500.00" required min="1">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">Registrar Servicio</button>
+        </form>
+    </div>
+</section>
+</body>
+</html>

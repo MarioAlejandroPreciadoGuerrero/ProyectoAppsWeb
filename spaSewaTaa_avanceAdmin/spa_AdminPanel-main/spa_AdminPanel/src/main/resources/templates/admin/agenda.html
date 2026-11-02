@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Agenda de Reservaciones - Spa Sewa Ta'a</title>
+</head>
+<body>
+<section class="admin-view">
+    <div class="section-banner">
+        <h2>Agenda del Día y Semana</h2>
+    </div>
+
+    <div class="card">
+        <!-- Filtro por GET -->
+        <form method="get" th:action="@{/citas}" class="filter-bar">
+            <div class="form-group">
+                <label for="vista">Vista</label>
+                <select id="vista" name="vista">
+                    <option value="dia">Agenda del Día</option>
+                    <option value="semana">Agenda de la Semana</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fecha">Fecha base</label>
+                <input type="date" id="fecha" name="fecha">
+            </div>
+            <button type="submit" class="btn-primary">Consultar</button>
+        </form>
+
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>Fecha y Hora</th>
+                    <th>Servicio</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Recorre la lista 'citas' enviada desde el controlador -->
+                <tr th:each="cita : ${citas}">
+                    <td th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')} ?: ${cita.fechaHora}">10/10/2026 09:00</td>
+                    <td th:text="${cita.servicio?.nombre} ?: 'Sin asignar'">Tratamiento Facial</td>
+                    <td th:text="${cita.cliente?.nombre} ?: ${cita.cliente?.usuario?.nombre}">María López</td>
+                    <td>
+                        <span class="badge" th:text="${cita.estado}">PENDIENTE</span>
+                    </td>
+                    <td class="action-buttons">
+                        <!-- Redirección al detalle de la cita -->
+                        <a th:href="@{/citas/{id}(id=${cita.id_cita})}" class="btn-primary" style="text-decoration: none; padding: 0.4rem 0.85rem; font-size: 0.85rem;">Detalle</a>
+
+                        <!-- Formulario POST para cancelar la cita usando la ruta del controlador -->
+                        <form th:action="@{/citas/{id}/cancelar(id=${cita.id_cita})}" method="post" style="display: inline;">
+                            <button type="submit" class="btn-cancel" onclick="return confirm('¿Seguro que deseas cancelar esta cita?');">Cancelar</button>
+                        </form>
+                    </td>
+                </tr>
+                <!-- Mensaje en caso de que no haya citas registradas -->
+                <tr th:if="${#lists.isEmpty(citas)}">
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+                        No hay reservaciones registradas en la agenda.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>
