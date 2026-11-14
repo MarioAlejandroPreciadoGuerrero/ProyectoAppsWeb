@@ -22,14 +22,12 @@ public class ServicioService {
         return this.servicioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El servicio no existe"));
     }
 
-    //TODO obtener servicio por nombre
     public Servicio obtenerPorNombre(String nombre){
-        return null;
+        return this.servicioRepository.findByNombre(nombre).orElseThrow(() -> new ResourceNotFoundException("El servicio buscado no existe"));
     }
 
-    //TODO obtener servicios por categoria
     public List<Servicio> obtenerPorCategoria(String categoria){
-        return null;
+        return this.servicioRepository.findByCategoria(categoria);
     }
 
     public Servicio crear(Servicio servicio){
