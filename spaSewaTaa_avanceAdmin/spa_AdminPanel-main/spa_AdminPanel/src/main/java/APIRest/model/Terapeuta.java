@@ -19,7 +19,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "terapeutas")
-public class Terapueta {
+public class Terapeuta {
 
     @Id
     @Column(name = "id_usuario")
