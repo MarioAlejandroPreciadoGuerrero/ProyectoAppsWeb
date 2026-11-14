@@ -1,7 +1,6 @@
 package APIRest.model;
 
 import com.example.spa_AdminPanel.model.Terapeuta;
-import com.example.spa_AdminPanel.model.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
