@@ -23,15 +23,25 @@ public class TerapeutaService {
     }
 
     public List<Terapeuta> obtenerPorNombre(String nombre){
-        return this.terapeutaRepository.findByNombre(nombre);
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException("El nombre es obligatorio");
+        }
+        return this.terapeutaRepository.buscarPorNombre(nombre.trim());
     }
 
     public Terapeuta obtenerPorId(Long id){
         return this.terapeutaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Terapeuta no encontrado"));
     }
 
-    public List<Terapeuta> obtenerPorEspecialidad(String especialidad){
-        return this.terapeutaRepository.findByExpecialidad(especialidad);
+    public List<Terapeuta> obtenerPorServicio(Long idServicio){
+        return this.terapeutaRepository.findByServicioId(idServicio);
     }
-    //no creo que el cliente necesite editar o eliminar los terapeutas
+
+    public List<Terapeuta> obtenerPorSucursal(Long idSucursal){
+        return this.terapeutaRepository.findBySucursalId(idSucursal);
+    }
+
+    public List<Terapeuta> obtenerPorServicioYSucursal(Long idServicio, Long idSucursal){
+        return this.terapeutaRepository.findByServicioIdAndSucursalId(idServicio, idSucursal);
+    }
 }

@@ -24,4 +24,8 @@ public class SucursalService {
     public List<Sucursal> obtenerTodas(){
         return this.sucursalRepository.findAll();
     }
+
+    public List<Sucursal> obtenerPorCodigoPostal(String codigoPostal){
+        return this.sucursalRepository.findByCodigoPostal(codigoPostal);
+    }
 }

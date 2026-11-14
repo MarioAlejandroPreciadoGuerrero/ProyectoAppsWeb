@@ -18,6 +18,10 @@ public class ServicioService {
         return this.servicioRepository.findAll();
     }
 
+    public List<String> obtenerCategorias(){
+        return this.servicioRepository.findCategorias();
+    }
+
     public Servicio obtenerPorId(Long id){
         return this.servicioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El servicio no existe"));
     }
@@ -27,7 +31,14 @@ public class ServicioService {
     }
 
     public List<Servicio> obtenerPorCategoria(String categoria){
-        return this.servicioRepository.findByCategoria(categoria);
+        return this.servicioRepository.findByCategoriaIgnoreCase(categoria);
+    }
+
+    public List<Servicio> buscarPorNombre(String termino){
+        if (termino == null || termino.isBlank()) {
+            throw new IllegalArgumentException("El término de búsqueda es obligatorio");
+        }
+        return this.servicioRepository.buscarPorNombre(termino.trim());
     }
 
     public Servicio crear(Servicio servicio){
@@ -65,4 +76,3 @@ public class ServicioService {
     }
 
 }
-
